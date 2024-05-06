@@ -13,8 +13,13 @@ This is a repository for Product Captsone Project for Bangkit Academy 2024.
 
 #### Machine Learning Side :
   - Syafri Winartanto M012D4KY3329
+<<<<<<< HEAD
   - Martinus Angger Budi Wicaksono M391D4KY2876[^1]
   - Antonius Miquel Aureliano M391D4KY2901[^2]
+=======
+  - Martinus Angger Budi Wicaksono M391D4KY2876[^2]
+  - Antonius Miquel Aureliano M391D4KY2901[^1]
+>>>>>>> fbaaedbd22544ddf55f574a4fddf7b095ac0c963
 
 #### Cloud Computing Side :
   - Putu Intan Julia Pratiwi C174D4KX1113
@@ -41,6 +46,11 @@ TBA
 - [ ] Something about tourism *should be an easy one in case shit hits the fan*
 
 ---
+<<<<<<< HEAD
 [^1]: Give this man some luck, poor dude lost 50/50 to yanqing
 [^2]: I just want this to finish bro, plz make it easy for us.
+=======
+[^1]: I just want this to finish bro, plz make it easy for us.
+[^2]: Give this man some luck, poor dude lost 50/50 to yanqing
+>>>>>>> fbaaedbd22544ddf55f574a4fddf7b095ac0c963
 
