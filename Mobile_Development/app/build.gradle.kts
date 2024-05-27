@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
     id("kotlin-parcelize")
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -54,6 +55,9 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.glide)
 
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.fragment.ktx)
+
     // Bottom Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
@@ -68,8 +72,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     // Maps & Location
-//    implementation(libs.play.services.maps)
-//    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
 
     // Coroutines
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
