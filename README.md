@@ -15,11 +15,9 @@ This dataset extractor requires you to use:
 ## Notes
 The extractor currently still use circle radius for the nearby search. 
 This means that it has flaws and efficiency problem while scraping places data.
-We planning to use square based area for next extraction to reduce API call and fix the [blankspot](#Image) flaw
+We planning to use square based area for next extraction to reduce API call and fix the blankspot flaw
 
-
-### Image
-![area](https://github.com/anggerbudi/Data-Extractor-Hore/assets/31381698/051a0502-f905-4db9-ac78-a90d89c0c8cb)
+![area problem](https://github.com/anggerbudi/Data-Extractor-Hore/assets/31381698/051a0502-f905-4db9-ac78-a90d89c0c8cb)
 
 
 ## ToDo
