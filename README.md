@@ -20,6 +20,6 @@ We planning to use square based area for next extraction to reduce API call and 
 ![area problem](https://github.com/anggerbudi/Data-Extractor-Hore/assets/31381698/051a0502-f905-4db9-ac78-a90d89c0c8cb)
 
 
-## ToDo
+## TODO
 
 - Proceed using square area for the places extraction to avoid blankspot
