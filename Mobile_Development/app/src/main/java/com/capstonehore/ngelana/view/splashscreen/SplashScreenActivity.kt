@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.capstonehore.ngelana.databinding.ActivitySplashScreenBinding
+import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.main.MainActivity
 
 @SuppressLint("CustomSplashScreen")
@@ -24,7 +25,7 @@ class SplashScreenActivity : AppCompatActivity() {
         installSplashScreen()
 
         window.decorView.postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this@SplashScreenActivity, LoginActivity::class.java))
             finish()
         }, DELAY)
     }

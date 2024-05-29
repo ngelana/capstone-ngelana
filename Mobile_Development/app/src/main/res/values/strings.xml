@@ -1,8 +1,79 @@
 <resources>
+
     <string name="app_name">Ngelana</string>
+
+    <!-- Navigation -->
     <string name="home">Home</string>
     <string name="maps">Maps</string>
     <string name="my_trip">My Trip</string>
     <string name="more">More</string>
     <string name="profile">Profile</string>
+    <string name="place">Place</string>
+
+    <!-- Field -->
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <!-- Empty Field -->
+    <string name="empty_name">Please enter your name address to proceed.</string>
+    <string name="empty_email">Please enter your email address to proceed.</string>
+    <string name="empty_password">Please enter your password to proceed.</string>
+
+    <!-- Login Page -->
+    <string name="login">Login</string>
+    <string name="login_title">Welcome Back to %1$s!</string>
+    <string name="login_description">Log in to %1$s and pick up where you left off on your unique journey.</string>
+    <string name="login_button_from_register">Already have an account? %1$s here.</string>
+    <string name="login_here">Log in</string>
+
+    <!-- Register Page -->
+    <string name="sign_up">Sign Up</string>
+    <string name="register_title">Join %1$s and Begin Your Journey!</string>
+    <string name="register_description">Your personal adventure awaits! Sign up on %1$s and discover the wonders of the world.</string>
+    <string name="register_button_from_login">Don\'t have an account yet? %1$s here.</string>
+    <string name="sign_up_here">Sign up</string>
+
+    <!-- Success condition -->
+    <string name="register_success">Congratulations! Your account has been successfully created.</string>
+    <string name="register_message">You can now log in and start exploring our platform. \n Press \'Continue\' to proceed to the log in page.</string>
+    <string name="continue_login">Continue</string>
+    <string name="successfully_logged_in">You\'ve successfully logged in. Welcome back!</string>
+    <string name="successfully_logged_out">You have successfully logged out. See you later!</string>
+    <string name="permission_request_granted">Permission request granted.</string>
+    <string name="successfully_take_pictures">Successfully take pictures.</string>
+
+    <!-- Failed Condition  -->
+    <string name="not_available">Not available.</string>
+    <string name="failed_to_load_data">Failed to load data.</string>
+    <string name="permission_request_denied">Permission request denied.</string>
+    <string name="invalid_email_format">Invalid email format.</string>
+    <string name="passwords_must_have_at_least_8_characters">Passwords must have at least 8 characters.</string>
+    <string name="enable_location_first">Please enable location first to proceed</string>
+    <string name="location_not_found">Location is not found. Try Again</string>
+
+    <string-array name="data_name">
+        <item>Monkey D. Luffy</item>
+        <item>Roronoa Zoro</item>
+        <item>Nami</item>
+        <item>Usopp</item>
+        <item>Sanji</item>
+    </string-array>
+
+    <string-array name="data_image">
+        <item>Pirate Captain</item>
+        <item>Pirate Swordsman</item>
+        <item>Pirate Navigator</item>
+        <item>Pirate Sniper</item>
+        <item>Pirate Chef</item>
+    </string-array>
+
+    <string-array name="data_description">
+        <item>Foosha Village</item>
+        <item>Shimotsuki Village</item>
+        <item>Cocoyasi Village</item>
+        <item>Syrup Island</item>
+        <item>Baratie</item>
+    </string-array>
+
 </resources>

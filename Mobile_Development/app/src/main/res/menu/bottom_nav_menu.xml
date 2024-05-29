@@ -8,8 +8,8 @@
 
     <item
         android:id="@+id/navigation_maps"
-        android:icon="@drawable/baseline_map_24"
-        android:title="@string/maps" />
+        android:icon="@drawable/baseline_place_24"
+        android:title="@string/place" />
 
     <item
         android:id="@+id/navigation_trip"
