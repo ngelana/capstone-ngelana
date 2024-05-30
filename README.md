@@ -2,6 +2,7 @@
 This is a repository for tools that Machine Learning path use to scrape data from Google Maps without breaking terms and conditions for Bangkit 2024 Capstone Project.
 
 ---
+> [!IMPORTANT]
 > For the Capstone Group Repository, visit the
 > [Capstone Ngelana Repository](https://github.com/REDummy/capstone-hore)
 
@@ -16,11 +17,12 @@ This dataset extractor requires you to use:
 ## Notes
 The extractor currently still use circle radius for the nearby search. 
 This means that it has flaws and efficiency problem while scraping places data.
-We planning to use square based area for next extraction to reduce API call and fix the blankspot flaw
+We plan to use square based area for next extraction to reduce API call and fix the blankspot flaw
 
-![area problem](https://github.com/anggerbudi/Data-Extractor-Hore/assets/31381698/051a0502-f905-4db9-ac78-a90d89c0c8cb)
+![area problem](area.png)
 
 
 ## TODO
-
-- Proceed using square area for the places extraction to avoid blankspot
+- [x] Make code to map all the coordinates for data extraction
+- [ ] Proceed using square area for the places extraction to avoid blankspot
+- [ ] Find efficient way to map the place to avoid API calls to search empty space or sea
