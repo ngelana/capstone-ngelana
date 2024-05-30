@@ -1,8 +1,9 @@
 # Data-Extractor-Hore
 This is a repository for tools that Machine Learning path use to scrape data from Google Maps without breaking terms and conditions for Bangkit 2024 Capstone Project.
 
-For the Capstone Group Repository, visit the
-[Capstone Ngelana Repository](https://github.com/REDummy/capstone-hore)
+---
+> For the Capstone Group Repository, visit the
+> [Capstone Ngelana Repository](https://github.com/REDummy/capstone-hore)
 
 ## Requirements
 This dataset extractor requires you to use:
