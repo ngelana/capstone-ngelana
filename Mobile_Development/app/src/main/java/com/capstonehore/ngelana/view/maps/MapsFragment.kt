@@ -1,11 +1,10 @@
 package com.capstonehore.ngelana.view.maps
 
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.FragmentMapsBinding
@@ -25,14 +24,7 @@ class MapsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        return root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

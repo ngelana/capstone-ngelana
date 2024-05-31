@@ -52,8 +52,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.glide)
+    implementation(libs.circleimageview)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.viewpager2)
 
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)

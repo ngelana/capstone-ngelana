@@ -4,21 +4,21 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/baseline_home_24"
-        android:title="@string/home" />
+        android:title="@string/home"/>
 
     <item
         android:id="@+id/navigation_maps"
         android:icon="@drawable/baseline_place_24"
-        android:title="@string/place" />
+        android:title="@string/place"/>
 
     <item
         android:id="@+id/navigation_trip"
         android:icon="@drawable/baseline_home_repair_service_24"
-        android:title="@string/my_trip" />
+        android:title="@string/my_trips"/>
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/baseline_person_24"
-        android:title="@string/more" />
+        android:title="@string/more"/>
 
 </menu>

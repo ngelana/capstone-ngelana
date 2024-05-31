@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/navigation_trip"
         android:name="com.capstonehore.ngelana.view.mytrip.MyTripFragment"
-        android:label="@string/my_trip"
+        android:label="@string/my_trips"
         tools:layout="@layout/fragment_my_trip" />
 
     <fragment

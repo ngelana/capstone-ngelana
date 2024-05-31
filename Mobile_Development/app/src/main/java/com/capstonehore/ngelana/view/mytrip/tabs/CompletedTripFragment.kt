@@ -1,26 +1,23 @@
-package com.capstonehore.ngelana.view.profile
+package com.capstonehore.ngelana.view.mytrip.tabs
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.capstonehore.ngelana.databinding.FragmentProfileBinding
-import com.capstonehore.ngelana.view.home.HomeViewModel
+import com.capstonehore.ngelana.databinding.FragmentCompletedTripBinding
 
-class ProfileFragment : Fragment() {
+class CompletedTripFragment : Fragment() {
 
-    private var _binding: FragmentProfileBinding? = null
+    private var _binding: FragmentCompletedTripBinding? = null
 
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentCompletedTripBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,4 +26,7 @@ class ProfileFragment : Fragment() {
 
     }
 
+    companion object {
+
+    }
 }
