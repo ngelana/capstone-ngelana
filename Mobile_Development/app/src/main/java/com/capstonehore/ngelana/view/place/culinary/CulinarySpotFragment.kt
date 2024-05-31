@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.maps
+package com.capstonehore.ngelana.view.place.culinary
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,15 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.databinding.FragmentMapsBinding
+import com.capstonehore.ngelana.databinding.FragmentHomeBinding
 import com.capstonehore.ngelana.view.home.HomeViewModel
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 
-class MapsFragment : Fragment() {
+class CulinarySpotFragment : Fragment() {
 
-    private var _binding: FragmentMapsBinding? = null
+    private var _binding: FragmentHomeBinding? = null
 
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
@@ -23,17 +20,14 @@ class MapsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMapsBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
-    }
 
-    private val callback = OnMapReadyCallback { googleMap ->
 
     }
+
 }
