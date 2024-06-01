@@ -15,14 +15,18 @@ This dataset extractor requires you to use:
 
 
 ## Notes
-The extractor currently still use circle radius for the nearby search. 
+~~The extractor currently still use circle radius for the nearby search. 
 This means that it has flaws and efficiency problem while scraping places data.
-We plan to use square based area for next extraction to reduce API call and fix the blankspot flaw
+We plan to use square based area for next extraction to reduce API call and fix the blankspot flaw~~
 
-![area problem](etc/area.png)
+Since google maps Places API New only has circle as the location restriction for the places extraction,
+we resort to use hexagonal packing strategy to efficiently cover area more than the initial circle strategy. 
+Even though it still has blind spot, the blind spot area is reduced greatly
 
+![hexagonal-packing.png](etc/hexagonal-packing.png)
 
 ## TODO
 - [x] Make code to map all the coordinates for data extraction
-- [ ] Proceed using square area for the places extraction to avoid blankspot
+- [ ] ~~Proceed using square area for the places extraction to avoid blankspot~~
+- [ ] Implement sea and land checking to add only land coordinates
 - [ ] Find efficient way to map the place to avoid API calls to search empty space or sea
