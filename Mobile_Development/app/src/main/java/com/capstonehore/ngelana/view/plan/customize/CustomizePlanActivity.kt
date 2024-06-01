@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
+import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.plan.result.ResultPlanActivity
 
 class CustomizePlanActivity : AppCompatActivity() {
@@ -47,6 +48,13 @@ class CustomizePlanActivity : AppCompatActivity() {
         binding.rvPlaces.layoutManager = LinearLayoutManager(this)
         customizePlanAdapter = PlanAdapter(list)
         binding.rvPlaces.adapter = customizePlanAdapter
+
+        customizePlanAdapter.setOnItemClickCallback(object : PlanAdapter.OnItemClickCallback {
+            override fun onItemClicked(items: Place) {
+                val dialogFragment = DetailPlaceFragment.newInstance(items)
+                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+            }
+        })
     }
 
     companion object {

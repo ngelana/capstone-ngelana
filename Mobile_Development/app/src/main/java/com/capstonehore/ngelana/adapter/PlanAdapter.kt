@@ -35,6 +35,11 @@ class PlanAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapte
                 .load(image)
                 .into(placeImage)
         }
+
+        holder.itemView.setOnClickListener {
+            @Suppress("DEPRECATION")
+            onItemClickCallback.onItemClicked(listPlace[holder.adapterPosition])
+        }
     }
 
     class ListViewHolder(var binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root)

@@ -10,9 +10,12 @@
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/grey</item>
 
+        <item name="colorPrimaryContainer">@color/dark_blue</item>
+
+        <item name="colorOnBackground">@color/dark_blue_transparent</item>
+
         <item name="backgroundColor">?attr/colorSecondary</item>
         <item name="android:statusBarColor">@color/dark_blue</item>
-        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>

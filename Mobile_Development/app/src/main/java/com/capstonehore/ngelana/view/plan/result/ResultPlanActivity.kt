@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityResultPlanBinding
+import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 
 class ResultPlanActivity : AppCompatActivity() {
 
@@ -21,9 +22,16 @@ class ResultPlanActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         list = intent.getParcelableArrayListExtra(EXTRA_RESULT_PLACE) ?: ArrayList()
 
-        val adapter = PlanAdapter(list)
+        val resultPlanAdapter = PlanAdapter(list)
         binding.rvPlaces.layoutManager = LinearLayoutManager(this)
-        binding.rvPlaces.adapter = adapter
+        binding.rvPlaces.adapter = resultPlanAdapter
+
+        resultPlanAdapter.setOnItemClickCallback(object : PlanAdapter.OnItemClickCallback {
+            override fun onItemClicked(items: Place) {
+                val dialogFragment = DetailPlaceFragment.newInstance(items)
+                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+            }
+        })
     }
 
     companion object {

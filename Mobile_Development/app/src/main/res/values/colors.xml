@@ -10,4 +10,7 @@
 
     <color name="blue">#3EAAF5</color>
     <color name="dark_blue">#002F49</color>
+
+    <color name="white_transparent">#80FFFFFF</color>
+    <color name="dark_blue_transparent">#80002F49</color>
 </resources>
