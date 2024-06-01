@@ -19,7 +19,7 @@ The extractor currently still use circle radius for the nearby search.
 This means that it has flaws and efficiency problem while scraping places data.
 We plan to use square based area for next extraction to reduce API call and fix the blankspot flaw
 
-![area problem](area.png)
+![area problem](etc/area.png)
 
 
 ## TODO
