@@ -118,6 +118,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupLogin() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
     }
 
 }

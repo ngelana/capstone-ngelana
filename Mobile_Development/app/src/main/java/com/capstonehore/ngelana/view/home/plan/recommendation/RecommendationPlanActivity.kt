@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.adapter.RecommendationPlanAdapter
+import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
@@ -55,25 +55,25 @@ class RecommendationPlanActivity : AppCompatActivity() {
 
     private fun showRecyclerList() {
         binding.rvPlaces.layoutManager = LinearLayoutManager(this)
-        val recommendationPlanAdapter = RecommendationPlanAdapter(list)
-        binding.rvPlaces.adapter = recommendationPlanAdapter
+        val recommendationPlaceAdapter = RecommendationPlaceAdapter(list)
+        binding.rvPlaces.adapter = recommendationPlaceAdapter
 
-        recommendationPlanAdapter.setOnItemClickCallback(object : RecommendationPlanAdapter.OnItemClickCallback {
+        recommendationPlaceAdapter.setOnItemClickCallback(object : RecommendationPlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Place) {
                 val dialogFragment = DetailPlaceFragment.newInstance(items)
                 dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
             }
         })
 
-        recommendationPlanAdapter.setOnClearButtonClickCallback(object : RecommendationPlanAdapter.OnClearButtonClickCallback {
+        recommendationPlaceAdapter.setOnClearButtonClickCallback(object : RecommendationPlaceAdapter.OnClearButtonClickCallback {
             @SuppressLint("NotifyDataSetChanged")
             override fun onClearButtonClicked(item: Place) {
                 list.remove(item)
-                recommendationPlanAdapter.notifyDataSetChanged()
+                recommendationPlaceAdapter.notifyDataSetChanged()
             }
         })
 
-        recommendationPlanAdapter.setOnAddButtonClickCallback(object : RecommendationPlanAdapter.OnAddButtonClickCallback {
+        recommendationPlaceAdapter.setOnAddButtonClickCallback(object : RecommendationPlaceAdapter.OnAddButtonClickCallback {
             override fun onAddButtonClicked(item: Place) {
                 val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
                     putExtra(CustomizePlanActivity.EXTRA_PLACE, item)

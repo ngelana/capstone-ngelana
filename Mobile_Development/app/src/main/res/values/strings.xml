@@ -8,6 +8,14 @@
     <string name="my_trips">My Trips</string>
     <string name="me">Me</string>
 
+    <!-- Toolbar Title -->
+    <string name="tourist_attractions">Tourist Attractions</string>
+    <string name="culinary_spot">Culinary Spot</string>
+    <string name="lodging">Lodging</string>
+    <string name="recommendation_place">Recommendation Place</string>
+    <string name="customize_place">Customize Place</string>
+    <string name="plan_result">Plan Result</string>
+
     <!-- Fragment -->
     <string name="upcoming_trip">Upcoming Trip</string>
     <string name="canceled_trip">Canceled Trip</string>

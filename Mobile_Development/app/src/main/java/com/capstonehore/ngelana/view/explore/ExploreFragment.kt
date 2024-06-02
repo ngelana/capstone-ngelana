@@ -1,5 +1,6 @@
 package com.capstonehore.ngelana.view.explore
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.adapter.PlaceAdapter
+import com.capstonehore.ngelana.adapter.CategoryAdapter
 import com.capstonehore.ngelana.data.Category
 import com.capstonehore.ngelana.databinding.FragmentExploreBinding
+import com.capstonehore.ngelana.view.explore.place.culinary.CulinarySpotActivity
+import com.capstonehore.ngelana.view.explore.place.lodging.LodgingActivity
+import com.capstonehore.ngelana.view.explore.place.tourist.TouristAttractionsActivity
 import com.capstonehore.ngelana.view.home.HomeViewModel
 
 class ExploreFragment : Fragment() {
@@ -53,17 +57,25 @@ class ExploreFragment : Fragment() {
 
     private fun showRecyclerList() {
         binding.rvPlaces.layoutManager = LinearLayoutManager(requireActivity())
-        val placeAdapter = PlaceAdapter(list)
-        binding.rvPlaces.adapter = placeAdapter
+        val categoryAdapter = CategoryAdapter(list)
+        binding.rvPlaces.adapter = categoryAdapter
 
-        placeAdapter.setOnItemClickCallback(object :
-            PlaceAdapter.OnItemClickCallback {
+        categoryAdapter.setOnItemClickCallback(object : CategoryAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Category) {
-//                val placeDetail =
-//                    Intent(this@RecommendationPlanActivity, ProfileFragment::class.java)
-////                placeDetail.putExtra(CrewsDetail.EXTRA_CREW, items)
-//                startActivity(placeDetail)
+                val context = requireContext()
+                val intent = when (items.name) {
+                    "Tourist Attractions" -> Intent(context, TouristAttractionsActivity::class.java)
+                    "Culinary Spot" -> Intent(context, CulinarySpotActivity::class.java)
+                    "Lodging" -> Intent(context, LodgingActivity::class.java)
+                    else -> null
+                }
+                intent?.let { startActivity(it) }
             }
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

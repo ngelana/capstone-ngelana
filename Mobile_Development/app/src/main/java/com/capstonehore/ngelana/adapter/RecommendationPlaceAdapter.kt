@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ItemRecommendationPlaceBinding
 
-class RecommendationPlanAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapter<RecommendationPlanAdapter.ListViewHolder>() {
+class RecommendationPlaceAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapter<RecommendationPlaceAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
     private lateinit var onClearButtonClickCallback: OnClearButtonClickCallback

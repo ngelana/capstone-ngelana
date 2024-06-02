@@ -17,8 +17,6 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private var list = ArrayList<Place>()
 
-    private lateinit var customizePlanAdapter: PlanAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomizePlanBinding.inflate(layoutInflater)
@@ -46,10 +44,10 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private fun showRecyclerList() {
         binding.rvPlaces.layoutManager = LinearLayoutManager(this)
-        customizePlanAdapter = PlanAdapter(list)
-        binding.rvPlaces.adapter = customizePlanAdapter
+        val planAdapter = PlanAdapter(list)
+        binding.rvPlaces.adapter = planAdapter
 
-        customizePlanAdapter.setOnItemClickCallback(object : PlanAdapter.OnItemClickCallback {
+        planAdapter.setOnItemClickCallback(object : PlanAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Place) {
                 val dialogFragment = DetailPlaceFragment.newInstance(items)
                 dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
