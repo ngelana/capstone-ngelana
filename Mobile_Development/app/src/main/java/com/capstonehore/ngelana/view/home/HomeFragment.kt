@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
-import com.capstonehore.ngelana.view.plan.recommendation.RecommendationPlanActivity
+import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 
 class HomeFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.plan.result
+package com.capstonehore.ngelana.view.home.plan.result
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

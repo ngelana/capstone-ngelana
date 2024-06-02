@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.plan.customize
+package com.capstonehore.ngelana.view.home.plan.customize
 
 import android.app.Activity
 import android.content.Intent
@@ -9,7 +9,7 @@ import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
-import com.capstonehore.ngelana.view.plan.result.ResultPlanActivity
+import com.capstonehore.ngelana.view.home.plan.result.ResultPlanActivity
 
 class CustomizePlanActivity : AppCompatActivity() {
 

@@ -28,6 +28,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="generate">Generate</string>
     <string name="save">Save</string>
+    <string name="back_to_home">Back to Home</string>
 
     <!-- Login Page -->
     <string name="login_title">Welcome Back to %1$s!</string>
@@ -63,6 +64,7 @@
     <string name="passwords_must_have_at_least_8_characters">Passwords must have at least 8 characters.</string>
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
+
 
     <string-array name="data_name">
         <item>Uluwatu Temple</item>

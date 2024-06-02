@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.place.lodging
+package com.capstonehore.ngelana.view.explore.place.lodging
 
 import android.os.Bundle
 import android.view.LayoutInflater

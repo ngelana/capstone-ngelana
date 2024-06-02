@@ -13,13 +13,13 @@
         android:theme="@style/Theme.Ngelana"
         tools:targetApi="31">
         <activity
-            android:name=".view.plan.result.ResultPlanActivity"
+            android:name=".view.home.plan.result.ResultPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".view.plan.recommendation.RecommendationPlanActivity"
+            android:name=".view.home.plan.recommendation.RecommendationPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".view.plan.customize.CustomizePlanActivity"
+            android:name=".view.home.plan.customize.CustomizePlanActivity"
             android:exported="false" />
 
 <!--        <meta-data-->

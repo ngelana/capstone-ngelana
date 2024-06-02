@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.place.culinary
+package com.capstonehore.ngelana.view.explore.place.culinary
 
 import android.os.Bundle
 import android.view.LayoutInflater

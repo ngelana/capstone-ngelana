@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.plan.recommendation
+package com.capstonehore.ngelana.view.home.plan.recommendation
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,7 +11,7 @@ import com.capstonehore.ngelana.adapter.RecommendationPlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
-import com.capstonehore.ngelana.view.plan.customize.CustomizePlanActivity
+import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
 
 class RecommendationPlanActivity : AppCompatActivity() {
 
