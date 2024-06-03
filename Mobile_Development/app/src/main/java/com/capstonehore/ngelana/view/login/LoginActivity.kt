@@ -31,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
         setupAction()
         setupAnimation()
         setupTitle()
-        setupDescription()
         setupButton()
     }
 
@@ -62,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupTitle() {
-        val grey = ContextCompat.getColor(this, R.color.grey)
+        val grey = ContextCompat.getColor(this, R.color.blue)
 
         val spannable =
             SpannableString(getString(R.string.login_title, getString(R.string.app_name)))
@@ -76,23 +75,8 @@ class LoginActivity : AppCompatActivity() {
         binding.tvTitle.text = spannable
     }
 
-    private fun setupDescription() {
-        val grey = ContextCompat.getColor(this, R.color.grey)
-
-        val spannable =
-            SpannableString(getString(R.string.login_description, getString(R.string.app_name)))
-        spannable.setSpan(
-            ForegroundColorSpan(grey),
-            spannable.indexOf(getString(R.string.app_name)),
-            spannable.indexOf(getString(R.string.app_name)) + getString(R.string.app_name).length,
-            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        binding.tvDescription.text = spannable
-    }
-
     private fun setupButton() {
-        val grey = ContextCompat.getColor(this, R.color.grey)
+        val grey = ContextCompat.getColor(this, R.color.blue)
 
         val spannable = SpannableString(
             getString(
@@ -134,6 +118,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupLogin() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
     }
 
 }

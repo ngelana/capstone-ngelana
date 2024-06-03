@@ -12,21 +12,21 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_maps"
-        android:name="com.capstonehore.ngelana.view.maps.MapsFragment"
-        android:label="@string/maps"
-        tools:layout="@layout/fragment_maps" />
+        android:id="@+id/navigation_explore"
+        android:name="com.capstonehore.ngelana.view.explore.ExploreFragment"
+        android:label="@string/explore"
+        tools:layout="@layout/fragment_explore" />
 
     <fragment
         android:id="@+id/navigation_trip"
         android:name="com.capstonehore.ngelana.view.mytrip.MyTripFragment"
-        android:label="@string/my_trip"
+        android:label="@string/my_trips"
         tools:layout="@layout/fragment_my_trip" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.capstonehore.ngelana.view.profile.ProfileFragment"
-        android:label="@string/more"
+        android:label="@string/me"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

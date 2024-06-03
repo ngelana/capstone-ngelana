@@ -1,7 +1,36 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.Ngelana" parent="Theme.Material3.DayNight">
-        <!-- Customize your dark theme here. -->
-         <item name="colorPrimary">@color/black</item>
+    <style name="Base.Theme.Ngelana" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/dark_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/dark_blue</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/grey</item>
+
+        <item name="colorOnBackground">@color/dark_blue_transparent</item>
+
+        <item name="android:progressBackgroundTint">@color/blue</item>
+
+        <item name="backgroundColor">?attr/colorSecondary</item>
+        <item name="android:statusBarColor">?attr/colorSecondary</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/slide_right</item>
+        <item name="android:windowExitTransition">@android:transition/slide_left</item>
     </style>
+
+    <!-- Bottom Navigation Style -->
+    <style name="BottomNavigationView" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationView.Active">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>
