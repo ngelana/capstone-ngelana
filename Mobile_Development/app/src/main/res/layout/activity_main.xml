@@ -27,7 +27,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/divider_1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/colorOnSecondary"
@@ -47,6 +47,7 @@
         tools:ignore="FragmentTagUsage" />
 
     <View
+        android:id="@+id/divider_2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey"
@@ -55,7 +56,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:background="?attr/colorSecondary"
         app:itemActiveIndicatorStyle="?attr/colorSecondary"
         app:itemIconTint="?attr/colorPrimary"

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <string name="app_name">Ngelana</string>
 
@@ -31,12 +31,27 @@
     <string name="empty_email">Please enter your email address to proceed.</string>
     <string name="empty_password">Please enter your password to proceed.</string>
 
+    <!-- Label -->
+    <string name="my_account">My Account</string>
+    <string name="settings">Settings</string>
+    <string name="information">Information</string>
+
+    <!-- Profile -->
+    <string name="personal_information">Personal Information</string>
+    <string name="my_favorite">My Favorite</string>
+    <string name="my_review">My Review</string>
+    <string name="language">Language</string>
+    <string name="help_center">Help Center</string>
+    <string name="about_us">About Us</string>
+
     <!-- Button -->
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
     <string name="generate">Generate</string>
     <string name="save">Save</string>
     <string name="back_to_home">Back to Home</string>
+    <string name="dark_mode">Dark Mode</string>
 
     <!-- Login Page -->
     <string name="login_title">Welcome Back to %1$s!</string>
@@ -72,42 +87,5 @@
     <string name="passwords_must_have_at_least_8_characters">Passwords must have at least 8 characters.</string>
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
-
-
-    <string-array name="data_name">
-        <item>Uluwatu Temple</item>
-        <item>Tanah Lot</item>
-        <item>Pura Ulun Danu Beratan Bedugul</item>
-        <item>Pura Agung Besakih</item>
-        <item>Bali Safari and Marine Park</item>
-    </string-array>
-
-    <string-array name="data_image">
-        <item tools:ignore="Typos">https://lh3.googleusercontent.com/p/AF1QipMdwKFTUSUx-4yMpNfsiewx6T7m4j2qCyW50u9F=s1360-w1360-h1020</item>
-        <item>https://lh3.googleusercontent.com/proxy/1jBJ6DkVJDO_fsthZ6MZP77iRtdlz-Is0vroTnIT3KlPou0oFRVbiyjXfbsqlW0DJv6sNMJHny4xMWfBL-QBx9PXLfjwYSytsKqWSeFAfKhY8B_s_SBYDLCqFi8FNjKeqW46oJDyKRMliIH2TcIJ3vTcS7tKug=s1360-w1360-h1020</item>
-        <item tools:ignore="Typos">https://lh3.googleusercontent.com/p/AF1QipO5Fkoef45k7C5lJr-L9qlroYsgxgV4gdJ8LYhT=s1360-w1360-h1020</item>
-        <item tools:ignore="Typos">https://lh3.googleusercontent.com/p/AF1QipORHs3b9MuUxGc2b7Zvx1vcHkCNsBbH3A26Ian3=s1360-w1360-h1020</item>
-        <item tools:ignore="Typos">https://lh3.googleusercontent.com/p/AF1QipNgVYrqKXDxij62Pu7Oz4jslXJIbWXlSb5ZMiid=s1360-w1360-h1020</item>
-    </string-array>
-
-    <string-array name="data_description">
-        <item>Uluwatu Temple is a Balinese Hindu sea temple (Pura Segara) located on the south-western tip of the Bukit Peninsula in Uluwatu (South Kuta), Badung Regency, Bali, Indonesia. The temple is regarded as one of the sad kahyangan and is dedicated to Sang Hyang Widhi Wasa in his manifestation as Rudra.</item>
-        <item>Tanah Lot is a rock formation off the Indonesian island of Bali. It is home to the ancient Hindu pilgrimage temple Pura Tanah Lot, a popular tourist and cultural icon for photography.</item>
-        <item>Pura Ulun Danu Beratan, or Pura Bratan, is a major Hindu Shaivite temple in Bali, Indonesia. The temple complex is on the shores of Lake Beratan in the mountains near Bedugul. The water from the lake serves the entire region in the outflow area, downstream there are many smaller water temples that are specific to each irrigation association.</item>
-        <item>Besakih Temple is a pura complex in the village of Besakih on the slopes of Mount Agung in eastern Bali, Indonesia. It is the most important, largest, and holiest temple of Balinese Hinduism,[1] and one of a series of Balinese temples.</item>
-        <item>Taman Safari Bali, or Taman Safari Indonesia III is a branch of Taman Safari located in Gianyar, Bali. Taman Safari Bali is managed by the Taman Safari Group which also manages Taman Safari Indonesia 1 in Cisarua, Bogor, West Java and Taman Safari Indonesia 2 in Prigen, East Java.</item>
-    </string-array>
-
-    <string-array name="data_category">
-        <item>Tourist Attractions</item>
-        <item>Culinary Spot</item>
-        <item>Lodging</item>
-    </string-array>
-
-    <string-array name="data_image_category">
-        <item>https://lh3.googleusercontent.com/proxy/1jBJ6DkVJDO_fsthZ6MZP77iRtdlz-Is0vroTnIT3KlPou0oFRVbiyjXfbsqlW0DJv6sNMJHny4xMWfBL-QBx9PXLfjwYSytsKqWSeFAfKhY8B_s_SBYDLCqFi8FNjKeqW46oJDyKRMliIH2TcIJ3vTcS7tKug=s1360-w1360-h1020</item>
-        <item>https://lh3.googleusercontent.com/proxy/1jBJ6DkVJDO_fsthZ6MZP77iRtdlz-Is0vroTnIT3KlPou0oFRVbiyjXfbsqlW0DJv6sNMJHny4xMWfBL-QBx9PXLfjwYSytsKqWSeFAfKhY8B_s_SBYDLCqFi8FNjKeqW46oJDyKRMliIH2TcIJ3vTcS7tKug=s1360-w1360-h1020</item>
-        <item>https://lh3.googleusercontent.com/proxy/1jBJ6DkVJDO_fsthZ6MZP77iRtdlz-Is0vroTnIT3KlPou0oFRVbiyjXfbsqlW0DJv6sNMJHny4xMWfBL-QBx9PXLfjwYSytsKqWSeFAfKhY8B_s_SBYDLCqFi8FNjKeqW46oJDyKRMliIH2TcIJ3vTcS7tKug=s1360-w1360-h1020</item>
-    </string-array>
 
 </resources>

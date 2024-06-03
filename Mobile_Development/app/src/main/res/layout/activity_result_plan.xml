@@ -16,7 +16,7 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimaryContainer"
+            android:background="?attr/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -26,13 +26,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/plan_result"
-                app:titleTextColor="?attr/colorSecondaryVariant"
+                app:titleTextColor="?attr/colorOnPrimary"
                 app:titleCentered="true"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/divider_1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?attr/colorOnSecondary"
@@ -47,7 +47,7 @@
             app:indicatorColor="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view"/>
+            app:layout_constraintTop_toBottomOf="@id/divider_1"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -19,26 +19,43 @@
         <!-- android:name="com.google.android.geo.API_KEY" -->
         <!-- android:value="${MAPS_API_KEY}" /> -->
 
+        <!-- Profile -->
         <activity
-            android:name=".view.explore.place.tourist.TouristAttractionsActivity"
-            android:parentActivityName=".view.explore.ExploreFragment"
+            android:name=".view.profile.personalinformation.PersonalInformationActivity"
             android:exported="false" />
         <activity
-            android:name=".view.explore.place.lodging.LodgingActivity"
-            android:parentActivityName=".view.explore.ExploreFragment"
+            android:name=".view.profile.favorite.MyFavoriteActivity"
             android:exported="false" />
         <activity
-            android:name=".view.explore.place.culinary.CulinarySpotActivity"
-            android:parentActivityName=".view.explore.ExploreFragment"
+            android:name=".view.profile.review.MyReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.profile.language.LanguageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.profile.helpcenter.HelpCenterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.profile.aboutus.AboutUsActivity"
             android:exported="false" />
 
+        <!-- Explore -->
+        <activity
+            android:name=".view.explore.place.tourist.TouristAttractionsActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".view.explore.place.lodging.LodgingActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".view.explore.place.culinary.CulinarySpotActivity"
+            android:exported="false"/>
+
+        <!-- Home -->
         <activity
             android:name=".view.home.plan.recommendation.RecommendationPlanActivity"
             android:exported="false" />
         <activity
             android:name=".view.home.plan.customize.CustomizePlanActivity"
-            android:parentActivityName=".view.home.plan.recommendation.RecommendationPlanActivity"
-            android:label="@string/customize_place"
             android:exported="false" />
         <activity
             android:name=".view.home.plan.result.ResultPlanActivity"
@@ -53,7 +70,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.register.RegisterActivity"
             android:exported="false" />
