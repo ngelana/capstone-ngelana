@@ -10,17 +10,27 @@
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/grey</item>
 
-        <item name="colorPrimaryContainer">@color/blue</item>
         <item name="colorOnBackground">@color/dark_blue_transparent</item>
 
         <item name="android:progressBackgroundTint">@color/blue</item>
 
         <item name="backgroundColor">?attr/colorSecondary</item>
-        <item name="android:statusBarColor">@color/blue</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">?attr/colorSecondary</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>
         <item name="android:windowExitTransition">@android:transition/slide_left</item>
     </style>
+
+    <!-- Bottom Navigation Style -->
+    <style name="BottomNavigationView" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationView.Active">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

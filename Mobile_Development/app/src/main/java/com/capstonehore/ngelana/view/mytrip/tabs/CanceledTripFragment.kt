@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.capstonehore.ngelana.databinding.FragmentCancelledTripBinding
+import com.capstonehore.ngelana.databinding.FragmentCanceledTripBinding
 
-class CancelledTripFragment : Fragment() {
+class CanceledTripFragment : Fragment() {
 
-    private var _binding: FragmentCancelledTripBinding? = null
+    private var _binding: FragmentCanceledTripBinding? = null
 
     private val binding get() = _binding!!
 
@@ -17,7 +17,7 @@ class CancelledTripFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCancelledTripBinding.inflate(inflater, container, false)
+        _binding = FragmentCanceledTripBinding.inflate(inflater, container, false)
         return binding.root
     }
 

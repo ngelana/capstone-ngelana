@@ -30,7 +30,7 @@
             app:civ_border_width="0.5dp"
             app:layout_constraintBottom_toBottomOf="@+id/divider_1"
             app:layout_constraintStart_toStartOf="@+id/divider_1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/divider_1" />
 
         <TextView
             android:id="@+id/userName"
@@ -81,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:text="@string/my_account"
             android:textSize="16sp"
@@ -180,7 +180,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:text="@string/information"
             android:textSize="16sp"
