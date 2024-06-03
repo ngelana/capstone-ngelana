@@ -1,0 +1,91 @@
+<resources>
+
+    <string name="app_name">Ngelana</string>
+
+    <!-- Navigation -->
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="my_trips">My Trips</string>
+    <string name="me">Me</string>
+
+    <!-- Toolbar Title -->
+    <string name="tourist_attractions">Tourist Attractions</string>
+    <string name="culinary_spot">Culinary Spot</string>
+    <string name="lodging">Lodging</string>
+    <string name="recommendation_place">Recommendation Place</string>
+    <string name="customize_place">Customize Place</string>
+    <string name="plan_result">Plan Result</string>
+
+    <!-- Fragment -->
+    <string name="upcoming_trip">Upcoming Trip</string>
+    <string name="canceled_trip">Canceled Trip</string>
+    <string name="completed_trip">Completed Trip</string>
+
+    <!-- Field -->
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <!-- Empty Field -->
+    <string name="empty_name">Please enter your name address to proceed.</string>
+    <string name="empty_email">Please enter your email address to proceed.</string>
+    <string name="empty_password">Please enter your password to proceed.</string>
+
+    <!-- Label -->
+    <string name="my_account">My Account</string>
+    <string name="settings">Settings</string>
+    <string name="information">Information</string>
+
+    <!-- Profile -->
+    <string name="personal_information">Personal Information</string>
+    <string name="my_favorite">My Favorite</string>
+    <string name="my_review">My Review</string>
+    <string name="language">Language</string>
+    <string name="help_center">Help Center</string>
+    <string name="about_us">About Us</string>
+
+    <!-- Button -->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="generate">Generate</string>
+    <string name="save">Save</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="dark_mode">Dark Mode</string>
+
+    <!-- Login Page -->
+    <string name="login_title">Welcome Back to %1$s!</string>
+    <string name="login_description">Log in to Ngelana and pick up where you left off on your unique journey.</string>
+    <string name="login_button_from_register">Already have an account? %1$s here.</string>
+    <string name="login_here">Log in</string>
+
+    <!-- Register Page -->
+    <string name="register_title">Join %1$s and Begin Your Journey!</string>
+    <string name="register_description">Your personal adventure awaits! Sign up on Ngelana and discover the wonders of the world.</string>
+    <string name="register_button_from_login">Don\'t have an account yet? %1$s here.</string>
+    <string name="sign_up_here">Sign up</string>
+
+    <!-- Tab Pager -->
+    <string name="tab_text_1">Upcoming</string>
+    <string name="tab_text_2">Completed</string>
+    <string name="tab_text_3">Canceled</string>
+
+    <!-- Success condition -->
+    <string name="register_success">Congratulations! Your account has been successfully created.</string>
+    <string name="register_message">You can now log in and start exploring our platform. \n Press \'Continue\' to proceed to the log in page.</string>
+    <string name="continue_login">Continue</string>
+    <string name="successfully_logged_in">You\'ve successfully logged in. Welcome back!</string>
+    <string name="successfully_logged_out">You have successfully logged out. See you later!</string>
+    <string name="permission_request_granted">Permission request granted.</string>
+    <string name="successfully_take_pictures">Successfully take pictures.</string>
+
+    <!-- Failed Condition  -->
+    <string name="not_available">Not available.</string>
+    <string name="failed_to_load_data">Failed to load data.</string>
+    <string name="permission_request_denied">Permission request denied.</string>
+    <string name="invalid_email_format">Invalid email format.</string>
+    <string name="passwords_must_have_at_least_8_characters">Passwords must have at least 8 characters.</string>
+    <string name="enable_location_first">Please enable location first to proceed</string>
+    <string name="location_not_found">Location is not found. Try Again</string>
+
+</resources>
