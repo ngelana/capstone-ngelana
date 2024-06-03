@@ -3,7 +3,7 @@
     <style name="Base.Theme.Ngelana" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/dark_blue</item>
+        <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <item name="colorSecondary">@color/dark_blue</item>
