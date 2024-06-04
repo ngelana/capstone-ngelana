@@ -37,40 +37,34 @@
             android:background="?attr/colorOnSecondary"
             app:layout_constraintBottom_toBottomOf="@+id/appBarLayout" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/logoImage"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+            app:layout_constraintTop_toBottomOf="@id/divider_1"
+            app:srcCompat="@drawable/ic_image"
+            tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/logoImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_image_24"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/app_name"
-                android:textColor="?attr/colorOnPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoImage" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/app_name"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoImage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

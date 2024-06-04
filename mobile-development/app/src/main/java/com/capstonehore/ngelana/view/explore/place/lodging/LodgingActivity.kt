@@ -13,7 +13,7 @@ class LodgingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLodgingBinding
 
-    private val list = ArrayList<Place>()
+    private val placeList = ArrayList<Place>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +22,8 @@ class LodgingActivity : AppCompatActivity() {
 
         binding.rvPlaces.setHasFixedSize(true)
 
-        list.addAll(getListPlace())
-        showRecyclerList()
+        placeList.addAll(getListPlace())
+        setupView()
     }
 
     private fun getListPlace(): ArrayList<Place> {
@@ -39,10 +39,14 @@ class LodgingActivity : AppCompatActivity() {
         return listPlace
     }
 
-    private fun showRecyclerList() {
-        binding.rvPlaces.layoutManager = LinearLayoutManager(this)
-        val placeAdapter = PlaceAdapter(list)
-        binding.rvPlaces.adapter = placeAdapter
+    private fun setupView() {
+        val placeAdapter = PlaceAdapter(placeList)
+
+        binding.rvPlaces.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@LodgingActivity)
+            adapter = placeAdapter
+        }
 
         placeAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Place) {
@@ -51,4 +55,5 @@ class LodgingActivity : AppCompatActivity() {
             }
         })
     }
+
 }

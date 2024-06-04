@@ -3,10 +3,11 @@ package com.capstonehore.ngelana.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.capstonehore.ngelana.data.local.entity.Profile
-import com.capstonehore.ngelana.databinding.ItemProfileBinding
+import com.capstonehore.ngelana.data.local.entity.PersonalInformation
+import com.capstonehore.ngelana.databinding.ItemPersonalInformationBinding
 
-class ProfileAdapter(private val listProfile: ArrayList<Profile>) : RecyclerView.Adapter<ProfileAdapter.ListViewHolder>() {
+class PersonalInformationAdapter(private val listProfile: ArrayList<PersonalInformation>) :
+    RecyclerView.Adapter<PersonalInformationAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -15,7 +16,7 @@ class ProfileAdapter(private val listProfile: ArrayList<Profile>) : RecyclerView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val binding = ItemProfileBinding.inflate(
+        val binding = ItemPersonalInformationBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -27,10 +28,10 @@ class ProfileAdapter(private val listProfile: ArrayList<Profile>) : RecyclerView
     override fun getItemCount(): Int = listProfile.size
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (name, icon) = listProfile[position]
+        val (title, name) = listProfile[position]
         with(holder.binding) {
+            tvTitle.text = title
             tvName.text = name
-            ivIconLeft.setImageResource(icon)
         }
 
         holder.itemView.setOnClickListener {
@@ -39,9 +40,10 @@ class ProfileAdapter(private val listProfile: ArrayList<Profile>) : RecyclerView
         }
     }
 
-    class ListViewHolder(var binding: ItemProfileBinding) : RecyclerView.ViewHolder(binding.root)
+    class ListViewHolder(var binding: ItemPersonalInformationBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
-        fun onItemClicked(items: Profile)
+        fun onItemClicked(items: PersonalInformation)
     }
 }

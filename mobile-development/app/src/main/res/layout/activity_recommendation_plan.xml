@@ -48,40 +48,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_1"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlaces"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:text="@string/save"
+            android:textColor="?attr/colorSecondaryVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPlaces"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/submitButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="?attr/colorPrimary"
-                android:text="@string/save"
-                android:textColor="?attr/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvPlaces"
-                app:layout_constraintVertical_bias="0.0" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@+id/rvPlaces" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

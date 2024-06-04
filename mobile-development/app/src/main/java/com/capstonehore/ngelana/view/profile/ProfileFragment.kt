@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.ProfileAdapter
-import com.capstonehore.ngelana.data.Profile
+import com.capstonehore.ngelana.data.local.entity.Profile
 import com.capstonehore.ngelana.databinding.FragmentProfileBinding
 import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.login.LoginActivity
@@ -44,6 +44,20 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupAction()
+        setupData()
+    }
+
+    private fun setupAction() {
+        binding.signOutButton.setOnClickListener {
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+    }
+
+    private fun setupData() {
         setupRecyclerView(binding.rvAccount)
         setupRecyclerView(binding.rvSettings)
         setupRecyclerView(binding.rvInformation)
@@ -92,13 +106,6 @@ class ProfileFragment : Fragment() {
                 else -> null
             }
             intent?.let { startActivity(it) }
-        }
-
-        binding.signOutButton.setOnClickListener {
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            requireActivity().finish()
         }
     }
 

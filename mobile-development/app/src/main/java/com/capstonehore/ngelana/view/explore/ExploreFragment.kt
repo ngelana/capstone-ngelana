@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.CategoryAdapter
-import com.capstonehore.ngelana.data.Category
+import com.capstonehore.ngelana.data.local.entity.Category
 import com.capstonehore.ngelana.databinding.FragmentExploreBinding
 import com.capstonehore.ngelana.view.explore.place.culinary.CulinarySpotActivity
 import com.capstonehore.ngelana.view.explore.place.lodging.LodgingActivity
@@ -24,7 +24,7 @@ class ExploreFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
 
-    private val list = ArrayList<Category>()
+    private val categoryList = ArrayList<Category>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +39,10 @@ class ExploreFragment : Fragment() {
 
         binding.rvPlaces.setHasFixedSize(true)
 
-        list.addAll(getListPlace())
-        showRecyclerList()
+        categoryList.addAll(getListPlace())
+        setupView()
     }
+
 
     private fun getListPlace(): ArrayList<Category> {
         val dataName = resources.getStringArray(R.array.data_category)
@@ -55,10 +56,14 @@ class ExploreFragment : Fragment() {
         return listPlace
     }
 
-    private fun showRecyclerList() {
-        binding.rvPlaces.layoutManager = LinearLayoutManager(requireActivity())
-        val categoryAdapter = CategoryAdapter(list)
-        binding.rvPlaces.adapter = categoryAdapter
+    private fun setupView() {
+        val categoryAdapter = CategoryAdapter(categoryList)
+
+        binding.rvPlaces.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireActivity())
+            adapter = categoryAdapter
+        }
 
         categoryAdapter.setOnItemClickCallback(object : CategoryAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Category) {

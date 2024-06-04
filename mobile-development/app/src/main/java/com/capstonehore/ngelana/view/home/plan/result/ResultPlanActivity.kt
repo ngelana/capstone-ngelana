@@ -14,7 +14,7 @@ class ResultPlanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultPlanBinding
 
-    private lateinit var list: ArrayList<Place>
+    private lateinit var planList: ArrayList<Place>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,23 +22,36 @@ class ResultPlanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         @Suppress("DEPRECATION")
-        list = intent.getParcelableArrayListExtra(EXTRA_RESULT_PLACE) ?: ArrayList()
+        planList = intent.getParcelableArrayListExtra(EXTRA_RESULT_PLACE) ?: ArrayList()
+        if (planList.isNotEmpty()) {
+            setupAction()
+            setupView()
+        }
 
-        val planAdapter = PlanAdapter(list)
-        binding.rvPlaces.layoutManager = LinearLayoutManager(this)
-        binding.rvPlaces.adapter = planAdapter
+    }
 
-        planAdapter.setOnItemClickCallback(object : PlanAdapter.OnItemClickCallback {
+    private fun setupAction() {
+        binding.backToHomeButton.setOnClickListener {
+            startActivity(Intent(this@ResultPlanActivity, MainActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun setupView() {
+        val planAdapter = PlanAdapter(planList)
+
+        binding.rvPlaces.apply {
+            layoutManager = LinearLayoutManager(this@ResultPlanActivity)
+            adapter = planAdapter
+        }
+
+        planAdapter.setOnItemClickCallback(object :
+            PlanAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Place) {
                 val dialogFragment = DetailPlaceFragment.newInstance(items)
                 dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
             }
         })
-
-        binding.backToHomeButton.setOnClickListener {
-            startActivity(Intent(this@ResultPlanActivity, MainActivity::class.java))
-            finish()
-        }
     }
 
     companion object {

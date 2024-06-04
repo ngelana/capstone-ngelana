@@ -47,9 +47,9 @@
     </string-array>
 
     <integer-array name="data_account_icon">
-        <item>@drawable/baseline_person_24</item>
-        <item>@drawable/baseline_favorite_border_24</item>
-        <item>@drawable/baseline_star_border_24</item>
+        <item>@drawable/ic_person</item>
+        <item>@drawable/ic_favorite_border</item>
+        <item>@drawable/ic_star_border</item>
     </integer-array>
 
     <string-array name="data_settings_name">
@@ -57,7 +57,7 @@
     </string-array>
 
     <integer-array name="data_settings_icon">
-        <item>@drawable/baseline_language_24</item>
+        <item>@drawable/ic_language</item>
     </integer-array>
 
     <string-array name="data_information_name">
@@ -66,8 +66,25 @@
     </string-array>
 
     <integer-array name="data_information_icon">
-        <item>@drawable/baseline_help_center_24</item>
-        <item>@drawable/baseline_info_24</item>
+        <item>@drawable/ic_help_center</item>
+        <item>@drawable/ic_info</item>
     </integer-array>
+
+    <!-- Profile -->
+    <string-array name="data_personal_title">
+        <item>Name</item>
+        <item>Date of Birth</item>
+        <item>Gender</item>
+        <item>No. Handphone</item>
+        <item>Email</item>
+    </string-array>
+
+    <string-array name="data_personal_name">
+        <item>Anisa Nurjanah</item>
+        <item>27 Mei 2003</item>
+        <item>Perempuan</item>
+        <item>083813699536</item>
+        <item>anisanurjanah2705@gmail.com</item>
+    </string-array>
 
 </resources>

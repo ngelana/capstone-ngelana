@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/backgroundColor"
-    android:padding="8dp">
+    android:layout_margin="8dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_image_24"
+                app:srcCompat="@drawable/ic_image"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/baseline_clear_24"
+                android:src="@drawable/ic_clear"
                 app:tint="@color/red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -81,7 +81,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/baseline_check_24"
+                android:src="@drawable/ic_check"
                 app:tint="@color/green"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

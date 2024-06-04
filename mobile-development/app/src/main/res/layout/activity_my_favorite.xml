@@ -37,23 +37,14 @@
             android:background="?attr/colorOnSecondary"
             app:layout_constraintBottom_toBottomOf="@+id/appBarLayout" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFavorite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPlaces"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@+id/divider_1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
