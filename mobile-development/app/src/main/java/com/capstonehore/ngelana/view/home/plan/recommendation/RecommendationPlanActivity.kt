@@ -17,7 +17,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRecommendationPlanBinding
 
-    private val list = ArrayList<Place>()
+    private val placeList = ArrayList<Place>()
 
     private val ADD_PLACE_REQUEST = 1
 
@@ -26,14 +26,15 @@ class RecommendationPlanActivity : AppCompatActivity() {
         binding = ActivityRecommendationPlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.rvPlaces.setHasFixedSize(true)
+        setupAction()
+        setupView()
+        placeList.addAll(getListPlace())
+    }
 
-        list.addAll(getListPlace())
-        showRecyclerList()
-
+    private fun setupAction() {
         binding.submitButton.setOnClickListener {
             val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
-                putParcelableArrayListExtra(CustomizePlanActivity.EXTRA_PLACE, list)
+                putParcelableArrayListExtra(CustomizePlanActivity.EXTRA_PLACE, placeList)
             }
             @Suppress("DEPRECATION")
             startActivityForResult(intent, ADD_PLACE_REQUEST)
@@ -53,10 +54,14 @@ class RecommendationPlanActivity : AppCompatActivity() {
         return listPlace
     }
 
-    private fun showRecyclerList() {
-        binding.rvPlaces.layoutManager = LinearLayoutManager(this)
-        val recommendationPlaceAdapter = RecommendationPlaceAdapter(list)
-        binding.rvPlaces.adapter = recommendationPlaceAdapter
+    private fun setupView() {
+        val recommendationPlaceAdapter = RecommendationPlaceAdapter(placeList)
+
+        binding.rvPlaces.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@RecommendationPlanActivity)
+            adapter = recommendationPlaceAdapter
+        }
 
         recommendationPlaceAdapter.setOnItemClickCallback(object : RecommendationPlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Place) {
@@ -68,7 +73,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
         recommendationPlaceAdapter.setOnClearButtonClickCallback(object : RecommendationPlaceAdapter.OnClearButtonClickCallback {
             @SuppressLint("NotifyDataSetChanged")
             override fun onClearButtonClicked(item: Place) {
-                list.remove(item)
+                placeList.remove(item)
                 recommendationPlaceAdapter.notifyDataSetChanged()
             }
         })
@@ -92,8 +97,8 @@ class RecommendationPlanActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             val updatedList = data?.getParcelableArrayListExtra<Place>(CustomizePlanActivity.EXTRA_PLACE)
             updatedList?.let {
-                list.clear()
-                list.addAll(it)
+                placeList.clear()
+                placeList.addAll(it)
                 binding.rvPlaces.adapter?.notifyDataSetChanged()
             }
         }

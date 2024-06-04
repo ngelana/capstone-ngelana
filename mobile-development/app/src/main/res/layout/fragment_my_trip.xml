@@ -7,13 +7,6 @@
     android:background="?attr/backgroundColor"
     tools:context=".view.mytrip.MyTripFragment">
 
-    <View
-        android:id="@+id/divider_1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressIndicator"
         android:layout_width="match_parent"
@@ -21,7 +14,7 @@
         android:indeterminate="true"
         android:visibility="gone"
         app:indicatorColor="?attr/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/divider_1"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -32,7 +25,7 @@
         android:background="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_1"
+        app:layout_constraintTop_toBottomOf="@id/progressIndicator"
         app:tabTextColor="?attr/colorOnPrimary"
         app:tabSelectedTextColor="?attr/colorPrimary"
         app:tabIndicatorColor="?attr/colorPrimary"/>

@@ -48,59 +48,70 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_1"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlaces"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+            app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPlaces"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addPlaceCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:cardBackgroundColor="?attr/backgroundColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvPlaces"
+            app:strokeColor="?attr/colorOnSecondary"
+            app:strokeWidth="1dp">
+
+            <ImageButton
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="128dp"
+                android:background="@drawable/rounded_corners_transparent"
+                android:src="@drawable/ic_add"
+                app:tint="?attr/colorPrimary"
+                tools:ignore="ContentDescription" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/addPlaceCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:cardBackgroundColor="?attr/backgroundColor"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvPlaces"
-                app:strokeColor="?attr/colorOnSecondary"
-                app:strokeWidth="1dp">
+        </com.google.android.material.card.MaterialCardView>
 
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="128dp"
-                    android:background="@drawable/rounded_corners_transparent"
-                    android:src="@drawable/baseline_add_24"
-                    app:tint="?attr/colorPrimary"
-                    tools:ignore="ContentDescription" />
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:text="@string/save"
+            android:textColor="?attr/colorSecondaryVariant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addPlaceCard" />
 
-            </com.google.android.material.card.MaterialCardView>
-
-            <Button
-                android:id="@+id/submitButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="?attr/colorPrimary"
-                android:text="@string/save"
-                android:textColor="?attr/colorSecondaryVariant"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addPlaceCard" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvNoData"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/no_data"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

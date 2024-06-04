@@ -87,5 +87,7 @@
     <string name="passwords_must_have_at_least_8_characters">Passwords must have at least 8 characters.</string>
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
+    <string name="welcome">Welcome,</string>
+    <string name="no_data">No data</string>
 
 </resources>

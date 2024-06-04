@@ -1,10 +1,10 @@
-package com.capstonehore.ngelana.data
+package com.capstonehore.ngelana.data.local.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Profile(
+data class Category(
     val name: String,
-    val icon: Int
+    val image: String
 ) : Parcelable
