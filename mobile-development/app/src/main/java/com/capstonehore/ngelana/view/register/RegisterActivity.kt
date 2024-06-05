@@ -3,6 +3,7 @@ package com.capstonehore.ngelana.view.register
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -14,6 +15,8 @@ import android.text.style.StyleSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityRegisterBinding
 import com.capstonehore.ngelana.view.login.LoginActivity
@@ -28,6 +31,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
+        setupStatusBar()
         setupAnimation()
         setupTitle()
         setupButton()
@@ -35,6 +39,22 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener { }
+    }
+
+    private fun setupStatusBar() {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+            }
+        }
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.isAppearanceLightStatusBars = true
     }
 
     private fun setupAnimation() {

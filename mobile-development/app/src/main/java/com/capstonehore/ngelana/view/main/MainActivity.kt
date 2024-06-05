@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityMainBinding
@@ -19,26 +17,42 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolbar = binding.topAppBar
-        setSupportActionBar(toolbar)
-
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
 
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home,
-                R.id.navigation_explore,
-                R.id.navigation_trip,
-                R.id.navigation_profile
-            )
-        )
-
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
         val bottomNavigationView = binding.navView
         bottomNavigationView.setupWithNavController(navController)
+
+        bottomNavigationView.setOnItemSelectedListener  { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    if (navController.currentDestination?.id != R.id.navigation_home) {
+                        navController.navigate(R.id.navigation_home)
+                    }
+                    true
+                }
+                R.id.navigation_explore -> {
+                    if (navController.currentDestination?.id != R.id.navigation_explore) {
+                        navController.navigate(R.id.navigation_explore)
+                    }
+                    true
+                }
+                R.id.navigation_trip -> {
+                    if (navController.currentDestination?.id != R.id.navigation_trip) {
+                        navController.navigate(R.id.navigation_trip)
+                    }
+                    true
+                }
+                R.id.navigation_profile -> {
+                    if (navController.currentDestination?.id != R.id.navigation_profile) {
+                        navController.navigate(R.id.navigation_profile)
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

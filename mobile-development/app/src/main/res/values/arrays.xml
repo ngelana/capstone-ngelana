@@ -41,13 +41,15 @@
 
     <!-- Profile -->
     <string-array name="data_account_name">
-        <item>Personal information</item>
-        <item>My favorite</item>
-        <item>My review</item>
+        <item>Personal Information</item>
+        <item>My Interest</item>
+        <item>My Favorite</item>
+        <item>My Review</item>
     </string-array>
 
     <integer-array name="data_account_icon">
         <item>@drawable/ic_person</item>
+        <item>@drawable/ic_interests</item>
         <item>@drawable/ic_favorite_border</item>
         <item>@drawable/ic_star_border</item>
     </integer-array>
@@ -61,8 +63,8 @@
     </integer-array>
 
     <string-array name="data_information_name">
-        <item>Help center</item>
-        <item>About us</item>
+        <item>Help Center</item>
+        <item>About Us</item>
     </string-array>
 
     <integer-array name="data_information_icon">

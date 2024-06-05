@@ -20,8 +20,6 @@ class TouristAttractionsActivity : AppCompatActivity() {
         binding = ActivityTouristAttractionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.rvPlaces.setHasFixedSize(true)
-
         placeList.addAll(getListPlace())
         setupView()
     }

@@ -12,8 +12,15 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.adapter.PlaceAdapter
+import com.capstonehore.ngelana.adapter.PlanAdapter
+import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
+import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 
 class HomeFragment : Fragment() {
@@ -22,6 +29,8 @@ class HomeFragment : Fragment() {
 
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
+
+    private val navController by lazy { findNavController() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,10 +46,18 @@ class HomeFragment : Fragment() {
         setupAction()
         setupAnimation()
         setupTitle()
-
+        setupView()
     }
 
     private fun setupAction() {
+        binding.seeMoreFavorite.setOnClickListener {
+            navController.navigate(R.id.action_navigation_home_to_navigation_explore)
+        }
+
+        binding.seeMoreRecommendation.setOnClickListener {
+            navController.navigate(R.id.action_navigation_home_to_navigation_explore)
+        }
+
         binding.submitButton.setOnClickListener {
             startActivity(Intent(requireActivity(), RecommendationPlanActivity::class.java))
         }
@@ -72,4 +89,50 @@ class HomeFragment : Fragment() {
         binding.tvTitle.text = spannable
     }
 
+    private fun getListPlace(): ArrayList<Place> {
+        val dataName = resources.getStringArray(R.array.data_name)
+        val dataDescription = resources.getStringArray(R.array.data_description)
+        val dataImage = resources.getStringArray(R.array.data_image)
+        val listPlace= ArrayList<Place>()
+
+        for (i in dataName.indices) {
+            val place = Place(dataName[i], dataDescription[i], dataImage[i])
+            listPlace.add(place)
+        }
+        return listPlace
+    }
+
+    private fun setupView() {
+        val favoritePlaceList = getListPlace()
+        val recommendationPlaceList = getListPlace()
+
+        val favoritePlaceAdapter = PlanAdapter(favoritePlaceList)
+        val recommendationPlaceAdapter = PlaceAdapter(recommendationPlaceList)
+
+        binding.rvFavoritePlace.apply {
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(requireActivity(), 8)
+            adapter = favoritePlaceAdapter
+        }
+
+        binding.rvRecommendationPlace.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireActivity())
+            adapter = recommendationPlaceAdapter
+        }
+
+        favoritePlaceAdapter.setOnItemClickCallback(object : PlanAdapter.OnItemClickCallback {
+            override fun onItemClicked(items: Place) {
+                val dialogFragment = DetailPlaceFragment.newInstance(items)
+                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+            }
+        })
+
+        recommendationPlaceAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
+            override fun onItemClicked(items: Place) {
+                val dialogFragment = DetailPlaceFragment.newInstance(items)
+                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+            }
+        })
+    }
 }
