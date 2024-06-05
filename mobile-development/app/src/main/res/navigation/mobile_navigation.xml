@@ -9,13 +9,22 @@
         android:id="@+id/navigation_home"
         android:name="com.capstonehore.ngelana.view.home.HomeFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_explore"
+            app:destination="@id/navigation_explore"
+            />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_explore"
         android:name="com.capstonehore.ngelana.view.explore.ExploreFragment"
         android:label="@string/explore"
-        tools:layout="@layout/fragment_explore" />
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_navigation_explore_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_trip"

@@ -3,6 +3,7 @@ package com.capstonehore.ngelana.view.register
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -14,6 +15,8 @@ import android.text.style.StyleSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityRegisterBinding
 import com.capstonehore.ngelana.view.login.LoginActivity
@@ -28,6 +31,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
+        setupStatusBar()
         setupAnimation()
         setupTitle()
         setupButton()
@@ -35,6 +39,22 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener { }
+    }
+
+    private fun setupStatusBar() {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+            }
+        }
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.isAppearanceLightStatusBars = true
     }
 
     private fun setupAnimation() {
@@ -69,12 +89,12 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupTitle() {
-        val grey = ContextCompat.getColor(this, R.color.blue)
+        val blue = ContextCompat.getColor(this, R.color.blue)
 
         val spannable =
             SpannableString(getString(R.string.register_title, getString(R.string.app_name)))
         spannable.setSpan(
-            ForegroundColorSpan(grey),
+            ForegroundColorSpan(blue),
             spannable.indexOf(getString(R.string.app_name)),
             spannable.indexOf(getString(R.string.app_name)) + getString(R.string.app_name).length,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -84,7 +104,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupButton() {
-        val grey = ContextCompat.getColor(this, R.color.blue)
+        val blue = ContextCompat.getColor(this, R.color.blue)
 
         val spannable = SpannableString(
             getString(
@@ -114,7 +134,7 @@ class RegisterActivity : AppCompatActivity() {
         )
 
         spannable.setSpan(
-            ForegroundColorSpan(grey),
+            ForegroundColorSpan(blue),
             spannable.indexOf(getString(R.string.login_here)),
             spannable.indexOf(getString(R.string.login_here)) + getString(R.string.login_here).length,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -123,6 +143,5 @@ class RegisterActivity : AppCompatActivity() {
         binding.tvLogin.text = spannable
         binding.tvLogin.movementMethod = LinkMovementMethod.getInstance()
     }
-
 
 }
