@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model User {
+  id          String            @id @default(cuid())
+  name        String
+  email       String
+  password    String
+  phone       String?
+  birthdate   DateTime          @db.Date()
+  gender      Gender?
+  preferences UserPreferences[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime
+  UserReview  UserReview[]
+  Plan        Plan[]
+}
+
+model Preference {
+  id          String            @id @default(cuid())
+  preferences String
+  users       UserPreferences[]
+}
+
+model UserPreferences {
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  preference   Preference @relation(fields: [preferenceId], references: [id])
+  preferenceId String
+
+  @@id([userId, preferenceId])
+}
+
+model Places {
+  id         String       @id @default(cuid())
+  name       String
+  address    String
+  url        String?
+  contact    String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime
+  UserReview UserReview[]
+}
+
+model UserReview {
+  id        String   @id @default(cuid())
+  review    String
+  star      Int
+  date      DateTime
+  place     Places   @relation(fields: [placeId], references: [id])
+  placeId   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model Plan {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
