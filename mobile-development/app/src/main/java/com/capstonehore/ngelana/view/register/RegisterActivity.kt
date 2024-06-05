@@ -69,12 +69,12 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupTitle() {
-        val grey = ContextCompat.getColor(this, R.color.blue)
+        val blue = ContextCompat.getColor(this, R.color.blue)
 
         val spannable =
             SpannableString(getString(R.string.register_title, getString(R.string.app_name)))
         spannable.setSpan(
-            ForegroundColorSpan(grey),
+            ForegroundColorSpan(blue),
             spannable.indexOf(getString(R.string.app_name)),
             spannable.indexOf(getString(R.string.app_name)) + getString(R.string.app_name).length,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -84,7 +84,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupButton() {
-        val grey = ContextCompat.getColor(this, R.color.blue)
+        val blue = ContextCompat.getColor(this, R.color.blue)
 
         val spannable = SpannableString(
             getString(
@@ -114,7 +114,7 @@ class RegisterActivity : AppCompatActivity() {
         )
 
         spannable.setSpan(
-            ForegroundColorSpan(grey),
+            ForegroundColorSpan(blue),
             spannable.indexOf(getString(R.string.login_here)),
             spannable.indexOf(getString(R.string.login_here)) + getString(R.string.login_here).length,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -123,6 +123,5 @@ class RegisterActivity : AppCompatActivity() {
         binding.tvLogin.text = spannable
         binding.tvLogin.movementMethod = LinkMovementMethod.getInstance()
     }
-
 
 }

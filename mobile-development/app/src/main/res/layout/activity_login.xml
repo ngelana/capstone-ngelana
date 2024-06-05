@@ -115,12 +115,13 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="?attr/colorPrimary"
         android:alpha="0"
+        android:backgroundTint="?attr/colorPrimary"
         android:text="@string/login"
         android:textColor="?attr/colorSecondaryVariant"
         app:layout_constraintBottom_toTopOf="@+id/tvRegister"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:alpha="100" />
 

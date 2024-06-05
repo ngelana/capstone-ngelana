@@ -61,12 +61,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupTitle() {
-        val grey = ContextCompat.getColor(this, R.color.blue)
+        val blue = ContextCompat.getColor(this, R.color.blue)
 
         val spannable =
             SpannableString(getString(R.string.login_title, getString(R.string.app_name)))
         spannable.setSpan(
-            ForegroundColorSpan(grey),
+            ForegroundColorSpan(blue),
             spannable.indexOf(getString(R.string.app_name)),
             spannable.indexOf(getString(R.string.app_name)) + getString(R.string.app_name).length,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupButton() {
-        val grey = ContextCompat.getColor(this, R.color.blue)
+        val blue = ContextCompat.getColor(this, R.color.blue)
 
         val spannable = SpannableString(
             getString(
@@ -106,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
         )
 
         spannable.setSpan(
-            ForegroundColorSpan(grey),
+            ForegroundColorSpan(blue),
             spannable.indexOf(getString(R.string.sign_up_here)),
             spannable.indexOf(getString(R.string.sign_up_here)) + getString(R.string.sign_up_here).length,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
