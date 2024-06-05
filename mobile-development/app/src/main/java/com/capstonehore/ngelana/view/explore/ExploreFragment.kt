@@ -24,8 +24,6 @@ class ExploreFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
 
-    private val categoryList = ArrayList<Category>()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,14 +35,11 @@ class ExploreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvPlaces.setHasFixedSize(true)
-
-        categoryList.addAll(getListPlace())
         setupView()
     }
 
 
-    private fun getListPlace(): ArrayList<Category> {
+    private fun getListCategory(): ArrayList<Category> {
         val dataName = resources.getStringArray(R.array.data_category)
         val dataImage = resources.getStringArray(R.array.data_image_category)
         val listPlace= ArrayList<Category>()
@@ -57,6 +52,7 @@ class ExploreFragment : Fragment() {
     }
 
     private fun setupView() {
+        val categoryList = getListCategory()
         val categoryAdapter = CategoryAdapter(categoryList)
 
         binding.rvPlaces.apply {

@@ -1,9 +1,12 @@
 package com.capstonehore.ngelana.view.home.plan.result
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityResultPlanBinding
@@ -23,10 +26,7 @@ class ResultPlanActivity : AppCompatActivity() {
 
         @Suppress("DEPRECATION")
         planList = intent.getParcelableArrayListExtra(EXTRA_RESULT_PLACE) ?: ArrayList()
-        if (planList.isNotEmpty()) {
-            setupAction()
-            setupView()
-        }
+        setupData(planList)
 
     }
 
@@ -34,6 +34,26 @@ class ResultPlanActivity : AppCompatActivity() {
         binding.backToHomeButton.setOnClickListener {
             startActivity(Intent(this@ResultPlanActivity, MainActivity::class.java))
             finish()
+        }
+    }
+
+    private fun setupStatusBar() {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+            }
+        }
+    }
+
+    private fun setupData(data: ArrayList<Place>) {
+        if (data.isNotEmpty()) {
+            setupAction()
+            setupStatusBar()
+            setupView()
         }
     }
 

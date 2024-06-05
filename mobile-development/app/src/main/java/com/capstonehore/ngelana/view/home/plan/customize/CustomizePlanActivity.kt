@@ -2,10 +2,13 @@ package com.capstonehore.ngelana.view.home.plan.customize
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
@@ -25,16 +28,7 @@ class CustomizePlanActivity : AppCompatActivity() {
 
         @Suppress("DEPRECATION")
         planList = intent.getParcelableArrayListExtra(EXTRA_PLACE) ?: ArrayList()
-        if (planList.isNotEmpty()) {
-            setupAction()
-            setupView()
-        } else {
-            binding.tvNoData.visibility = View.VISIBLE
-
-            binding.rvPlaces.visibility = View.GONE
-            binding.addPlaceCard.visibility = View.GONE
-            binding.submitButton.visibility = View.GONE
-        }
+        setupData(planList)
     }
 
     private fun setupAction() {
@@ -49,6 +43,32 @@ class CustomizePlanActivity : AppCompatActivity() {
             resultIntent.putParcelableArrayListExtra(EXTRA_PLACE, planList)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
+        }
+    }
+
+    private fun setupStatusBar() {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+            }
+        }
+    }
+
+    private fun setupData(data: ArrayList<Place>) {
+        if (data.isNotEmpty()) {
+            setupAction()
+            setupStatusBar()
+            setupView()
+        } else {
+            binding.tvNoData.visibility = View.VISIBLE
+
+            binding.rvPlaces.visibility = View.GONE
+            binding.addPlaceCard.visibility = View.GONE
+            binding.submitButton.visibility = View.GONE
         }
     }
 

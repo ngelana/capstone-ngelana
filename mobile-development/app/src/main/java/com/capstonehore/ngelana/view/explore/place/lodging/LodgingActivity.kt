@@ -1,7 +1,9 @@
 package com.capstonehore.ngelana.view.explore.place.lodging
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
@@ -13,15 +15,25 @@ class LodgingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLodgingBinding
 
-    private val placeList = ArrayList<Place>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLodgingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        placeList.addAll(getListPlace())
+        setupStatusBar()
         setupView()
+    }
+
+    private fun setupStatusBar() {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+            }
+        }
     }
 
     private fun getListPlace(): ArrayList<Place> {
@@ -38,6 +50,7 @@ class LodgingActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
+        val placeList = getListPlace()
         val placeAdapter = PlaceAdapter(placeList)
 
         binding.rvPlaces.apply {

@@ -33,8 +33,10 @@
 
     <!-- Home -->
     <string name="plan">Plan</string>
+    <string name="location">Location</string>
+    <string name="destinations">Destinations</string>
     <string name="home_title">Arrange Your %1$s!</string>
-    <string name="home_description">Start planning your journey with Ngelana by clicking the image on the right.</string>
+    <string name="home_description">Start planning your journey with Ngelana by clicking the image beside.</string>
     <string name="tv_favorite_place">Find your favorite place</string>
     <string name="tv_recommended_place">Recommended place for you</string>
     <string name="see_all">See all</string>

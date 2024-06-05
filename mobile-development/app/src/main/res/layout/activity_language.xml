@@ -26,9 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/language"
-                app:titleTextColor="?attr/colorOnPrimary"
-                app:titleCentered="true"/>
-
+                app:titleTextColor="?attr/colorOnPrimary"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <View

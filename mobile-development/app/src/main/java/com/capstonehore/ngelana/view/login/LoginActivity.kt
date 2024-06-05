@@ -15,8 +15,6 @@ import android.text.style.StyleSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.view.main.MainActivity
@@ -52,10 +50,6 @@ class LoginActivity : AppCompatActivity() {
                 window.statusBarColor = ContextCompat.getColor(this, R.color.white)
             }
         }
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.isAppearanceLightStatusBars = true
     }
 
     private fun setupAnimation() {
