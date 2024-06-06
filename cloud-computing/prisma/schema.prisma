@@ -44,6 +44,7 @@ model UserPreferences {
   userId       String
   preference   Preference @relation(fields: [preferenceId], references: [id])
   preferenceId String
+  preferences  String
 
   @@id([userId, preferenceId])
 }
