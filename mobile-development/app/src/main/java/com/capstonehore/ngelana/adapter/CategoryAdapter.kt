@@ -28,12 +28,13 @@ class CategoryAdapter(private val listPlace: ArrayList<Category>) : RecyclerView
     override fun getItemCount(): Int = listPlace.size
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (name, image) = listPlace[position]
+        val (name, description, image) = listPlace[position]
         with(holder.binding) {
-            placeName.text = name
+            categoryName.text = name
+            categoryDescription.text = description
             Glide.with(holder.itemView.context)
                 .load(image)
-                .into(placeImage)
+                .into(categoryImage)
 
             holder.itemView.setOnClickListener {
                 @Suppress("DEPRECATION")

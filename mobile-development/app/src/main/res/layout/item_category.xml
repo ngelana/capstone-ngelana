@@ -22,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/placeImage"
+                android:id="@+id/categoryImage"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:scaleType="centerCrop"
@@ -33,37 +33,34 @@
                 app:srcCompat="@drawable/ic_image"
                 tools:ignore="ContentDescription" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="-8dp"
-                android:background="@drawable/rounded_corners_right"
-                app:layout_constraintBottom_toBottomOf="@+id/placeName"
-                app:layout_constraintEnd_toEndOf="@+id/placeName"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/placeName" />
-
             <TextView
-                android:id="@+id/placeName"
-                android:layout_width="wrap_content"
+                android:id="@+id/categoryName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/name"
-                android:textColor="?attr/colorOnPrimary"
+                android:textColor="?attr/colorSecondaryVariant"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/categoryDescription"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <View
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/bg_floating_action_button"
-                app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-                app:layout_constraintEnd_toEndOf="@+id/imageButton"
-                app:layout_constraintStart_toStartOf="@+id/imageButton"
-                app:layout_constraintTop_toTopOf="@+id/imageButton" />
+            <TextView
+                android:id="@+id/categoryDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/name"
+                android:textColor="?attr/colorSecondaryVariant"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageButton
                 android:id="@+id/imageButton"
@@ -71,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/transparent"
+                android:background="@drawable/bg_floating_action_button"
                 android:padding="16dp"
                 android:src="@drawable/ic_arrow_outward"
                 app:layout_constraintBottom_toBottomOf="parent"

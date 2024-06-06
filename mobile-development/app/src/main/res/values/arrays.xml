@@ -27,16 +27,22 @@
     </string-array>
 
     <!-- Category -->
-    <string-array name="data_category">
+    <string-array name="data_category_name">
         <item>Tourist Attractions</item>
         <item>Culinary Spot</item>
         <item>Lodging</item>
     </string-array>
 
-    <string-array name="data_image_category">
+    <string-array name="data_category_description">
+        <item>Popular destinations like landmarks, historical sites, and natural attractions.</item>
+        <item>Places known for local dishes, street food, and unique dining experiences.</item>
+        <item>Accommodation options such as hotels, hostels, and resorts.</item>
+    </string-array>
+
+    <string-array name="data_category_image">
         <item>https://lh3.googleusercontent.com/proxy/1jBJ6DkVJDO_fsthZ6MZP77iRtdlz-Is0vroTnIT3KlPou0oFRVbiyjXfbsqlW0DJv6sNMJHny4xMWfBL-QBx9PXLfjwYSytsKqWSeFAfKhY8B_s_SBYDLCqFi8FNjKeqW46oJDyKRMliIH2TcIJ3vTcS7tKug=s1360-w1360-h1020</item>
-        <item>https://lh3.googleusercontent.com/proxy/1jBJ6DkVJDO_fsthZ6MZP77iRtdlz-Is0vroTnIT3KlPou0oFRVbiyjXfbsqlW0DJv6sNMJHny4xMWfBL-QBx9PXLfjwYSytsKqWSeFAfKhY8B_s_SBYDLCqFi8FNjKeqW46oJDyKRMliIH2TcIJ3vTcS7tKug=s1360-w1360-h1020</item>
-        <item>https://lh3.googleusercontent.com/proxy/1jBJ6DkVJDO_fsthZ6MZP77iRtdlz-Is0vroTnIT3KlPou0oFRVbiyjXfbsqlW0DJv6sNMJHny4xMWfBL-QBx9PXLfjwYSytsKqWSeFAfKhY8B_s_SBYDLCqFi8FNjKeqW46oJDyKRMliIH2TcIJ3vTcS7tKug=s1360-w1360-h1020</item>
+        <item tools:ignore="Typos">https://lh3.googleusercontent.com/p/AF1QipP_WGpkdDty_flKMrWXBy8LdedNrBdHIns78KFt=s1360-w1360-h1020</item>
+        <item tools:ignore="Typos">https://lh6.googleusercontent.com/proxy/_jyPMM3P6hAkwoST7Ffb9WCUYG4YqHEE2w0rXqO7WBs2Dvy8MsBUV3BAbDOOgDvxvez1H_tnz_UHMDIsSkuygBOalJFCFiVAj-Z1P57Qean3zFF4qGuf4oi9i4blBsDBCCzZRt4HPisTpmPxmcM0EonJVbin-g=w253-h186-k-no</item>
     </string-array>
 
     <!-- Profile -->

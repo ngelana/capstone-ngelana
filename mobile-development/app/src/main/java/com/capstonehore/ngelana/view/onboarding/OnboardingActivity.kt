@@ -1,11 +1,14 @@
 package com.capstonehore.ngelana.view.onboarding
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityOnboardingBinding
+import com.capstonehore.ngelana.view.login.LoginActivity
+import com.capstonehore.ngelana.view.register.RegisterActivity
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -16,7 +19,19 @@ class OnboardingActivity : AppCompatActivity() {
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupAction()
         setupStatusBar()
+    }
+
+    private fun setupAction() {
+        binding.loginButton.setOnClickListener {
+            startActivity(Intent(this@OnboardingActivity, LoginActivity::class.java))
+            finish()
+        }
+        binding.signupButton.setOnClickListener {
+            startActivity(Intent(this@OnboardingActivity, RegisterActivity::class.java))
+            finish()
+        }
     }
 
     private fun setupStatusBar() {
