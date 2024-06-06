@@ -78,7 +78,7 @@
         <item>@drawable/ic_info</item>
     </integer-array>
 
-    <!-- Profile -->
+    <!-- Personal Information -->
     <string-array name="data_personal_title">
         <item>Name</item>
         <item>Date of Birth</item>
@@ -94,5 +94,20 @@
         <item>083813699536</item>
         <item>anisanurjanah2705@gmail.com</item>
     </string-array>
+
+    <!-- Profile -->
+    <string-array name="data_interest_name">
+        <item>Beach</item>
+        <item>Japanese Food</item>
+        <item>Park</item>
+        <item>Chinese Food</item>
+    </string-array>
+
+    <integer-array name="data_interest_icon">
+        <item>@drawable/ic_fastfood</item>
+        <item>@drawable/ic_fastfood</item>
+        <item>@drawable/ic_fastfood</item>
+        <item>@drawable/ic_fastfood</item>
+    </integer-array>
 
 </resources>

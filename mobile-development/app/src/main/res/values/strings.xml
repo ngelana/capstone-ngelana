@@ -75,6 +75,13 @@
     <string name="register_button_from_login">Don\'t have an account yet? %1$s here.</string>
     <string name="sign_up_here">Sign up</string>
 
+    <!-- Interest Page -->
+    <string name="interest">Interest</string>
+    <string name="interest_title">Discover Your Perfect Recommendations!</string>
+    <string name="interest_description">Please select your interests below. We will use this information to personalize recommendations that best match your preferences and needs.</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+
     <!-- Tab Pager -->
     <string name="tab_text_1">Upcoming</string>
     <string name="tab_text_2">Completed</string>

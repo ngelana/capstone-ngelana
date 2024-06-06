@@ -43,13 +43,13 @@ class ExploreFragment : Fragment() {
         val dataName = resources.getStringArray(R.array.data_category_name)
         val dataDescription = resources.getStringArray(R.array.data_category_description)
         val dataImage = resources.getStringArray(R.array.data_category_image)
-        val listPlace= ArrayList<Category>()
+        val listCategory = ArrayList<Category>()
 
         for (i in dataName.indices) {
             val place = Category(dataName[i], dataDescription[i], dataImage[i])
-            listPlace.add(place)
+            listCategory.add(place)
         }
-        return listPlace
+        return listCategory
     }
 
     private fun setupView() {

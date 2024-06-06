@@ -64,19 +64,19 @@ class ProfileFragment : Fragment() {
         setupRecyclerView(binding.rvInformation)
 
         accountList.addAll(
-            getListFromResources(
+            getListProfile(
                 R.array.data_account_name,
                 R.array.data_account_icon
             )
         )
         settingsList.addAll(
-            getListFromResources(
+            getListProfile(
                 R.array.data_settings_name,
                 R.array.data_settings_icon
             )
         )
         informationList.addAll(
-            getListFromResources(
+            getListProfile(
                 R.array.data_information_name,
                 R.array.data_information_icon
             )
@@ -116,16 +116,16 @@ class ProfileFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
     }
 
-    private fun getListFromResources(namesResId: Int, iconsResId: Int): ArrayList<Profile> {
+    private fun getListProfile(namesResId: Int, iconsResId: Int): ArrayList<Profile> {
         val dataName = resources.getStringArray(namesResId)
         val dataIcon = resources.obtainTypedArray(iconsResId)
-        val list = ArrayList<Profile>()
+        val listProfile = ArrayList<Profile>()
         for (i in dataName.indices) {
             val profile = Profile(dataName[i], dataIcon.getResourceId(i, -1))
-            list.add(profile)
+            listProfile.add(profile)
         }
         dataIcon.recycle()
-        return list
+        return listProfile
     }
 
     private fun showList(
