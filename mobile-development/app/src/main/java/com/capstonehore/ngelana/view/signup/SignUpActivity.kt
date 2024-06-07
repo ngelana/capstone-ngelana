@@ -2,7 +2,9 @@ package com.capstonehore.ngelana.view.signup
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivitySignUpBinding
+import com.capstonehore.ngelana.view.signup.name.NameFragment
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -12,5 +14,11 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, NameFragment())
+                .commit()
+        }
     }
 }

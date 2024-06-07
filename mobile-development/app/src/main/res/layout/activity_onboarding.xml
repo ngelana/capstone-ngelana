@@ -5,55 +5,65 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
     tools:context=".view.onboarding.OnboardingActivity">
 
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_image"
-        app:layout_constraintBottom_toTopOf="@+id/loginButton"
+        app:layout_constraintBottom_toTopOf="@+id/bgView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <Button
-        android:id="@+id/interestButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/interest"
-        app:layout_constraintBottom_toTopOf="@+id/signupButton"
+    <View
+        android:id="@+id/bgView"
+        android:layout_width="match_parent"
+        android:layout_height="144dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_bottom_sheet"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/signupButton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/sign_up"
-        app:layout_constraintBottom_toTopOf="@+id/loginButton"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/rounded_corners_interest"
+        android:drawableEnd="@drawable/ic_keyboard_arrow_right"
+        android:drawableTint="?attr/colorSecondaryVariant"
+        android:alpha="0"
+        android:text="@string/onboarding"
+        android:textColor="?attr/colorSecondaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bgView"
+        tools:alpha="100" />
 
-
-    <Button
-        android:id="@+id/loginButton"
+    <TextView
+        android:id="@+id/tvLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
-        android:text="@string/login"
+        android:alpha="0"
+        android:text="@string/login_button_from_register"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signupButton"
+        tools:alpha="100" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

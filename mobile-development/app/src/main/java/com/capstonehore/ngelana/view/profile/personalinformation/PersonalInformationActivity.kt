@@ -1,9 +1,7 @@
 package com.capstonehore.ngelana.view.profile.personalinformation
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PersonalInformationAdapter
@@ -19,20 +17,7 @@ class PersonalInformationActivity : AppCompatActivity() {
         binding = ActivityPersonalInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupStatusBar()
         setupView()
-    }
-
-    private fun setupStatusBar() {
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-            }
-        }
     }
 
     private fun getListPersonal(): ArrayList<PersonalInformation> {
