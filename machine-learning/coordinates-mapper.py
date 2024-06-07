@@ -35,7 +35,7 @@ def coord_mapper(start_coord, radius, row_count, height_count):
     return coord_data
 
 
-# Function to export square Bali Island mapping to csv
+# Function to export coordinates to csv
 def coord_to_csv(data, filename):
     file_path = 'coordinates'
     file = f'{file_path}/{filename}.csv'
@@ -67,6 +67,7 @@ def forest_filter(shape_gdf, points_df):
     return filtered_df
 
 
+# Function to export map to html
 def map_exporter(data):
     map_export = folium.Map(location=[data['latitude'][0], data['longitude'][0]], zoom_start=10)
     for latitude, longitude in data.values:
