@@ -24,6 +24,7 @@ class SplashScreenActivity : AppCompatActivity() {
         installSplashScreen()
 
         window.decorView.postDelayed({
+            // onboarding activity
             startActivity(Intent(this@SplashScreenActivity, OnboardingActivity::class.java))
             finish()
         }, DELAY)

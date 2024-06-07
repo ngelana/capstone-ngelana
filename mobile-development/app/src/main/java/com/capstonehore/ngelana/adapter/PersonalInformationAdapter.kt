@@ -5,7 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.capstonehore.ngelana.data.local.entity.PersonalInformation
 import com.capstonehore.ngelana.databinding.ItemPersonalInformationBinding
-
+/**
+ * Called when an item in this adapter has been clicked.
+ *
+ * @param items The item that was clicked.
+ */
 class PersonalInformationAdapter(private val listProfile: ArrayList<PersonalInformation>) :
     RecyclerView.Adapter<PersonalInformationAdapter.ListViewHolder>() {
 

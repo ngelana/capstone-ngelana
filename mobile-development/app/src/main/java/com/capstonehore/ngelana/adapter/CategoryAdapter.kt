@@ -7,6 +7,12 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.local.entity.Category
 import com.capstonehore.ngelana.databinding.ItemCategoryBinding
 
+
+/**
+ * CategoryAdapter is a RecyclerView.Adapter implementation for displaying a list of Category items.
+ *
+ * @property listPlace The list of Category items to be displayed.
+ */
 class CategoryAdapter(private val listPlace: ArrayList<Category>) : RecyclerView.Adapter<CategoryAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback

@@ -7,6 +7,11 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ItemPlaceBinding
 
+/**
+ * Called when an item in this adapter has been clicked.
+ *
+ * @param items The item that was clicked.
+ */
 class PlaceAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapter<PlaceAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback

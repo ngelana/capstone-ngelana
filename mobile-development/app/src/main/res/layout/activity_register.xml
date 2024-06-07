@@ -22,9 +22,9 @@
 
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:src="@drawable/ic_image"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:src="@drawable/img_signup"
         app:layout_constraintBottom_toTopOf="@+id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
