@@ -1,5 +1,4 @@
-# This script is created to create a dataset for the machine learning model.
-# For the completion of Bangkit 2024 Capstone Project
+# This script is created to create coordinate list for data scraping.
 
 import os
 import csv
