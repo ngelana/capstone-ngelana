@@ -3,7 +3,6 @@ package com.capstonehore.ngelana.view.register
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -29,7 +28,6 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
-        setupStatusBar()
         setupAnimation()
         setupTitle()
         setupButton()
@@ -37,18 +35,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener { }
-    }
-
-    private fun setupStatusBar() {
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-            }
-        }
     }
 
     private fun setupAnimation() {

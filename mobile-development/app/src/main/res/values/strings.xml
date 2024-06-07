@@ -63,6 +63,9 @@
     <string name="back_to_home">Back to Home</string>
     <string name="dark_mode">Dark Mode</string>
 
+    <!-- Onboarding Page  -->
+    <string name="onboarding">Let\'s Plan Your Journey</string>
+
     <!-- Login Page -->
     <string name="login_title">Welcome Back to %1$s!</string>
     <string name="login_description">Log in to Ngelana and pick up where you left off on your unique journey.</string>
@@ -74,6 +77,23 @@
     <string name="register_description">Your personal adventure awaits! Sign up on Ngelana and discover the wonders of the world.</string>
     <string name="register_button_from_login">Don\'t have an account yet? %1$s here.</string>
     <string name="sign_up_here">Sign up</string>
+
+    <!-- Sign Up Page -->
+    <string name="back">Back</string>
+    <string name="_0">(0)</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="what_s_your_name">What\'s your name?</string>
+    <string name="what_s_your_email">What\'s your email?</string>
+    <string name="set_your_password">Set your password!</string>
+    <string name="signup_title">Join Ngelana and Begin Your Journey!</string>
+    <string name="signup_description">Your personal adventure awaits! Sign up on Ngelana and discover the wonders of the world.</string>
+    <string name="recommendation_title">Explore Beyond Boundaries with Ngelana\'s Recommendations</string>
+    <string name="recommendation_description">Let Ngelana guide you beyond boundaries. Uncover new destinations, immerse yourself in diverse cultures, and embark on a journey of discovery.</string>
+    <string name="customize_description">Customize your travel plans effortlessly with Ngelana\'s user-friendly destination planner. Plan your trip, add favorite spots, and enjoy seamless travel arrangements.</string>
+    <string name="customize_title">Effortless Customization: Ngelana\'s Easy-to-Use Destination Planner</string>
+
 
     <!-- Interest Page -->
     <string name="interest">Interest</string>

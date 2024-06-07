@@ -3,10 +3,8 @@ package com.capstonehore.ngelana.view.home.plan.recommendation
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
@@ -29,7 +27,6 @@ class RecommendationPlanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
-        setupStatusBar()
         setupView()
     }
 
@@ -40,18 +37,6 @@ class RecommendationPlanActivity : AppCompatActivity() {
             }
             @Suppress("DEPRECATION")
             startActivityForResult(intent, ADD_PLACE_REQUEST)
-        }
-    }
-
-    private fun setupStatusBar() {
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-            }
         }
     }
 
