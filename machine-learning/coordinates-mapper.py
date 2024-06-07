@@ -90,7 +90,7 @@ def main():
     forest_gdf = gpd.GeoDataFrame(pd.concat(forest_gdf, ignore_index=True))
 
     land_gdf = gpd.read_file('land-filter/indonesia_province.shp')
-    coord_df = pd.read_csv('coordinates/bali_island_dirty.csv')
+    coord_df = pd.read_csv('archive/coordinates/bali_island_dirty.csv')
 
     land_filtered = land_filter(land_gdf, coord_df)
     forest_filtered = forest_filter(forest_gdf, land_filtered)
