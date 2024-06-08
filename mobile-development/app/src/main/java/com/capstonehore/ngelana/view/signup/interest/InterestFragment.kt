@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.InterestAdapter
-import com.capstonehore.ngelana.data.local.entity.Interest
+import com.capstonehore.ngelana.data.Interest
 import com.capstonehore.ngelana.databinding.FragmentInterestBinding
 import com.capstonehore.ngelana.view.login.LoginActivity
 

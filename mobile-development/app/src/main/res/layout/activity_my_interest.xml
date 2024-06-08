@@ -37,6 +37,29 @@
             android:background="?attr/colorOnSecondary"
             app:layout_constraintBottom_toBottomOf="@+id/appBarLayout" />
 
+        <Button
+            android:id="@+id/addInterest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/transparent"
+            android:drawableLeft="@drawable/ic_add"
+            android:drawableTint="?attr/colorOnPrimary"
+            android:text="@string/back_to_home"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_1"
+            tools:ignore="RtlHardcoded" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rInterest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addInterest" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

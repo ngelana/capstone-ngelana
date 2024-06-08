@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/backgroundColor"
+    android:layout_margin="8dp">
+
+    <View
+        android:id="@+id/bgBottom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/bgTop"
+        android:layout_width="0dp"
+        android:layout_height="96dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constraintEnd_toEndOf="@id/bgBottom"
+        app:layout_constraintStart_toStartOf="@id/bgBottom"
+        app:layout_constraintTop_toTopOf="@+id/bgBottom" />
+
+    <ImageView
+        android:id="@+id/placeImage"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:background="@drawable/rounded_corners_transparent"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/bgTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_image"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/placeName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/app_name"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/placeImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/placeDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/app_name"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/bgTop"
+        app:layout_constraintStart_toEndOf="@+id/placeImage"
+        app:layout_constraintTop_toBottomOf="@+id/placeName" />
+
+    <View
+        android:id="@+id/reviewNumber"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/bg_floating_action_button"
+        app:layout_constraintBottom_toBottomOf="@+id/reviewDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/reviewDescription" />
+
+    <TextView
+        android:id="@+id/reviewRating"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/_0"
+        android:textSize="12sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/reviewNumber"
+        app:layout_constraintEnd_toEndOf="@+id/reviewNumber"
+        app:layout_constraintStart_toStartOf="@+id/reviewNumber"
+        app:layout_constraintTop_toTopOf="@+id/reviewNumber" />
+
+    <TextView
+        android:id="@+id/reviewDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:alpha="0.7"
+        android:text="@string/app_name"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/reviewNumber"
+        app:layout_constraintTop_toBottomOf="@+id/bgTop" />
+
+    <TextView
+        android:id="@+id/reviewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.7"
+        android:text="@string/app_name"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/reviewNumber"
+        app:layout_constraintTop_toBottomOf="@+id/reviewDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

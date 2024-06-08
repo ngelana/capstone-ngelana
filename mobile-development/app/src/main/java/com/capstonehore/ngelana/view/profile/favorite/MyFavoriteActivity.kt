@@ -13,6 +13,23 @@ class MyFavoriteActivity : AppCompatActivity() {
         binding = ActivityMyFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupView()
     }
 
+    private fun setupView() {
+//        val placeAdapter = PlaceAdapter()
+//
+//        binding.rvFavorite.apply {
+//            setHasFixedSize(true)
+//            layoutManager = LinearLayoutManager(this@MyFavoriteActivity)
+//            adapter = placeAdapter
+//        }
+//
+//        placeAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
+//            override fun onItemClicked(items: Place) {
+//                val dialogFragment = DetailPlaceFragment.newInstance(items)
+//                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+//            }
+//        })
+    }
 }

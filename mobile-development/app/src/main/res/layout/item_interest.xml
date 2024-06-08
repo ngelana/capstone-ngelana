@@ -11,7 +11,7 @@
         android:id="@+id/viewInterest"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        android:background="@drawable/rounded_corners_interest"
+        android:background="@drawable/rounded_corners_light_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

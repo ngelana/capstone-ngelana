@@ -31,6 +31,15 @@
     <string name="empty_email">Please enter your email address to proceed.</string>
     <string name="empty_password">Please enter your password to proceed.</string>
 
+    <!-- Button -->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="generate">Generate</string>
+    <string name="save">Save</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="dark_mode">Dark Mode</string>
+
     <!-- Home -->
     <string name="plan">Plan</string>
     <string name="location">Location</string>
@@ -40,6 +49,7 @@
     <string name="tv_favorite_place">Find your favorite place</string>
     <string name="tv_recommended_place">Recommended place for you</string>
     <string name="see_all">See all</string>
+    <string name="add_place">Add place</string>
 
     <!-- Profile -->
     <string name="welcome">Welcome,</string>
@@ -54,17 +64,28 @@
     <string name="help_center">Help Center</string>
     <string name="about_us">About Us</string>
 
-    <!-- Button -->
-    <string name="login">Login</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="generate">Generate</string>
-    <string name="save">Save</string>
-    <string name="back_to_home">Back to Home</string>
-    <string name="dark_mode">Dark Mode</string>
+    <string name="edit">Edit</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="woman">Woman</string>
+    <string name="man">Man</string>
+    <string name="phone_number">Phone Number</string>
+
+    <string name="help_topics">Help Topics</string>
+    <string name="can_t_find_what_you_re_looking_for">Can\'t find what you\'re looking for?</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="about_us_description">
+        Ngelana is an innovative mobile application designed to enhance the travel experience
+        by providing location information at tourist attractions for users. The app aims to solve
+        the common issue of overcrowded destinations, where it can lead not just the schedule
+        to be messy, but it can make users be disappointed and frustrated. Utilizing machine
+        learning to make user-generated data algorithms, Ngelana can make predictions about
+        potential tourist destinations based on the user’s current location and interest.
+        With that, users can make decisions more precisely and optimize their time in traveling.
+    </string>
 
     <!-- Onboarding Page  -->
-    <string name="onboarding">Let\'s Plan Your Journey</string>
+    <string name="onboarding">Create an Account</string>
 
     <!-- Login Page -->
     <string name="login_title">Welcome Back to %1$s!</string>
@@ -93,7 +114,6 @@
     <string name="recommendation_description">Let Ngelana guide you beyond boundaries. Uncover new destinations, immerse yourself in diverse cultures, and embark on a journey of discovery.</string>
     <string name="customize_description">Customize your travel plans effortlessly with Ngelana\'s user-friendly destination planner. Plan your trip, add favorite spots, and enjoy seamless travel arrangements.</string>
     <string name="customize_title">Effortless Customization: Ngelana\'s Easy-to-Use Destination Planner</string>
-
 
     <!-- Interest Page -->
     <string name="interest">Interest</string>

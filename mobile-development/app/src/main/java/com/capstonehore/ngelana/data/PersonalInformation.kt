@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.data.local.entity
+package com.capstonehore.ngelana.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

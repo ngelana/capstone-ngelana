@@ -7,13 +7,8 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.local.entity.Category
 import com.capstonehore.ngelana.databinding.ItemCategoryBinding
 
-
-/**
- * CategoryAdapter is a RecyclerView.Adapter implementation for displaying a list of Category items.
- *
- * @property listPlace The list of Category items to be displayed.
- */
-class CategoryAdapter(private val listPlace: ArrayList<Category>) : RecyclerView.Adapter<CategoryAdapter.ListViewHolder>() {
+class CategoryAdapter(private val listPlace: ArrayList<Category>) :
+    RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -21,19 +16,19 @@ class CategoryAdapter(private val listPlace: ArrayList<Category>) : RecyclerView
         this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding = ItemCategoryBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return ListViewHolder(binding)
+        return CategoryViewHolder(binding)
     }
 
     override fun getItemCount(): Int = listPlace.size
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val (name, description, image) = listPlace[position]
         with(holder.binding) {
             categoryName.text = name
@@ -49,7 +44,7 @@ class CategoryAdapter(private val listPlace: ArrayList<Category>) : RecyclerView
         }
     }
 
-    class ListViewHolder(var binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root)
+    class CategoryViewHolder(var binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
         fun onItemClicked(items: Category)

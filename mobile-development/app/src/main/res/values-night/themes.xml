@@ -12,7 +12,7 @@
 
         <item name="android:progressBackgroundTint">@color/blue</item>
 
-        <item name="backgroundColor">?attr/colorSecondary</item>
+        <item name="backgroundColor">@color/dark_blue</item>
         <item name="android:statusBarColor">@color/dark_blue</item>
         <item name="android:windowLightStatusBar">true</item>
 

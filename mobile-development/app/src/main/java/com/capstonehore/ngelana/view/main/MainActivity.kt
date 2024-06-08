@@ -1,5 +1,7 @@
 package com.capstonehore.ngelana.view.main
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -9,23 +11,18 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityMainBinding
+import com.capstonehore.ngelana.utils.LanguagePreference
+import java.util.Locale
 
-/**
- * MainActivity is the entry point of the application. It sets up the navigation for the app.
- */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    /**
-     * Called when the activity is starting. This is where most initialization should go.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setLocale(this)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.blue)
@@ -37,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = binding.navView
         bottomNavigationView.setupWithNavController(navController)
 
-        // Set up navigation item selection listener
         bottomNavigationView.setOnItemSelectedListener  { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -69,13 +65,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * This method is called whenever the user chooses to navigate Up within your application's activity hierarchy from the action bar.
-     *
-     * @return boolean Return true if Up navigation completed successfully and this Activity was finished, false otherwise.
-     */
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    companion object {
+        fun setLocale(context: Context) {
+            val languageCode = LanguagePreference.getLanguage(context)
+            if (languageCode != null) {
+                val locale = Locale(languageCode)
+                Locale.setDefault(locale)
+
+                val config = Configuration()
+                config.setLocale(locale)
+                @Suppress("DEPRECATION")
+                context.resources.updateConfiguration(config, context.resources.displayMetrics)
+            }
+        }
+
+        fun updateResources(context: Context, language: String): Context {
+            val locale = Locale(language)
+            Locale.setDefault(locale)
+
+            val res = context.resources
+            val config = Configuration(res.configuration)
+            config.setLocale(locale)
+            return context.createConfigurationContext(config)
+        }
     }
 }

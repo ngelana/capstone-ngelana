@@ -1,12 +1,14 @@
 package com.capstonehore.ngelana.view.profile.personalinformation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PersonalInformationAdapter
-import com.capstonehore.ngelana.data.local.entity.PersonalInformation
+import com.capstonehore.ngelana.data.PersonalInformation
 import com.capstonehore.ngelana.databinding.ActivityPersonalInformationBinding
+import com.capstonehore.ngelana.view.profile.personalinformation.edit.EditPersonalInformationActivity
 
 class PersonalInformationActivity : AppCompatActivity() {
 
@@ -17,7 +19,14 @@ class PersonalInformationActivity : AppCompatActivity() {
         binding = ActivityPersonalInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupAction()
         setupView()
+    }
+
+    private fun setupAction() {
+        binding.editButton.setOnClickListener {
+            startActivity(Intent(this@PersonalInformationActivity, EditPersonalInformationActivity::class.java))
+        }
     }
 
     private fun getListPersonal(): ArrayList<PersonalInformation> {
@@ -42,20 +51,12 @@ class PersonalInformationActivity : AppCompatActivity() {
             adapter = informationAdapter
         }
 
-//        informationAdapter.setOnItemClickCallback(object : PersonalInformationAdapter.OnItemClickCallback {
-////            override fun onItemClicked(items: PersonalInformation) {
-////                val activity = this@PersonalInformationActivity
-////                val intent = when (items.title) {
-////                    "Name" -> Intent(activity, TouristAttractionsActivity::class.java)
-////                    "Date of Birth" -> Intent(activity, CulinarySpotActivity::class.java)
-////                    "Gender" -> Intent(activity, LodgingActivity::class.java)
-////                    "No. Handphone" -> Intent(activity, LodgingActivity::class.java)
-////                    "Email" -> Intent(activity, LodgingActivity::class.java)
-////                    else -> null
-////                }
-////                intent?.let { startActivity(it) }
-////            }
-////        })
+        informationAdapter.setOnItemClickCallback(object : PersonalInformationAdapter.OnItemClickCallback {
+            override fun onItemClicked(items: PersonalInformation) {
+                val context = this@PersonalInformationActivity
+                startActivity(Intent(context, EditPersonalInformationActivity::class.java)
+                    .putExtra(EditPersonalInformationActivity.EXTRA_RESULT_INFORMATION, items))
+            }
+        })
     }
-
 }
