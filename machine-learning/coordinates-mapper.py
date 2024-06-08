@@ -36,9 +36,8 @@ def coord_mapper(start_coord, radius, row_count, height_count):
 
 # Function to export coordinates to csv
 def coord_to_csv(data, filename):
-    file_path = 'coordinates'
-    file = f'{file_path}/{filename}.csv'
-    with open(file, mode='w', newline='', encoding='utf-8') as file:
+    file_path = 'coordinates/bali_island_dirty.csv'
+    with open(file_path, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(['latitude', 'longitude'])
         writer.writerows(data)
@@ -95,7 +94,7 @@ def main():
     forest_filtered = forest_filter(forest_gdf, land_filtered)
 
     map_exporter(forest_filtered)
-    coord_to_csv(forest_filtered, 'bali_island_clean')
+    forest_filtered.to_csv('coordinates/bali_island_clean.csv', index=False)
 
 
 if __name__ == '__main__':
