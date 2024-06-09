@@ -16,6 +16,7 @@ def get_row(start_coord, radius, count):
     coord_data = []
     for _ in range(count):
         next_coord = geodesic(meters=radius * 2).destination(start_coord, 90)
+
         coord_data.append([next_coord.latitude, next_coord.longitude])
         start_coord = next_coord
     return coord_data
