@@ -90,7 +90,7 @@ def circle_search(cred, lat, lon, rad):
 def dataset_maker(data):
     now = datetime.now().strftime('%d-%m-%y_%H%M%S')
     banned_types = ['point_of_interest', 'establishment']
-    file_path = f'dataset-output/export_{now}.csv'
+    file_path = f'scraping-output/export_{now}.csv'
     dataset = []
 
     for item in data.get('places', []):
@@ -113,7 +113,7 @@ def dataset_maker(data):
         dataset.append(row)
 
     if dataset:
-        os.makedirs('dataset-output', exist_ok=True)
+        os.makedirs('scraping-output', exist_ok=True)
         with open(file_path, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.DictWriter(file, fieldnames=dataset[0].keys())
             writer.writeheader()

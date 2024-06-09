@@ -6,7 +6,7 @@ import pandas as pd
 
 def main():
     # Load the dataset
-    dataset_path = 'dataset-output'
+    dataset_path = 'scraping-output'
     dataset_files = [f for f in os.listdir(dataset_path) if f.endswith('.csv')]
 
     #  Get the headers
@@ -19,7 +19,7 @@ def main():
     dataset = pd.concat([first_file] + other_files, ignore_index=True)
 
     # Save the combined dataset
-    combined_path = 'dataset-output/combined_dataset.csv'
+    combined_path = 'combined-dataset/combined_dataset.csv'
     dataset.to_csv(combined_path, index=False)
     print(f'Compiled dataset saved to {combined_path}')
 
