@@ -4,45 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/backgroundColor">
-
-    <View
-        android:id="@+id/verticalLine_1"
-        android:layout_width="4dp"
-        android:layout_height="52dp"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/circleView_1"
-        app:layout_constraintEnd_toEndOf="@+id/circleView_1"
-        app:layout_constraintStart_toStartOf="@+id/circleView_1"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/circleView_1"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="@drawable/circle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/verticalLine_2"
-        android:layout_width="4dp"
-        android:layout_height="52dp"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/circleView_1"
-        app:layout_constraintEnd_toEndOf="@+id/circleView_1"
-        app:layout_constraintStart_toStartOf="@+id/circleView_1"
-        app:layout_constraintBottom_toBottomOf="parent" />
+    android:background="?attr/backgroundColor"
+    android:layout_margin="8dp">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="128dp"
-        android:layout_marginStart="16dp"
         app:cardBackgroundColor="?attr/backgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/circleView_1"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="0dp">
 
@@ -50,23 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="128dp">
 
-            <View
-                android:id="@+id/cornersView"
-                android:layout_width="8dp"
-                android:layout_height="112dp"
-                android:background="@drawable/rounded_corners_left"
-                app:layout_constraintBottom_toBottomOf="@+id/placeImage"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/placeImage" />
-
             <ImageView
                 android:id="@+id/placeImage"
-                android:layout_width="0dp"
-                android:layout_height="112dp"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cornersView"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_image"
                 tools:ignore="ContentDescription" />

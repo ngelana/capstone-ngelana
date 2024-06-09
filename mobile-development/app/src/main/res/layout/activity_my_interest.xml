@@ -45,7 +45,7 @@
             android:backgroundTint="@color/transparent"
             android:drawableLeft="@drawable/ic_add"
             android:drawableTint="?attr/colorOnPrimary"
-            android:text="@string/back_to_home"
+            android:text="@string/add_interest"
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -9,12 +9,17 @@ import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityResultPlanBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.main.MainActivity
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ResultPlanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultPlanBinding
 
     private lateinit var planList: ArrayList<Place>
+
+    private var selectedDate: LocalDate? = null
+    private val dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +29,7 @@ class ResultPlanActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         planList = intent.getParcelableArrayListExtra(EXTRA_RESULT_PLACE) ?: ArrayList()
         setupData(planList)
+        setupDate()
 
     }
 
@@ -31,6 +37,16 @@ class ResultPlanActivity : AppCompatActivity() {
         binding.backToHomeButton.setOnClickListener {
             startActivity(Intent(this@ResultPlanActivity, MainActivity::class.java))
             finish()
+        }
+    }
+
+    private fun setupDate() {
+        val receivedDateStr = intent.getStringExtra(EXTRA_DATE)
+        if (receivedDateStr != null) {
+            selectedDate = LocalDate.parse(receivedDateStr, dateFormat)
+            binding.planDate.text = selectedDate?.format(dateFormat)
+        } else {
+            binding.planDate.text = ""
         }
     }
 
@@ -60,5 +76,6 @@ class ResultPlanActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_RESULT_PLACE = "extra_result_place"
+        const val EXTRA_DATE = "extra_date"
     }
 }

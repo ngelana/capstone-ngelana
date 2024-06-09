@@ -12,6 +12,8 @@ import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class RecommendationPlanActivity : AppCompatActivity() {
 
@@ -21,12 +23,16 @@ class RecommendationPlanActivity : AppCompatActivity() {
 
     private val ADD_PLACE_REQUEST = 1
 
+    private var selectedDate: LocalDate? = null
+    private val dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecommendationPlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupAction()
+        setupDate()
         setupView()
     }
 
@@ -34,9 +40,20 @@ class RecommendationPlanActivity : AppCompatActivity() {
         binding.submitButton.setOnClickListener {
             val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
                 putParcelableArrayListExtra(CustomizePlanActivity.EXTRA_PLACE, placeList)
+                putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate?.format(dateFormat))
             }
             @Suppress("DEPRECATION")
             startActivityForResult(intent, ADD_PLACE_REQUEST)
+        }
+    }
+
+    private fun setupDate() {
+        val receivedDateStr = intent.getStringExtra(EXTRA_DATE)
+        if (receivedDateStr != null) {
+            selectedDate = LocalDate.parse(receivedDateStr, dateFormat)
+            binding.planDate.text = selectedDate?.format(dateFormat)
+        } else {
+            binding.planDate.text = ""
         }
     }
 
@@ -89,6 +106,22 @@ class RecommendationPlanActivity : AppCompatActivity() {
         })
     }
 
+//    private fun showToast(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//    }
+
+//    private fun showLoading(isLoading: Boolean) {
+//        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+//    }
+//
+//    private fun obtainViewModel(activity: AppCompatActivity): MainViewModel {
+//        val factory = ViewModelFactory.getInstance(
+//            activity.application,
+//            UserPreference.getInstance(dataStore)
+//        )
+//        return ViewModelProvider(activity, factory)[MainViewModel::class.java]
+//    }
+
     @SuppressLint("NotifyDataSetChanged")
     @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -102,5 +135,9 @@ class RecommendationPlanActivity : AppCompatActivity() {
                 binding.rvPlaces.adapter?.notifyDataSetChanged()
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_DATE = "extra_date"
     }
 }

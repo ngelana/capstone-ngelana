@@ -14,11 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ngelana"
         tools:targetApi="31">
-
+        <activity
+            android:name=".view.home.plan.date.DatePlanActivity"
+            android:exported="false" />
         <!-- <meta-data -->
         <!-- android:name="com.google.android.geo.API_KEY" -->
         <!-- android:value="${MAPS_API_KEY}" /> -->
-
         <!-- Profile -->
         <activity
             android:name=".view.profile.personalinformation.PersonalInformationActivity"
@@ -43,9 +44,7 @@
             android:exported="false" />
         <activity
             android:name=".view.profile.aboutus.AboutUsActivity"
-            android:exported="false" />
-
-        <!-- Explore -->
+            android:exported="false" /> <!-- Explore -->
         <activity
             android:name=".view.explore.place.tourist.TouristAttractionsActivity"
             android:exported="false" />
@@ -54,9 +53,7 @@
             android:exported="false" />
         <activity
             android:name=".view.explore.place.culinary.CulinarySpotActivity"
-            android:exported="false" />
-
-        <!-- Home -->
+            android:exported="false" /> <!-- Home -->
         <activity
             android:name=".view.home.plan.recommendation.RecommendationPlanActivity"
             android:exported="false" />
@@ -66,7 +63,6 @@
         <activity
             android:name=".view.home.plan.result.ResultPlanActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.splashscreen.SplashScreenActivity"
             android:exported="true">

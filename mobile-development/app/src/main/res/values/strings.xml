@@ -30,6 +30,7 @@
     <string name="empty_name">Please enter your name address to proceed.</string>
     <string name="empty_email">Please enter your email address to proceed.</string>
     <string name="empty_password">Please enter your password to proceed.</string>
+    <string name="empty_date">Please select date first to proceed.</string>
 
     <!-- Button -->
     <string name="login">Login</string>
@@ -49,7 +50,17 @@
     <string name="tv_favorite_place">Find your favorite place</string>
     <string name="tv_recommended_place">Recommended place for you</string>
     <string name="see_all">See all</string>
+
+    <string name="choose_the_date_for_your_trip">Choose the date for your trip!</string>
+    <string name="select_date">Select Date</string>
+
     <string name="add_place">Add place</string>
+    <string name="start_destination">Start Destination</string>
+    <string name="end_destination">End Destination</string>
+    <string name="set_your_trip_name">Set Your Trip Name</string>
+    <string name="enter_trip_name">Enter Trip Name</string>
+    <string name="trip_name">Trip Name:</string>
+    <string name="date">Date:</string>
 
     <!-- Profile -->
     <string name="welcome">Welcome,</string>
@@ -70,6 +81,8 @@
     <string name="woman">Woman</string>
     <string name="man">Man</string>
     <string name="phone_number">Phone Number</string>
+
+    <string name="add_interest">Add Interest</string>
 
     <string name="help_topics">Help Topics</string>
     <string name="can_t_find_what_you_re_looking_for">Can\'t find what you\'re looking for?</string>
