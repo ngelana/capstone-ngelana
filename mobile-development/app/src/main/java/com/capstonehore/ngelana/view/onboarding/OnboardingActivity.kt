@@ -40,11 +40,11 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setupAnimation() {
-        ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
+//        ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -30f, 30f).apply {
+//            duration = 6000
+//            repeatCount = ObjectAnimator.INFINITE
+//            repeatMode = ObjectAnimator.REVERSE
+//        }.start()
 
         val signupButton =
             ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(400)

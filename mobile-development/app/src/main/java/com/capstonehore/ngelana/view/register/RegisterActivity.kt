@@ -34,8 +34,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.submitButton.setOnClickListener { }
+        binding.submitButton.setOnClickListener {
+            setupFunction()
+        }
     }
+
 
     private fun setupAnimation() {
         ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -30f, 30f).apply {
@@ -123,5 +126,10 @@ class RegisterActivity : AppCompatActivity() {
         binding.tvLogin.text = spannable
         binding.tvLogin.movementMethod = LinkMovementMethod.getInstance()
     }
+
+    private fun setupFunction() {
+        TODO("Not yet implemented")
+    }
+
 
 }
