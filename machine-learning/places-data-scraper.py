@@ -37,6 +37,7 @@ fields = ','.join([
     'places.priceLevel',
     'places.rating',
     'places.userRatingCount',
+    'places.reviews',
 ])
 
 types = [
@@ -95,6 +96,11 @@ def dataset_maker(data):
 
     for item in data.get('places', []):
         filtered_types = [t for t in item.get('types', []) if t not in banned_types]
+
+        # Filter reviews with languageCode 'en'
+        reviews = [r.get('text', {}).get('text', '') for r in item.get('reviews', []) if
+                   r.get('text', {}).get('languageCode') == 'en']
+
         row = {
             'id': item.get('id', ),
             'name': item.get('displayName', {}).get('text', ),
@@ -110,6 +116,10 @@ def dataset_maker(data):
             'rating-count': item.get('userRatingCount', ),
             'price-level': item.get('priceLevel', )
         }
+        num_reviews = 5
+        for i in range(num_reviews):
+            row[f'review {i + 1}'] = reviews[i] if i < len(reviews) else ''
+
         dataset.append(row)
 
     if dataset:
@@ -148,7 +158,7 @@ def main():
     credential = get_gcloud_credential()
     radius = 500
 
-    for index in range(start_index, len(coordinates)):
+    for index in range(start_index, 10):
         row = coordinates.iloc[index]
         lat = row['latitude']
         lon = row['longitude']
