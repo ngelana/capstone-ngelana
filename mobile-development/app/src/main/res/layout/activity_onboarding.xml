@@ -98,17 +98,6 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/menu1"
-        android:layout_width="56dp"
-        android:layout_height="174dp"
-        android:layout_marginStart="60dp"
-        app:altSrc="@drawable/ic_circle_full"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_circle"
-        app:tint="@color/blue" />
-
-    <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/menu2"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -123,16 +112,13 @@
         app:tint="@color/blue" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/menu3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/menu1"
+        android:layout_width="56dp"
+        android:layout_height="174dp"
+        android:layout_marginStart="60dp"
         app:altSrc="@drawable/ic_circle_full"
-        app:layout_constraintBottom_toBottomOf="@+id/menu2"
-        app:layout_constraintEnd_toStartOf="@+id/menu4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/menu2"
-        app:layout_constraintTop_toTopOf="@+id/menu2"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
         app:srcCompat="@drawable/ic_circle"
         app:tint="@color/blue" />
 
@@ -146,6 +132,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/menu3"
         app:layout_constraintTop_toTopOf="@+id/menu3"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_circle"
+        app:tint="@color/blue" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/menu3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:altSrc="@drawable/ic_circle_full"
+        app:layout_constraintBottom_toBottomOf="@+id/menu2"
+        app:layout_constraintEnd_toStartOf="@+id/menu4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/menu2"
+        app:layout_constraintTop_toTopOf="@+id/menu2"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_circle"
         app:tint="@color/blue" />

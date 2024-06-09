@@ -115,11 +115,11 @@
             android:id="@+id/menu1"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="32dp"
-            motion:layout_constraintHorizontal_bias="0.417"
+            android:layout_marginStart="88dp"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="144dp" >
+            android:layout_marginBottom="144dp"
+            android:layout_marginLeft="88dp">
             <CustomAttribute
                 motion:attributeName="crossfade"
                 motion:customFloatValue="1" />
@@ -165,13 +165,12 @@
             android:id="@+id/menu1"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="32dp"
-            motion:layout_constraintHorizontal_bias="0.417"
+            android:layout_marginStart="76dp"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="144dp"
 
-            >
+            android:layout_marginLeft="76dp">
             <CustomAttribute
                 motion:attributeName="crossfade"
                 motion:customFloatValue="0" />
@@ -204,6 +203,16 @@
                 motion:attributeName="crossfade"
                 motion:customFloatValue="0" />
         </Constraint>
+        <Constraint
+            android:layout_marginEnd="32dp"
+            motion:layout_constraintVertical_bias="0.0"
+            android:layout_height="30dp"
+            motion:layout_constraintStart_toEndOf="@+id/menu3"
+            motion:layout_constraintTop_toTopOf="@+id/menu3"
+            motion:layout_constraintBottom_toBottomOf="@+id/menu3"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="30dp"
+            android:id="@+id/menu4" />
     </ConstraintSet>
     <Transition
         motion:constraintSetStart="@+id/end"
