@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
+import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.result.ResultPlanActivity
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class CustomizePlanActivity : AppCompatActivity() {
 
@@ -20,8 +19,8 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private var planList = ArrayList<Place>()
 
-    private var selectedDate: LocalDate? = null
-    private val dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+    private var planName: String? = null
+    private var selectedDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +29,15 @@ class CustomizePlanActivity : AppCompatActivity() {
 
         @Suppress("DEPRECATION")
         planList = intent.getParcelableArrayListExtra(EXTRA_PLACE) ?: ArrayList()
+        setupAction()
         setupData(planList)
+        setupDate()
     }
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener {
-            val intent = Intent(this@CustomizePlanActivity, ResultPlanActivity::class.java).apply {
-                putParcelableArrayListExtra(ResultPlanActivity.EXTRA_RESULT_PLACE, planList)
-                putExtra(ResultPlanActivity.EXTRA_DATE, selectedDate?.format(dateFormat))
-            }
-            startActivity(intent)
+            planName = binding.edPlanName.text?.toString()
+            navigateToResultActivity()
         }
 
         binding.addPlaceCard.setOnClickListener{
@@ -51,10 +49,9 @@ class CustomizePlanActivity : AppCompatActivity() {
     }
 
     private fun setupDate() {
-        val receivedDateStr = intent.getStringExtra(EXTRA_DATE)
-        if (receivedDateStr != null) {
-            selectedDate = LocalDate.parse(receivedDateStr, dateFormat)
-            binding.planDate.text = selectedDate?.format(dateFormat)
+        selectedDate = intent.getStringExtra(EXTRA_DATE)
+        if (selectedDate != null) {
+            binding.planDate.text = selectedDate?.withDateFormat()
         } else {
             binding.planDate.text = ""
         }
@@ -62,8 +59,6 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private fun setupData(data: ArrayList<Place>) {
         if (data.isNotEmpty()) {
-            setupAction()
-            setupDate()
             setupView()
         } else {
             binding.tvNoData.visibility = View.VISIBLE
@@ -90,6 +85,15 @@ class CustomizePlanActivity : AppCompatActivity() {
                 dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
             }
         })
+    }
+
+    private fun navigateToResultActivity() {
+        val intent = Intent(this@CustomizePlanActivity, ResultPlanActivity::class.java).apply {
+            putParcelableArrayListExtra(ResultPlanActivity.EXTRA_RESULT_PLACE, planList)
+            putExtra(ResultPlanActivity.EXTRA_NAME, planName)
+            putExtra(ResultPlanActivity.EXTRA_DATE, selectedDate)
+        }
+        startActivity(intent)
     }
 
     companion object {

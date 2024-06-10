@@ -7,12 +7,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.FragmentNameBinding
-import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
+import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.email.EmailFragment
 
 class NameFragment : Fragment() {
@@ -20,13 +21,15 @@ class NameFragment : Fragment() {
     private var _binding: FragmentNameBinding? = null
 
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
+    private lateinit var signUpViewModel: SignUpViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNameBinding.inflate(inflater, container, false)
+        signUpViewModel = ViewModelProvider(requireActivity())[SignUpViewModel::class.java]
+
         return binding.root
     }
 
@@ -35,6 +38,8 @@ class NameFragment : Fragment() {
 
         setupAction()
         setupAnimation()
+        setupName()
+
     }
 
     private fun setupAction() {
@@ -42,10 +47,8 @@ class NameFragment : Fragment() {
             startActivity(Intent(requireActivity(), OnboardingActivity::class.java))
         }
         binding.nextButton.setOnClickListener {
-            childFragmentManager.beginTransaction()
-                .replace(R.id.main, EmailFragment())
-                .addToBackStack(null)
-                .commit()
+            val name = binding.edName.text.toString()
+            moveToEmail(name)
         }
     }
 
@@ -80,5 +83,28 @@ class NameFragment : Fragment() {
             )
             start()
         }
+    }
+
+    private fun setupName() {
+        signUpViewModel.name.observe(viewLifecycleOwner) { name ->
+            binding.edName.setText(name)
+        }
+    }
+
+    private fun moveToEmail(name: String) {
+        if (name.isNotEmpty()) {
+            signUpViewModel.setName(name)
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main, EmailFragment())
+                .addToBackStack(null)
+                .commit()
+        } else {
+            showToast(getString(R.string.empty_name))
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 }

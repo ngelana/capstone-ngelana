@@ -42,6 +42,7 @@ class DatePlanActivity : AppCompatActivity() {
         }
         binding.nextButton.setOnClickListener {
             val dateStr = selectedDate?.let { dateFormat.format(it) } ?: ""
+
             if (dateStr.isEmpty()) {
                 showToast(getString(R.string.empty_date))
             } else {

@@ -10,10 +10,9 @@ import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
+import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class RecommendationPlanActivity : AppCompatActivity() {
 
@@ -23,8 +22,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
 
     private val ADD_PLACE_REQUEST = 1
 
-    private var selectedDate: LocalDate? = null
-    private val dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+    private var selectedDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +38,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
         binding.submitButton.setOnClickListener {
             val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
                 putParcelableArrayListExtra(CustomizePlanActivity.EXTRA_PLACE, placeList)
-                putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate?.format(dateFormat))
+                putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
             }
             @Suppress("DEPRECATION")
             startActivityForResult(intent, ADD_PLACE_REQUEST)
@@ -48,10 +46,9 @@ class RecommendationPlanActivity : AppCompatActivity() {
     }
 
     private fun setupDate() {
-        val receivedDateStr = intent.getStringExtra(EXTRA_DATE)
-        if (receivedDateStr != null) {
-            selectedDate = LocalDate.parse(receivedDateStr, dateFormat)
-            binding.planDate.text = selectedDate?.format(dateFormat)
+        selectedDate = intent.getStringExtra(EXTRA_DATE)
+        if (selectedDate != null) {
+            binding.planDate.text = selectedDate?.withDateFormat()
         } else {
             binding.planDate.text = ""
         }

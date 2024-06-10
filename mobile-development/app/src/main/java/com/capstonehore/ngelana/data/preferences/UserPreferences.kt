@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.di
+package com.capstonehore.ngelana.data.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserPreference constructor(private val dataStore: DataStore<Preferences>) {
+class UserPreferences constructor(private val dataStore: DataStore<Preferences>) {
     suspend fun login() {
         dataStore.edit { preferences ->
             preferences[STATE_KEY] = true
@@ -44,7 +44,7 @@ class UserPreference constructor(private val dataStore: DataStore<Preferences>) 
     }
 
     companion object {
-        private var INSTANCE: UserPreference? = null
+        private var INSTANCE: UserPreferences? = null
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
 

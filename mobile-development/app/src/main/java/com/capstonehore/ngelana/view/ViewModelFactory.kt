@@ -2,17 +2,12 @@ package com.capstonehore.ngelana.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstonehore.ngelana.GeneralRepository
-import com.capstonehore.ngelana.di.UserPreference
-import com.capstonehore.ngelana.view.home.HomeViewModel
-import com.capstonehore.ngelana.view.login.LoginViewModel
-import com.capstonehore.ngelana.view.profile.ProfileViewModel
-import com.capstonehore.ngelana.view.signup.email.EmailViewModel
-import com.capstonehore.ngelana.view.signup.password.PasswordViewModel
+import com.capstonehore.ngelana.data.repository.GeneralRepository
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 
 class ViewModelFactory(
-        private val repository: GeneralRepository,
-        private val pref: UserPreference,
+    private val repository: GeneralRepository,
+    private val pref: UserPreferences,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 //        when {

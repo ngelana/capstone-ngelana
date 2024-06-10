@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.view.main.MainActivity
-import com.capstonehore.ngelana.view.register.RegisterActivity
+import com.capstonehore.ngelana.view.signup.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -86,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
         )
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+                startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
             }
         }
 

@@ -27,7 +27,7 @@
     <string name="password">Password</string>
 
     <!-- Empty Field -->
-    <string name="empty_name">Please enter your name address to proceed.</string>
+    <string name="empty_name">Please enter your name to proceed.</string>
     <string name="empty_email">Please enter your email address to proceed.</string>
     <string name="empty_password">Please enter your password to proceed.</string>
     <string name="empty_date">Please select date first to proceed.</string>

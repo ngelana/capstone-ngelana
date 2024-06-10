@@ -21,6 +21,4 @@ class SignUpActivity : AppCompatActivity() {
                 .commit()
         }
     }
-
-
 }
