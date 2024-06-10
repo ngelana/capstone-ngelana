@@ -2,12 +2,22 @@ const express = require("express");
 const prisma = require("../db");
 const router = express.Router();
 const { accessValidation } = require("../services/AuthServices");
+const { parseISO, format, isValid } = require("date-fns");
+
+// Helper function to format the date
+const formatDate = (date) => {
+  const parsedDate = parseISO(date);
+  if (!isValid(parsedDate)) {
+    throw new Error("Invalid date format");
+  }
+  return format(parsedDate, "yyyy-MM-dd");
+};
 
 // Placeholder function to simulate ML model for generating placeIds
 const generatePlaceIds = async () => {
   // Simulate fetching or generating place IDs
   // Replace this with your ML model logic later
-  const places = await prisma.places.findMany({
+  const places = await prisma.place.findMany({
     select: { id: true },
     take: 3, // Simulate getting 3 place IDs, adjust as needed
   });
@@ -44,48 +54,45 @@ router.get("/", accessValidation, async (req, res) => {
 
 // Create a new plan
 router.post("/", accessValidation, async (req, res) => {
-  const userId = req.user.id; // Assuming user ID is available in the request object
-  const { date } = req.body; // Expecting date in the request body
+  const { date, userId } = req.body; // Expecting date in the request body
+  const placeIds = await generatePlaceIds();
 
+  console.log(placeIds);
+  console.log(placeIds[0]);
   if (!date) {
     return res.status(400).json({
       message: "Date is required",
     });
   }
-
   try {
-    // Generate place IDs using the placeholder function
-    const placeIds = await generatePlaceIds();
-
-    // Create the plan with the generated place IDs
-    const plan = await prisma.plan.create({
+    const createPlan = await prisma.plan.create({
       data: {
-        userId: userId,
         date: new Date(date),
-        PlanPlaces: {
+        userId,
+        places: {
           create: placeIds.map((placeId) => ({
-            place: {
-              connect: { id: placeId },
-            },
+            placeId: placeId,
+            assignedBy: userId,
+            assignedAt: new Date(),
           })),
         },
       },
       include: {
-        PlanPlaces: {
+        places: {
           include: {
-            place: true, // Include place data
+            place: true,
           },
         },
       },
     });
 
-    res.status(201).json({
-      data: plan,
-      message: "Plan created successfully!",
+    return res.status(201).json({
+      data: createPlan,
+      message: "Success created a plan!",
     });
   } catch (error) {
     res.status(500).json({
-      message: "Error creating plan",
+      message: "Error creating a plan",
       error: error.message,
     });
   }

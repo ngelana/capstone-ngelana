@@ -32,11 +32,11 @@ function createToken(payload) {
 }
 
 function createHashedPass(password) {
-  return bcrypt.hash(password, 10);
+  return bcrypt.hashSync(password, 10);
 }
 
 function compareHashedPass(password, encrypted) {
-  return bcrypt.compare(password, encrypted);
+  return bcrypt.compareSync(password, encrypted);
 }
 
 module.exports = {

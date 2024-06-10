@@ -61,6 +61,7 @@ router.post("/login", async (req, res) => {
         email: user.email,
       },
       token: token,
+      message: "Logged in",
     });
   } else {
     return res.status(403).json({
