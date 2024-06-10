@@ -158,5 +158,9 @@
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
     <string name="no_data">No data</string>
+    <string name="completed">Completed</string>
+    <string name="q_completed">Have you finished your journey?</string>
+    <string name="write_a_review">Write a review..</string>
+    <string name="already_review">You\'ve already left a review for this place.</string>
 
 </resources>

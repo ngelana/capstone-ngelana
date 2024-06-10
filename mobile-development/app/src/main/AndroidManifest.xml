@@ -14,12 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ngelana"
         tools:targetApi="31">
-        <activity
-            android:name=".view.home.plan.date.DatePlanActivity"
-            android:exported="false" />
+
         <!-- <meta-data -->
         <!-- android:name="com.google.android.geo.API_KEY" -->
         <!-- android:value="${MAPS_API_KEY}" /> -->
+
         <!-- Profile -->
         <activity
             android:name=".view.profile.personalinformation.PersonalInformationActivity"
@@ -44,16 +43,34 @@
             android:exported="false" />
         <activity
             android:name=".view.profile.aboutus.AboutUsActivity"
-            android:exported="false" /> <!-- Explore -->
+            android:exported="false" />
+
+        <!-- My Trip -->
+        <activity
+            android:name=".view.mytrip.detail.UpcomingTripDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.mytrip.detail.CompletedTripDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.mytrip.detail.CanceledTripDetailActivity"
+            android:exported="false" />
+
+        <!-- Explore -->
         <activity
             android:name=".view.explore.place.tourist.TouristAttractionsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.explore.place.lodging.LodgingActivity"
+            android:name=".view.explore.place.culinary.CulinarySpotActivity"
             android:exported="false" />
         <activity
-            android:name=".view.explore.place.culinary.CulinarySpotActivity"
-            android:exported="false" /> <!-- Home -->
+            android:name=".view.explore.place.lodging.LodgingActivity"
+            android:exported="false" />
+
+        <!-- Home -->
+        <activity
+            android:name=".view.home.plan.date.DatePlanActivity"
+            android:exported="false" />
         <activity
             android:name=".view.home.plan.recommendation.RecommendationPlanActivity"
             android:exported="false" />
@@ -63,6 +80,7 @@
         <activity
             android:name=".view.home.plan.result.ResultPlanActivity"
             android:exported="false" />
+
         <activity
             android:name=".view.splashscreen.SplashScreenActivity"
             android:exported="true">
@@ -72,6 +90,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.register.RegisterActivity"
             android:exported="false" />
