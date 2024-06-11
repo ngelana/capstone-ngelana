@@ -47,8 +47,8 @@
     <string name="destinations">Destinations</string>
     <string name="home_title">Arrange Your %1$s!</string>
     <string name="home_description">Start planning your journey with Ngelana by clicking the image beside.</string>
-    <string name="tv_favorite_place">Find your favorite place</string>
-    <string name="tv_recommended_place">Recommended place for you</string>
+    <string name="favorite_place">Find your favorite place</string>
+    <string name="popular_places_in_bali">Popular places in Bali</string>
     <string name="see_all">See all</string>
 
     <string name="choose_the_date_for_your_trip">Choose the date for your trip!</string>
@@ -61,6 +61,12 @@
     <string name="enter_trip_name">Enter Trip Name</string>
     <string name="trip_name">Trip Name:</string>
     <string name="date">Date:</string>
+
+    <!-- My Trip -->
+    <string name="completed">Completed</string>
+    <string name="q_completed">Have you finished your journey?</string>
+    <string name="write_a_review">Write a review..</string>
+    <string name="already_review">You\'ve already left a review for this place.</string>
 
     <!-- Profile -->
     <string name="welcome">Welcome,</string>
@@ -158,9 +164,5 @@
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
     <string name="no_data">No data</string>
-    <string name="completed">Completed</string>
-    <string name="q_completed">Have you finished your journey?</string>
-    <string name="write_a_review">Write a review..</string>
-    <string name="already_review">You\'ve already left a review for this place.</string>
 
 </resources>

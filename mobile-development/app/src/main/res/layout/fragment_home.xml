@@ -136,17 +136,18 @@
             tools:alpha="100" />
 
         <TextView
-            android:id="@+id/tv_favorite_place"
+            android:id="@+id/tvFavoritePlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/tv_favorite_place"
+            android:text="@string/favorite_place"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/seeMoreFavorite"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_2" />
 
@@ -158,41 +159,37 @@
             android:text="@string/see_all"
             android:textColor="?attr/colorPrimary"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_favorite_place"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFavoritePlace"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_favorite_place" />
+            app:layout_constraintTop_toTopOf="@+id/tvFavoritePlace" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFavoritePlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:fillViewport="true"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_favorite_place">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvFavoritePlace"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
+            app:layout_constraintTop_toBottomOf="@id/tvFavoritePlace"/>
 
         <TextView
-            android:id="@+id/tv_recommendation_place"
+            android:id="@+id/tvRecommendationPlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/tv_recommended_place"
+            android:text="@string/popular_places_in_bali"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/seeMoreRecommendation"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+            app:layout_constraintTop_toBottomOf="@+id/rvFavoritePlace" />
 
         <TextView
             android:id="@+id/seeMoreRecommendation"
@@ -202,9 +199,9 @@
             android:text="@string/see_all"
             android:textColor="?attr/colorPrimary"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_recommendation_place"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRecommendationPlace"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_recommendation_place" />
+            app:layout_constraintTop_toTopOf="@+id/tvRecommendationPlace" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecommendationPlace"
@@ -214,7 +211,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recommendation_place" />
+            app:layout_constraintTop_toBottomOf="@+id/tvRecommendationPlace" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

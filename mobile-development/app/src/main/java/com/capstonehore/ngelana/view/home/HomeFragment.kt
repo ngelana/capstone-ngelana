@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.FavoriteAdapter
@@ -111,7 +110,7 @@ class HomeFragment : Fragment() {
 
         binding.rvFavoritePlace.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(requireActivity(), 8)
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = favoritePlaceAdapter
         }
 

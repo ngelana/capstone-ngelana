@@ -8,22 +8,23 @@
     android:layout_margin="8dp">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:id="@+id/cardFavoritePlace"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:cardBackgroundColor="?attr/backgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="128dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/placeImage"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="128dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +47,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/placeImage"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/placeImage" />
+                app:layout_constraintStart_toStartOf="@id/placeImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
