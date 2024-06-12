@@ -131,5 +131,4 @@ class RegisterActivity : AppCompatActivity() {
         TODO("Not yet implemented")
     }
 
-
 }

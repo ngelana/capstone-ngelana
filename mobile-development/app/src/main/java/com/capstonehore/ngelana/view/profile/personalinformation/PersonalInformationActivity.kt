@@ -20,12 +20,23 @@ class PersonalInformationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
+        setupToolbar()
         setupView()
     }
 
     private fun setupAction() {
         binding.editButton.setOnClickListener {
             startActivity(Intent(this@PersonalInformationActivity, EditPersonalInformationActivity::class.java))
+        }
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 

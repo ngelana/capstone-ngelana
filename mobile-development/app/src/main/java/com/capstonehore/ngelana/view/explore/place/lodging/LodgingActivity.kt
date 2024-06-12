@@ -8,6 +8,7 @@ import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityLodgingBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
+import com.capstonehore.ngelana.view.explore.ExploreFragment
 
 class LodgingActivity : AppCompatActivity() {
 
@@ -18,7 +19,18 @@ class LodgingActivity : AppCompatActivity() {
         binding = ActivityLodgingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
         setupView()
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 
     private fun getListPlace(): ArrayList<Place> {

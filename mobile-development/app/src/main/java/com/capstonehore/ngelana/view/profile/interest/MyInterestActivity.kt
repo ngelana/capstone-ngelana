@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.profile.interest
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityMyInterestBinding
 
 class MyInterestActivity : AppCompatActivity() {
@@ -13,7 +14,18 @@ class MyInterestActivity : AppCompatActivity() {
         binding = ActivityMyInterestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
         setupView()
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 
     private fun setupView() {

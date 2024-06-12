@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -18,55 +19,50 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setLocale(this)
 
+        setStatusBarColor()
+        setupNavigation()
+    }
+
+    private fun setStatusBarColor() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.blue)
+    }
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
-        val navController = navHostFragment.navController
+    private fun setupNavigation() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        navController = navHostFragment.navController
 
         val bottomNavigationView = binding.navView
         bottomNavigationView.setupWithNavController(navController)
 
-        bottomNavigationView.setOnItemSelectedListener  { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    if (navController.currentDestination?.id != R.id.navigation_home) {
-                        navController.navigate(R.id.navigation_home)
-                    }
-                    true
-                }
-                R.id.navigation_explore -> {
-                    if (navController.currentDestination?.id != R.id.navigation_explore) {
-                        navController.navigate(R.id.navigation_explore)
-                    }
-                    true
-                }
-                R.id.navigation_trip -> {
-                    if (navController.currentDestination?.id != R.id.navigation_trip) {
-                        navController.navigate(R.id.navigation_trip)
-                    }
-                    true
-                }
-                R.id.navigation_profile -> {
-                    if (navController.currentDestination?.id != R.id.navigation_profile) {
-                        navController.navigate(R.id.navigation_profile)
-                    }
-                    true
-                }
-                else -> false
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            navigateToDestination(item.itemId, navController)
+            true
+        }
+    }
+
+    private fun navigateToDestination(itemId: Int, navController: NavController) {
+        val currentDestination = navController.currentDestination?.id
+
+        if (currentDestination != itemId) {
+            when (itemId) {
+                R.id.navigation_home -> navController.navigate(R.id.navigation_home)
+                R.id.navigation_explore -> navController.navigate(R.id.navigation_explore)
+                R.id.navigation_trip -> navController.navigate(R.id.navigation_trip)
+                R.id.navigation_profile -> navController.navigate(R.id.navigation_profile)
             }
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 

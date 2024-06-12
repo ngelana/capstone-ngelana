@@ -35,10 +35,7 @@ class DatePlanActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.backButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main, HomeFragment())
-                .addToBackStack(null)
-                .commit()
+            onBackPressedDispatcher.onBackPressed()
         }
         binding.nextButton.setOnClickListener {
             val dateStr = selectedDate?.let { dateFormat.format(it) } ?: ""

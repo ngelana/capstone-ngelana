@@ -8,6 +8,7 @@
     android:background="?attr/colorAccent"
     app:layoutDescription="@xml/activity_onboarding_scene"
     tools:context=".view.onboarding.OnboardingActivity">
+
     <View
         android:id="@+id/bgView"
         android:layout_width="match_parent"
@@ -64,7 +65,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3"
+        tools:ignore="ContentDescription" />
 
 
     <ImageView
@@ -75,7 +77,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/logoMenu3"
@@ -85,7 +88,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/logoMenu4"
@@ -95,7 +99,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3"
+        tools:ignore="ContentDescription" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/menu2"

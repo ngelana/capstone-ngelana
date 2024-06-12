@@ -116,7 +116,6 @@ class PasswordFragment : Fragment() {
     private fun moveToInterest() {
         parentFragmentManager.beginTransaction()
             .replace(R.id.main, InterestFragment())
-            .addToBackStack(null)
             .commit()
     }
 

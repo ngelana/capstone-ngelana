@@ -17,7 +17,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashScreenBinding
 
-    private var DELAY: Long = 3000
+    private var delay: Long = 3000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,19 +26,28 @@ class SplashScreenActivity : AppCompatActivity() {
 
         installSplashScreen()
 
-        window.decorView.postDelayed({
-            // onboarding activity
-            startActivity(Intent(this@SplashScreenActivity, OnboardingActivity::class.java))
-            finish()
-        }, DELAY)
+        setStatusBarColor()
+        setupLogo()
+        moveToOnboarding()
+    }
 
+    private fun setStatusBarColor() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.blue)
+    }
 
+    private fun setupLogo() {
         val logo = "https://cdn.discordapp.com/attachments/1224593462951673898/1245771315370135552/Untitled_design__1___1_-removebg-preview.png?ex=6659f672&is=6658a4f2&hm=bd52d66ac5559d895030f6ee527489c5672ce1da97613b773896851bdd8d0f21&"
         Glide.with(this@SplashScreenActivity)
             .load(logo)
             .into(binding.imageLogo)
+    }
+
+    private fun moveToOnboarding() {
+        window.decorView.postDelayed({
+            startActivity(Intent(this@SplashScreenActivity, OnboardingActivity::class.java))
+            finish()
+        }, delay)
     }
 
 }

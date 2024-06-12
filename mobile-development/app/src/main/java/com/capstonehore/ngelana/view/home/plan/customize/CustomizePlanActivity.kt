@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
@@ -30,6 +31,7 @@ class CustomizePlanActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         planList = intent.getParcelableArrayListExtra(EXTRA_PLACE) ?: ArrayList()
         setupAction()
+        setupToolbar()
         setupData(planList)
         setupDate()
     }
@@ -45,6 +47,16 @@ class CustomizePlanActivity : AppCompatActivity() {
             resultIntent.putParcelableArrayListExtra(EXTRA_PLACE, planList)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
+        }
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
@@ -94,6 +106,7 @@ class CustomizePlanActivity : AppCompatActivity() {
             putExtra(ResultPlanActivity.EXTRA_DATE, selectedDate)
         }
         startActivity(intent)
+        finish()
     }
 
     companion object {

@@ -44,7 +44,7 @@ class NameFragment : Fragment() {
 
     private fun setupAction() {
         binding.backButton.setOnClickListener {
-            startActivity(Intent(requireActivity(), OnboardingActivity::class.java))
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.nextButton.setOnClickListener {
             val name = binding.edName.text.toString()

@@ -30,6 +30,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
+        setupToolbar()
         setupDate()
         setupView()
     }
@@ -42,6 +43,16 @@ class RecommendationPlanActivity : AppCompatActivity() {
             }
             @Suppress("DEPRECATION")
             startActivityForResult(intent, ADD_PLACE_REQUEST)
+        }
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 

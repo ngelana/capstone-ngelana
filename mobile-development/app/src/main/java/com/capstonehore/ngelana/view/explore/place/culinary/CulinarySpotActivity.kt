@@ -18,7 +18,18 @@ class CulinarySpotActivity : AppCompatActivity() {
         binding = ActivityCulinarySpotBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
         setupView()
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 
     private fun getListPlace(): ArrayList<Place> {
