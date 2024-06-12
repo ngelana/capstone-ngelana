@@ -26,7 +26,7 @@ const generatePlaceIds = async () => {
 
 // Get list of plans for a user
 router.get("/", accessValidation, async (req, res) => {
-  const userId = req.user.id; // Assuming user ID is available in the request object
+  const { id } = req.body;
 
   try {
     const plans = await prisma.plan.findMany({
@@ -67,7 +67,7 @@ router.post("/", accessValidation, async (req, res) => {
   try {
     const createPlan = await prisma.plan.create({
       data: {
-        date: new Date(date),
+        date: new Date(formatDate(date)),
         userId,
         places: {
           create: placeIds.map((placeId) => ({
@@ -92,6 +92,97 @@ router.post("/", accessValidation, async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      message: "Error creating a plan",
+      error: error.message,
+    });
+  }
+});
+
+router.post("/recommend", accessValidation, async (req, res) => {
+  const { date, userId } = req.body;
+  if (!date) {
+    return res.status(400).json({
+      message: "Date is required",
+    });
+  }
+
+  try {
+    const userExists = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userExists) {
+      return res.status(400).json({
+        message: "User ID does not exist",
+      });
+    }
+    const placeIds = await generatePlaceIds();
+    const places = await prisma.place.findMany({
+      where: {
+        id: { in: placeIds },
+      },
+    });
+
+    return res.status(200).json({
+      places,
+      message: "Successfully generated recommendations",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error generating recommendations",
+      error: error.message,
+    });
+  }
+});
+
+router.post("/finalize", accessValidation, async (req, res) => {
+  const { date, userId, places, planName } = req.body;
+
+  if (!date || !places || !planName) {
+    return res.status(400).json({
+      message: "Date, places, and plan name are required",
+    });
+  }
+
+  try {
+    // Check if the userId exists
+    const userExists = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userExists) {
+      return res.status(400).json({
+        message: "User ID does not exist",
+      });
+    }
+    const createPlan = await prisma.plan.create({
+      data: {
+        date: new Date(formatDate(date)),
+        userId,
+        name: planName,
+        places: {
+          create: places.map((place) => ({
+            placeId: place.id,
+            assignedBy: userId,
+            assignedAt: new Date(),
+          })),
+        },
+      },
+      include: {
+        places: {
+          include: {
+            place: true,
+          },
+        },
+      },
+    });
+
+    return res.status(201).json({
+      data: createPlan,
+      message: "Successfully created a plan!",
+    });
+  } catch (error) {
+    return res.status(500).json({
       message: "Error creating a plan",
       error: error.message,
     });

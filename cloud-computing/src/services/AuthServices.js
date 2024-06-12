@@ -9,7 +9,7 @@ const accessValidation = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: "Token needed !!!",
     });
   }
