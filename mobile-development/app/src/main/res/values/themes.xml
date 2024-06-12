@@ -14,8 +14,7 @@
         <item name="android:progressBackgroundTint">@color/dark_blue</item>
 
         <item name="backgroundColor">?attr/colorSecondary</item>
-        <item name="android:statusBarColor">?attr/colorSecondary</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
 
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>

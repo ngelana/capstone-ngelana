@@ -18,6 +18,7 @@ import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.profile.aboutus.AboutUsActivity
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteActivity
 import com.capstonehore.ngelana.view.profile.helpcenter.HelpCenterActivity
+import com.capstonehore.ngelana.view.profile.interest.MyInterestActivity
 import com.capstonehore.ngelana.view.profile.language.LanguageActivity
 import com.capstonehore.ngelana.view.profile.personalinformation.PersonalInformationActivity
 import com.capstonehore.ngelana.view.profile.review.MyReviewActivity
@@ -83,9 +84,10 @@ class ProfileFragment : Fragment() {
 
         showList(binding.rvAccount, accountList) { item ->
             val intent = when (item.name) {
-                "Personal information" -> Intent(requireContext(), PersonalInformationActivity::class.java)
-                "My favorite" -> Intent(requireContext(), MyFavoriteActivity::class.java)
-                "My review" -> Intent(requireContext(), MyReviewActivity::class.java)
+                "Personal Information" -> Intent(requireContext(), PersonalInformationActivity::class.java)
+                "My Interest" -> Intent(requireContext(), MyInterestActivity::class.java)
+                "My Favorite" -> Intent(requireContext(), MyFavoriteActivity::class.java)
+                "My Review" -> Intent(requireContext(), MyReviewActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }
@@ -101,8 +103,8 @@ class ProfileFragment : Fragment() {
 
         showList(binding.rvInformation, informationList) { item ->
             val intent = when (item.name) {
-                "Help center" -> Intent(requireContext(), HelpCenterActivity::class.java)
-                "About us" -> Intent(requireContext(), AboutUsActivity::class.java)
+                "Help Center" -> Intent(requireContext(), HelpCenterActivity::class.java)
+                "About Us" -> Intent(requireContext(), AboutUsActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }

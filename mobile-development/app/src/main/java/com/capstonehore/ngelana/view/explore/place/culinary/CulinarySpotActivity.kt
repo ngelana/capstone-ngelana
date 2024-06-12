@@ -20,8 +20,6 @@ class CulinarySpotActivity : AppCompatActivity() {
         binding = ActivityCulinarySpotBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.rvPlaces.setHasFixedSize(true)
-
         placeList.addAll(getListPlace())
         setupView()
     }

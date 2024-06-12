@@ -20,8 +20,6 @@ class LodgingActivity : AppCompatActivity() {
         binding = ActivityLodgingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.rvPlaces.setHasFixedSize(true)
-
         placeList.addAll(getListPlace())
         setupView()
     }
