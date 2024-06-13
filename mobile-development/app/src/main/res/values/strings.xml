@@ -30,7 +30,8 @@
     <string name="empty_name">Please enter your name to proceed.</string>
     <string name="empty_email">Please enter your email address to proceed.</string>
     <string name="empty_password">Please enter your password to proceed.</string>
-    <string name="empty_date">Please select date first to proceed.</string>
+    <string name="empty_date">You need to select date first to proceed.</string>
+    <string name="empty_place">You need to select at least one place before submitting.</string>
 
     <!-- Button -->
     <string name="login">Login</string>
@@ -163,6 +164,6 @@
     <string name="passwords_must_have_at_least_8_characters">Passwords must have at least 8 characters.</string>
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
-    <string name="no_data">No data</string>
+    <string name="no_data_available">No data available.</string>
 
 </resources>

@@ -1,9 +1,11 @@
 package com.capstonehore.ngelana.view.home.plan.customize
 
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
@@ -12,13 +14,19 @@ import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
+import com.capstonehore.ngelana.view.home.PlanViewModel
+import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 import com.capstonehore.ngelana.view.home.plan.result.ResultPlanActivity
 
 class CustomizePlanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCustomizePlanBinding
 
+    private lateinit var planViewModel: PlanViewModel
+
     private var planList = ArrayList<Place>()
+
+    private var newPlace: Place? = null
 
     private var planName: String? = null
     private var selectedDate: String? = null
@@ -28,24 +36,35 @@ class CustomizePlanActivity : AppCompatActivity() {
         binding = ActivityCustomizePlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        @Suppress("DEPRECATION")
-        planList = intent.getParcelableArrayListExtra(EXTRA_PLACE) ?: ArrayList()
+        planViewModel = PlanViewModel(this)
+
+        planList = planViewModel.loadPlanList()
+
+        newPlace = intent.getParcelableExtra(EXTRA_PLACE)
+
         setupAction()
         setupToolbar()
-        setupData(planList)
         setupDate()
+        setupData()
+        setupView()
+        updatePlanListAndSave()
     }
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener {
-            planName = binding.edPlanName.text?.toString()
-            navigateToResultActivity()
+            if (planList.isEmpty()) {
+                showToast(getString(R.string.empty_place))
+            } else {
+                planName = binding.edPlanName.text?.toString()
+                navigateToResultActivity()
+            }
         }
 
-        binding.addPlaceCard.setOnClickListener{
-            val resultIntent = Intent()
-            resultIntent.putParcelableArrayListExtra(EXTRA_PLACE, planList)
-            setResult(Activity.RESULT_OK, resultIntent)
+        binding.ivAddPlace.setOnClickListener{
+            val addPlaceIntent = Intent().apply {
+                putExtra(RecommendationPlanActivity.EXTRA_RETURN_PLACE, planList)
+            }
+            setResult(RESULT_CODE, addPlaceIntent)
             finish()
         }
     }
@@ -62,22 +81,14 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private fun setupDate() {
         selectedDate = intent.getStringExtra(EXTRA_DATE)
-        if (selectedDate != null) {
-            binding.planDate.text = selectedDate?.withDateFormat()
-        } else {
-            binding.planDate.text = ""
-        }
+        binding.planDate.text = selectedDate?.withDateFormat() ?: ""
     }
 
-    private fun setupData(data: ArrayList<Place>) {
-        if (data.isNotEmpty()) {
-            setupView()
+    private fun setupData() {
+        if (planList.isNotEmpty()) {
+            binding.tvNoData.visibility = View.GONE
         } else {
             binding.tvNoData.visibility = View.VISIBLE
-
-            binding.rvPlaces.visibility = View.GONE
-            binding.addPlaceCard.visibility = View.GONE
-            binding.submitButton.visibility = View.GONE
         }
     }
 
@@ -97,9 +108,36 @@ class CustomizePlanActivity : AppCompatActivity() {
                 dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
             }
         })
+
+        planAdapter.setOnClearButtonClickCallback(object : PlanAdapter.OnClearButtonClickCallback {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onClearButtonClicked(item: Place) {
+                planList.remove(item)
+                planAdapter.notifyDataSetChanged()
+                planViewModel.savePlanList(planList)
+                setupData()
+
+                val returnIntent = Intent().apply {
+                    putExtra(RecommendationPlanActivity.EXTRA_RETURN_PLACE, item)
+                }
+                Log.d("CustomizePlanActivity", "Returning place: $item")
+                setResult(RESULT_CODE, returnIntent)
+            }
+        })
+    }
+
+    private fun updatePlanListAndSave() {
+        newPlace?.let {
+            if (!planList.contains(it)) {
+                planList.add(it)
+                planViewModel.savePlanList(planList)
+                setupData()
+            }
+        }
     }
 
     private fun navigateToResultActivity() {
+        val planName = binding.edPlanName.text?.toString()
         val intent = Intent(this@CustomizePlanActivity, ResultPlanActivity::class.java).apply {
             putParcelableArrayListExtra(ResultPlanActivity.EXTRA_RESULT_PLACE, planList)
             putExtra(ResultPlanActivity.EXTRA_NAME, planName)
@@ -109,8 +147,13 @@ class CustomizePlanActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
         const val EXTRA_PLACE = "extra_place"
         const val EXTRA_DATE = "extra_date"
+        const val RESULT_CODE = 110
     }
 }

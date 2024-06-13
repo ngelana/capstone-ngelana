@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.capstonehore.ngelana.adapter.PlanAdapter
+import com.capstonehore.ngelana.adapter.PlanResultAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityResultPlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
@@ -68,15 +68,15 @@ class ResultPlanActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        val planAdapter = PlanAdapter(planList)
+        val planResultAdapter = PlanResultAdapter(planList)
 
         binding.rvPlaces.apply {
             layoutManager = LinearLayoutManager(this@ResultPlanActivity)
-            adapter = planAdapter
+            adapter = planResultAdapter
         }
 
-        planAdapter.setOnItemClickCallback(object :
-            PlanAdapter.OnItemClickCallback {
+        planResultAdapter.setOnItemClickCallback(object :
+            PlanResultAdapter.OnItemClickCallback {
             override fun onItemClicked(items: Place) {
                 val dialogFragment = DetailPlaceFragment.newInstance(items)
                 dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")

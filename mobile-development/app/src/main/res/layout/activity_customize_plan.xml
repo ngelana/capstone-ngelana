@@ -209,6 +209,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageButton
+                    android:id="@+id/ivAddPlace"
                     android:layout_width="match_parent"
                     android:layout_height="108dp"
                     android:background="@drawable/rounded_corners_transparent"
@@ -281,17 +282,17 @@
             android:id="@+id/tvNoData"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/no_data"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/no_data_available"
             android:textAlignment="center"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="16sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/addPlaceCard"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+            app:layout_constraintStart_toEndOf="@+id/circleView_2"
+            app:layout_constraintTop_toBottomOf="@+id/verticalLine_1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

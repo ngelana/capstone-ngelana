@@ -113,7 +113,7 @@
         <View
             android:id="@+id/verticalLine_1"
             android:layout_width="4dp"
-            android:layout_height="24dp"
+            android:layout_height="16dp"
             android:background="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="@+id/circleView_1"
             app:layout_constraintStart_toStartOf="@+id/circleView_1"
@@ -145,7 +145,7 @@
         <View
             android:id="@+id/verticalLine_2"
             android:layout_width="4dp"
-            android:layout_height="32dp"
+            android:layout_height="16dp"
             android:background="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="@+id/circleView_2"
             app:layout_constraintStart_toStartOf="@+id/circleView_2"

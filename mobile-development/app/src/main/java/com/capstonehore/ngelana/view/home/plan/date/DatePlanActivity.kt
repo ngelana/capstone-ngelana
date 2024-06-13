@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityDatePlanBinding
-import com.capstonehore.ngelana.view.home.HomeFragment
 import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar

@@ -5,24 +5,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.Place
-import com.capstonehore.ngelana.databinding.ItemPlanBinding
+import com.capstonehore.ngelana.databinding.ItemPlanResultBinding
 
-class PlanAdapter(private val listPlace: ArrayList<Place>) :
-    RecyclerView.Adapter<PlanAdapter.PlanViewHolder>() {
+class PlanResultAdapter(private val listPlace: ArrayList<Place>) :
+    RecyclerView.Adapter<PlanResultAdapter.PlanViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private lateinit var onClearButtonClickCallback: OnClearButtonClickCallback
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setOnClearButtonClickCallback(onClearButtonClickCallback: OnClearButtonClickCallback) {
-        this.onClearButtonClickCallback = onClearButtonClickCallback
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanViewHolder {
-        val binding = ItemPlanBinding.inflate(
+        val binding = ItemPlanResultBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -46,20 +41,11 @@ class PlanAdapter(private val listPlace: ArrayList<Place>) :
             @Suppress("DEPRECATION")
             onItemClickCallback.onItemClicked(listPlace[holder.adapterPosition])
         }
-
-        holder.binding.clearButton.setOnClickListener {
-            @Suppress("DEPRECATION")
-            onClearButtonClickCallback.onClearButtonClicked(listPlace[holder.adapterPosition])
-        }
     }
 
-    class PlanViewHolder(var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root)
+    class PlanViewHolder(var binding: ItemPlanResultBinding) : RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
         fun onItemClicked(items: Place)
-    }
-
-    interface OnClearButtonClickCallback {
-        fun onClearButtonClicked(item: Place)
     }
 }

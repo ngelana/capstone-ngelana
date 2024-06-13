@@ -8,7 +8,6 @@ import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityTouristAttractionsBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
-import com.capstonehore.ngelana.view.explore.ExploreFragment
 
 class TouristAttractionsActivity : AppCompatActivity() {
 
