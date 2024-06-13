@@ -19,25 +19,25 @@ enum Gender {
 }
 
 model User {
-  id          String            @id @default(cuid())
-  name        String            @unique
-  email       String            @unique
-  password    String
-  phone       String?
-  birthdate   DateTime?         @db.Date()
-  gender      Gender?
-  preferences UserPreferences[]
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  UserReview  UserReview[]
-  Plan        Plan[]
+  id              String            @id @default(cuid())
+  name            String            @unique
+  email           String            @unique
+  password        String
+  phone           String?
+  birthdate       DateTime?         @db.Date()
+  gender          Gender?
+  userPreferences UserPreferences[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  UserReview      UserReview[]
+  Plan            Plan[]
 }
 
 model Preference {
   id              String            @id @default(cuid())
   name            String
   urlPlaceholder  String
-  UserPreferences UserPreferences[]
+  userPreferences UserPreferences[]
 }
 
 model UserPreferences {

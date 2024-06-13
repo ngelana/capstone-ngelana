@@ -18,124 +18,72 @@ router.get("/", accessValidation, async (req, res) => {
   }
 });
 
-// NOT WORKING !!!!!!!!!!
-// router.post("/", accessValidation, async (req, res) => {
-//   const { userId, preferences } = req.body;
-
-//   try {
-//     // Check if the userId exists
-//     if (!userId || !preferences) {
-//       return res.status(400).json({
-//         message: "UserId or Preferences is empty!",
-//       });
-//     }
-//     const userExists = await prisma.user.findUnique({
-//       where: { id: userId },
-//     });
-
-//     if (!userExists) {
-//       return res.status(400).json({
-//         message: "User ID does not exist",
-//       });
-//     }
-//     const createUserPreference = await prisma.userPreferences.create({
-//       data: {
-//         userId,
-//         preferences: {
-//           create: preferences.map((preference) => ({
-//             preferenceId: preference.id,
-//             assignedBy: userId,
-//             assignedAt: new Date(),
-//           })),
-//         },
-//       },
-//       include: {
-//         preferences: {
-//           include: {
-//             preference: true,
-//           },
-//         },
-//       },
-//     });
-
-//     return res.status(201).json({
-//       data: createUserPreference,
-//       message: "Successfully created a userPreference!",
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: "Error creating userPreference",
-//       error: error.message,
-//     });
-//   }
-// });
-
 // Create user preferences WORKING !!!!!!!!!!!
-// router.post("/", accessValidation, async (req, res) => {
-//   const { userId, preferenceIds } = req.body;
-//   if (!preferenceIds || !Array.isArray(preferenceIds)) {
-//     return res.status(400).json({ error: "Invalid input data" });
-//   }
+router.post("/", accessValidation, async (req, res) => {
+  const { userId, preferenceIds } = req.body;
+  if (!preferenceIds || !Array.isArray(preferenceIds)) {
+    return res.status(400).json({ error: "Invalid input data" });
+  }
 
-//   try {
-//     // Check if the user exists
-//     const user = await prisma.user.findUnique({
-//       where: { id: userId },
-//     });
+  try {
+    // Check if the user exists
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
 
-//     if (!user) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-//     // Fetch preferences from the database
-//     const preferences = await prisma.preference.findMany({
-//       where: {
-//         id: {
-//           in: preferenceIds,
-//         },
-//       },
-//     });
+    // Fetch preferences from the database
+    const preferences = await prisma.preference.findMany({
+      where: {
+        id: {
+          in: preferenceIds,
+        },
+      },
+    });
 
-//     if (preferences.length !== preferenceIds.length) {
-//       return res
-//         .status(400)
-//         .json({ error: "One or more preferences not found" });
-//     }
+    if (preferences.length !== preferenceIds.length) {
+      return res
+        .status(400)
+        .json({ error: "One or more preferences not found" });
+    }
 
-//     // Map preference IDs to user preferences
-//     const userPreferencesData = preferenceIds.map((preferenceId) => ({
-//       userId,
-//       preferenceId,
-//       assignedBy: userId,
-//     }));
+    // Map preference IDs to user preferences
+    const userPreferencesData = preferenceIds.map((preferenceId) => ({
+      userId,
+      preferenceId,
+      assignedBy: userId,
+    }));
 
-//     // Insert user preferences
-//     await prisma.userPreferences.createMany({
-//       data: userPreferencesData,
-//       skipDuplicates: true,
-//     });
+    // Insert user preferences
+    await prisma.userPreferences.createMany({
+      data: userPreferencesData,
+      skipDuplicates: true,
+    });
 
-//     // Fetch the newly created user preferences with preference details
-//     const userPreferences = await prisma.userPreferences.findMany({
-//       where: {
-//         userId: userId,
-//         preferenceId: {
-//           in: preferenceIds,
-//         },
-//       },
-//       include: {
-//         preference: true,
-//       },
-//     });
+    // Fetch the newly created user preferences with preference details
+    const userPreferences = await prisma.userPreferences.findMany({
+      where: {
+        userId: userId,
+        preferenceId: {
+          in: preferenceIds,
+        },
+      },
+      include: {
+        preference: true,
+      },
+    });
 
-//     res.status(201).json(userPreferences);
-//   } catch (error) {
-//     console.error(error);
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while adding preferences" });
-//   }
-// });
+    res.status(201).json(userPreferences);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding preferences" });
+  }
+});
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -144,25 +92,32 @@ router.get("/:id", async (req, res) => {
     // Check if the user exists
     const user = await prisma.user.findUnique({
       where: { id },
+      select: {
+        id: true,
+        name: true,
+        userPreferences: {
+          select: { preference: true },
+        },
+      },
     });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Fetch user preferences with related preference details
-    const userPreferences = await prisma.userPreferences.findMany({
-      where: {
-        userId: id,
-      },
-      include: {
-        preference: true,
-      },
-    });
+    // // Fetch user preferences with related preference details
+    // const userPreferences = await prisma.userPreferences.findMany({
+    //   where: {
+    //     userId: id,
+    //   },
+    //   include: {
+    //     preference: true,
+    //   },
+    // });
 
     res
       .status(200)
-      .json({ userPreferences, message: `Listed preferences from user:${id}` });
+      .json({ user, message: `Listed preferences from user: ${id}` });
   } catch (error) {
     console.error(error);
     res
@@ -182,7 +137,7 @@ router.patch("/:id", async (req, res) => {
   try {
     // Check if the user exists
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id },
     });
 
     if (!user) {
@@ -216,7 +171,7 @@ router.patch("/:id", async (req, res) => {
 
     // Add new preferences
     const newUserPreferences = preferencesToAdd.map((preferenceId) => ({
-      userId,
+      userId: id,
       preferenceId,
       assignedBy: id,
     }));
