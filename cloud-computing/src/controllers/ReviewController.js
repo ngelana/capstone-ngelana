@@ -3,6 +3,7 @@ const prisma = require("../db");
 const router = express.Router();
 const { accessValidation } = require("../services/AuthServices");
 
+
 // get all reviews from one user
 router.get("/", accessValidation, async (req, res) => {
   const { userId } = req.body;
@@ -71,6 +72,42 @@ router.post("/", accessValidation, async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: `Failed creating review from user : ${userId}, error:${err.message}`,
+    });
+  }
+});
+
+// read review by id
+router.get("/:id", accessValidation, async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const user = await prisma.userReview.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    const reviews = await prisma.userReview.findUnique({
+      where: { userId, id },
+    });
+    if (!reviews) {
+      return res.status(404).json({
+        message: "Review not found or empty",
+      });
+    }
+    return res.status(200).json({
+      data: reviews,
+      message: `Review id :${id} listed!`,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: `Failed listing reviews from user : ${id}, error:${err.message}`,
     });
   }
 });

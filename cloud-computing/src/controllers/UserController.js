@@ -7,6 +7,7 @@ const {
   createToken,
   compareHashedPass,
 } = require("../services/AuthServices");
+const parseDate = require("../services/UtilServices");
 // Middleware auth
 
 // Register user
@@ -123,7 +124,7 @@ router.get("/", accessValidation, async (req, res) => {
 router.patch("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
   const { name, email, password, phone, birthdate, gender } = req.body;
-
+  const hashedPassword = createHashedPass(password);
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -136,13 +137,17 @@ router.patch("/:id", accessValidation, async (req, res) => {
         message: "User not found",
       });
     }
+
+    // Parse the birthdate
+    const parsedBirthdate = birthdate ? parseDate(birthdate) : null;
+
     const result = await prisma.user.update({
       data: {
         name: name,
         email: email,
-        password: password,
+        password: hashedPassword,
         phone: phone,
-        birthdate: birthdate,
+        birthdate: parsedBirthdate,
         gender: gender,
       },
       where: {
@@ -185,6 +190,26 @@ router.delete("/:id", accessValidation, async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: `Error deleting user! Error : ${error.message}`,
+    });
+  }
+});
+
+// Logout user
+router.post("/logout", accessValidation, (req, res) => {
+  try {
+    const payload = {
+      id: req.userData.id,
+      name: req.userData.name,
+      email: req.userData.email,
+    };
+    const token = createToken(payload, "1ms");
+    return res.status(200).json({
+      message: "Logged out successfully",
+      token: token,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: `Error logging out user from server. Error:${error.message}`,
     });
   }
 });

@@ -53,7 +53,7 @@ model UserPreferences {
 
 model Place {
   id           String          @id @default(cuid())
-  name         String          @unique
+  name         String
   latitude     Float
   longitude    Float
   address      String
@@ -64,7 +64,7 @@ model Place {
   types        String?
   rating       Float?
   ratingCount  Int?
-  priceLevel   Int?
+  priceLevel   String?
   UserReview   UserReview[]
   plans        PlacesOnPlans[]
 }
