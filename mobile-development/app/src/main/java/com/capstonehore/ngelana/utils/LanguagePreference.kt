@@ -18,4 +18,11 @@ object LanguagePreference {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         return sharedPreferences.getString(KEY_LANGUAGE, null)
     }
+
+    fun clearLanguage(context: Context) {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove(KEY_LANGUAGE)
+        editor.apply()
+    }
 }

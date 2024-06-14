@@ -116,6 +116,12 @@
         <item>id</item>
         <item>es</item>
         <item>fr</item>
+        <item>de</item>
+        <item>zh</item>
+        <item>fr</item>
+        <item>ja</item>
+        <item>ru</item>
+        <item>hi</item>
     </string-array>
 
     <string-array name="data_languages_name">
@@ -123,6 +129,12 @@
         <item>Indonesia</item>
         <item>Español</item>
         <item>Français</item>
+        <item>Deutschland</item>
+        <item>Mandarin</item>
+        <item>Français</item>
+        <item>Nihon</item>
+        <item>Rusia</item>
+        <item>Hindi</item>
     </string-array>
 
 </resources>

@@ -1,20 +1,30 @@
 package com.capstonehore.ngelana.view.profile
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.ProfileAdapter
 import com.capstonehore.ngelana.data.local.entity.Profile
+import com.capstonehore.ngelana.data.preferences.ThemeManager
 import com.capstonehore.ngelana.databinding.FragmentProfileBinding
 import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.login.LoginActivity
+import com.capstonehore.ngelana.view.main.ThemeViewModel
+import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.profile.aboutus.AboutUsActivity
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteActivity
 import com.capstonehore.ngelana.view.profile.helpcenter.HelpCenterActivity
@@ -34,6 +44,11 @@ class ProfileFragment : Fragment() {
     private val settingsList = ArrayList<Profile>()
     private val informationList = ArrayList<Profile>()
 
+    private lateinit var themeManager: ThemeManager
+    private lateinit var themeViewModel: ThemeViewModel
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(THEME_SETTINGS)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +62,7 @@ class ProfileFragment : Fragment() {
 
         setupAction()
         setupData()
+        themeSettings()
     }
 
     private fun setupAction() {
@@ -82,7 +98,11 @@ class ProfileFragment : Fragment() {
 
         showList(binding.rvAccount, accountList) { item ->
             val intent = when (item.name) {
-                "Personal Information" -> Intent(requireContext(), PersonalInformationActivity::class.java)
+                "Personal Information" -> Intent(
+                    requireContext(),
+                    PersonalInformationActivity::class.java
+                )
+
                 "My Interest" -> Intent(requireContext(), MyInterestActivity::class.java)
                 "My Favorite" -> Intent(requireContext(), MyFavoriteActivity::class.java)
                 "My Review" -> Intent(requireContext(), MyReviewActivity::class.java)
@@ -141,8 +161,36 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    private fun themeSettings() {
+        themeManager = ThemeManager.getInstance(requireContext().dataStore)
+
+        themeViewModel = ViewModelProvider(
+            requireActivity(),
+            ThemeViewModelFactory(themeManager)
+        )[ThemeViewModel::class.java]
+
+        themeViewModel.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                binding.switchThemes.isChecked = true
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                binding.switchThemes.isChecked = false
+            }
+        }
+
+        binding.switchThemes.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            themeViewModel.saveThemeSetting(isChecked)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+        private const val THEME_SETTINGS = "theme_settings"
+    }
+
 }

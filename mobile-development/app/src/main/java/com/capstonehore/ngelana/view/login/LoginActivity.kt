@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -13,15 +14,26 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.preferences.ThemeManager
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.view.main.MainActivity
+import com.capstonehore.ngelana.view.main.ThemeViewModel
+import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.signup.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+
+    private lateinit var themeManager: ThemeManager
+    private lateinit var themeViewModel: ThemeViewModel
+
+    private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         setupAnimation()
         setupTitle()
         setupButton()
+        themeSettings()
     }
 
     private fun setupAction() {
@@ -121,4 +134,24 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun themeSettings() {
+        themeManager = ThemeManager.getInstance(dataStore)
+
+        themeViewModel = ViewModelProvider(
+            this@LoginActivity,
+            ThemeViewModelFactory(themeManager)
+        )[ThemeViewModel::class.java]
+
+        themeViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+    }
+
+    companion object {
+        const val THEME_SETTINGS = "theme_settings"
+    }
 }

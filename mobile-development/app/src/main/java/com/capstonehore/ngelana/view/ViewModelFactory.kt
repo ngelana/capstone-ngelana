@@ -1,6 +1,5 @@
 package com.capstonehore.ngelana.view
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.data.repository.GeneralRepository
 import com.capstonehore.ngelana.data.preferences.UserPreferences
@@ -27,13 +26,13 @@ class ViewModelFactory(
 ////                return EmailViewModel(repository, pref) as T
 ////            }
 ////
-////            modelClass.isAssignableFrom(PasswordViewModel::class.java) -> {
-////                return PasswordViewModel(repository, pref) as T
-////            }
-////
-////            else {
-////                throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
-////            }
+//            modelClass.isAssignableFrom(PasswordViewModel::class.java) -> {
+//                return PasswordViewModel(repository, pref) as T
+//            }
+//
+//            else {
+//                throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
+//            }
 //
 //
 //    }

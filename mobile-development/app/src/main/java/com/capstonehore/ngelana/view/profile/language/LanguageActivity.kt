@@ -1,5 +1,6 @@
 package com.capstonehore.ngelana.view.profile.language
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import com.capstonehore.ngelana.data.local.entity.Language
 import com.capstonehore.ngelana.databinding.ActivityLanguageBinding
 import com.capstonehore.ngelana.utils.LanguagePreference
 import com.capstonehore.ngelana.view.main.MainActivity
+import com.capstonehore.ngelana.view.main.MainActivity.Companion.setLocale
 
 class LanguageActivity : AppCompatActivity() {
 
@@ -57,13 +59,23 @@ class LanguageActivity : AppCompatActivity() {
 
         languageAdapter.setOnItemClickCallback(object : LanguageAdapter.OnItemClickCallback {
             override fun onItemClicked(language: Language) {
-                LanguagePreference.setLanguage(this@LanguageActivity, language.code)
-                MainActivity.updateResources(this@LanguageActivity, language.code)
-
-                finish()
-                startActivity(intent)
+                if (language.code == "clear") {
+                    LanguagePreference.clearLanguage(this@LanguageActivity)
+                    restartApp()
+                } else {
+                    LanguagePreference.setLanguage(this@LanguageActivity, language.code)
+                    setLocale(this@LanguageActivity)
+                    restartApp()
+                }
             }
         })
+    }
+
+    private fun restartApp() {
+        val intent = Intent(this@LanguageActivity, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
     }
 
 }
