@@ -89,7 +89,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Check if the user exists
+    // Check if the user exists + fetch userPreferences
     const user = await prisma.user.findUnique({
       where: { id },
       select: {

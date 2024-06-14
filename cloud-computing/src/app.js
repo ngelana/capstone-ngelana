@@ -6,7 +6,7 @@ const PORT = process.env.PORT;
 const userController = require("./controllers/UserController");
 const planController = require("./controllers/PlanController");
 const placeController = require("./controllers/PlaceController");
-const reviewController = require("./controllers/PlaceController");
+const reviewController = require("./controllers/ReviewController");
 const preferenceController = require("./controllers/PreferenceController");
 
 app.use(express.json());
