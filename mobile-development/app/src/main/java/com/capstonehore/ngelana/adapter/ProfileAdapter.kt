@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.capstonehore.ngelana.data.local.entity.Profile
 import com.capstonehore.ngelana.databinding.ItemProfileBinding
 
-class ProfileAdapter(private val listProfile: ArrayList<Profile>) : RecyclerView.Adapter<ProfileAdapter.ListViewHolder>() {
+class ProfileAdapter(private val listProfile: ArrayList<Profile>) :
+    RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -14,20 +15,20 @@ class ProfileAdapter(private val listProfile: ArrayList<Profile>) : RecyclerView
         this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         val binding = ItemProfileBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return ListViewHolder(binding)
+        return ProfileViewHolder(binding)
     }
 
     override fun getItemCount(): Int = listProfile.size
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (name, icon) = listProfile[position]
+    override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
+        val (_, name, icon) = listProfile[position]
         with(holder.binding) {
             tvName.text = name
             ivIconLeft.setImageResource(icon)
@@ -39,9 +40,10 @@ class ProfileAdapter(private val listProfile: ArrayList<Profile>) : RecyclerView
         }
     }
 
-    class ListViewHolder(var binding: ItemProfileBinding) : RecyclerView.ViewHolder(binding.root)
+    class ProfileViewHolder(var binding: ItemProfileBinding) : RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
         fun onItemClicked(items: Profile)
     }
+
 }

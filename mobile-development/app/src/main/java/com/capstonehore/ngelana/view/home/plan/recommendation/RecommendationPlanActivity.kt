@@ -1,15 +1,17 @@
 package com.capstonehore.ngelana.view.home.plan.recommendation
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
+import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
 
@@ -19,26 +21,49 @@ class RecommendationPlanActivity : AppCompatActivity() {
 
     private val placeList = ArrayList<Place>()
 
-    private val ADD_PLACE_REQUEST = 1
+    private var selectedDate: String? = null
+
+    private lateinit var recommendationPlaceAdapter: RecommendationPlaceAdapter
+
+    @SuppressLint("NotifyDataSetChanged")
+    val addPlaceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == CustomizePlanActivity.RESULT_CODE && result.data != null) {
+            @Suppress("DEPRECATION")
+            val returnedPlace = result.data?.getParcelableExtra<Place>(EXTRA_RETURN_PLACE)
+            Log.d("RecommendationPlanActivity", "Returned Place: $returnedPlace")
+            returnedPlace?.let {
+                if (!placeList.contains(it)) {
+                    placeList.add(it)
+                    binding.rvPlaces.adapter?.notifyItemInserted(placeList.size - 1)
+                    recommendationPlaceAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecommendationPlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupAction()
+        setupToolbar()
+        setupDate()
         setupView()
-        placeList.addAll(getListPlace())
     }
 
-    private fun setupAction() {
-        binding.submitButton.setOnClickListener {
-            val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
-                putParcelableArrayListExtra(CustomizePlanActivity.EXTRA_PLACE, placeList)
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
             }
-            @Suppress("DEPRECATION")
-            startActivityForResult(intent, ADD_PLACE_REQUEST)
         }
+    }
+
+    private fun setupDate() {
+        selectedDate = intent.getStringExtra(EXTRA_DATE)
+        binding.planDate.text = selectedDate?.withDateFormat() ?: ""
     }
 
     private fun getListPlace(): ArrayList<Place> {
@@ -55,7 +80,9 @@ class RecommendationPlanActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        val recommendationPlaceAdapter = RecommendationPlaceAdapter(placeList)
+        placeList.addAll(getListPlace())
+
+        recommendationPlaceAdapter = RecommendationPlaceAdapter(placeList)
 
         binding.rvPlaces.apply {
             setHasFixedSize(true)
@@ -79,28 +106,45 @@ class RecommendationPlanActivity : AppCompatActivity() {
         })
 
         recommendationPlaceAdapter.setOnAddButtonClickCallback(object : RecommendationPlaceAdapter.OnAddButtonClickCallback {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onAddButtonClicked(item: Place) {
                 val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
                     putExtra(CustomizePlanActivity.EXTRA_PLACE, item)
+                    putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
                 }
-                @Suppress("DEPRECATION")
-                startActivityForResult(intent, ADD_PLACE_REQUEST)
+                addPlaceLauncher.launch(intent)
+
+                if (placeList.remove(item)) {
+                    recommendationPlaceAdapter.notifyDataSetChanged()
+                }
             }
         })
     }
 
+//    private fun showToast(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//    }
+
+//    private fun showLoading(isLoading: Boolean) {
+//        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+//    }
+//
+//    private fun obtainViewModel(activity: AppCompatActivity): MainViewModel {
+//        val factory = ViewModelFactory.getInstance(
+//            activity.application,
+//            UserPreference.getInstance(dataStore)
+//        )
+//        return ViewModelProvider(activity, factory)[MainViewModel::class.java]
+//    }
+
     @SuppressLint("NotifyDataSetChanged")
-    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_PLACE_REQUEST && resultCode == Activity.RESULT_OK) {
-            @Suppress("DEPRECATION")
-            val updatedList = data?.getParcelableArrayListExtra<Place>(CustomizePlanActivity.EXTRA_PLACE)
-            updatedList?.let {
-                placeList.clear()
-                placeList.addAll(it)
-                binding.rvPlaces.adapter?.notifyDataSetChanged()
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        binding.rvPlaces.adapter?.notifyDataSetChanged()
+    }
+
+    companion object {
+        const val EXTRA_DATE = "extra_date"
+        const val EXTRA_RETURN_PLACE = "extra_return_place"
     }
 }

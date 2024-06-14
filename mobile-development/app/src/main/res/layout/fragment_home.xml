@@ -25,22 +25,67 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="?attr/colorOnPrimary"/>
+                app:titleTextColor="?attr/colorOnPrimary">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvAppName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorSecondaryVariant"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivIconLeft"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_place"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvLocation"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/colorSecondaryVariant"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/location"
+                        android:textColor="?attr/colorSecondaryVariant"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivIconLeft"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/ivIconLeft" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <View
             android:id="@+id/divider_1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+            android:background="@color/light_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/appBarLayout" />
 
         <View
             android:id="@+id/divider_2"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/bg_circle_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_1" />
@@ -51,7 +96,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:paddingVertical="32dp"
-            android:src="@drawable/ic_travel_plan"
+            android:src="@drawable/ic_route"
             app:layout_constraintBottom_toBottomOf="@+id/divider_2"
             app:layout_constraintEnd_toEndOf="@+id/divider_2"
             app:layout_constraintStart_toStartOf="@+id/divider_2"
@@ -63,13 +108,13 @@
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:alpha="0"
             android:text="@string/home_title"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="24sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/divider_2"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,17 +136,18 @@
             tools:alpha="100" />
 
         <TextView
-            android:id="@+id/tv_favorite_place"
+            android:id="@+id/tvFavoritePlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="36dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/tv_favorite_place"
+            android:text="@string/favorite_place"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/seeMoreFavorite"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_2" />
 
@@ -110,67 +156,62 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
             android:text="@string/see_all"
             android:textColor="?attr/colorPrimary"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFavoritePlace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvFavoritePlace" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFavoritePlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:fillViewport="true"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_favorite_place">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvFavoritePlace"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
+            app:layout_constraintTop_toBottomOf="@id/tvFavoritePlace"/>
 
         <TextView
-            android:id="@+id/tv_recommendation_place"
+            android:id="@+id/tvRecommendationPlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/tv_recommended_place"
+            android:text="@string/popular_places_in_bali"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/seeMoreRecommendation"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+            app:layout_constraintTop_toBottomOf="@+id/rvFavoritePlace" />
 
         <TextView
             android:id="@+id/seeMoreRecommendation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
             android:text="@string/see_all"
             android:textColor="?attr/colorPrimary"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/rvRecommendationPlace"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRecommendationPlace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvRecommendationPlace" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecommendationPlace"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recommendation_place" />
+            app:layout_constraintTop_toBottomOf="@+id/tvRecommendationPlace" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -24,6 +24,9 @@
             android:name=".view.profile.personalinformation.PersonalInformationActivity"
             android:exported="false" />
         <activity
+            android:name=".view.profile.personalinformation.edit.EditPersonalInformationActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.profile.interest.MyInterestActivity"
             android:exported="false" />
         <activity
@@ -42,18 +45,32 @@
             android:name=".view.profile.aboutus.AboutUsActivity"
             android:exported="false" />
 
+        <!-- My Trip -->
+        <activity
+            android:name=".view.mytrip.detail.UpcomingTripDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.mytrip.detail.CompletedTripDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.mytrip.detail.CanceledTripDetailActivity"
+            android:exported="false" />
+
         <!-- Explore -->
         <activity
             android:name=".view.explore.place.tourist.TouristAttractionsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.explore.place.lodging.LodgingActivity"
+            android:name=".view.explore.place.culinary.CulinarySpotActivity"
             android:exported="false" />
         <activity
-            android:name=".view.explore.place.culinary.CulinarySpotActivity"
+            android:name=".view.explore.place.lodging.LodgingActivity"
             android:exported="false" />
 
         <!-- Home -->
+        <activity
+            android:name=".view.home.plan.date.DatePlanActivity"
+            android:exported="false" />
         <activity
             android:name=".view.home.plan.recommendation.RecommendationPlanActivity"
             android:exported="false" />
@@ -73,11 +90,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.register.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".view.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.signup.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".view.onboarding.OnboardingActivity"

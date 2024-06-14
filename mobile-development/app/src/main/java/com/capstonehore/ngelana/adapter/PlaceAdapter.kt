@@ -7,7 +7,8 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ItemPlaceBinding
 
-class PlaceAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapter<PlaceAdapter.ListViewHolder>() {
+class PlaceAdapter(private val listPlace: ArrayList<Place>) :
+    RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -15,19 +16,19 @@ class PlaceAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapt
         this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val binding = ItemPlaceBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return ListViewHolder(binding)
+        return PlaceViewHolder(binding)
     }
 
     override fun getItemCount(): Int = listPlace.size
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         val (name, description, image) = listPlace[position]
         with(holder.binding) {
             placeName.text = name
@@ -43,7 +44,7 @@ class PlaceAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapt
         }
     }
 
-    class ListViewHolder(var binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root)
+    class PlaceViewHolder(var binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
         fun onItemClicked(items: Place)
