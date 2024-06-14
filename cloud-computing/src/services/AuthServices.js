@@ -1,7 +1,19 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const rateLimit = require("express-rate-limit");
 
 const secret = process.env.JWT_SECRET;
+
+//Rate Limiter
+function limiter() {
+  return rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: {
+      message: "Too many requests, please try again later.",
+    },
+  });
+}
 
 // Middleware auth
 
@@ -44,4 +56,5 @@ module.exports = {
   createHashedPass,
   createToken,
   compareHashedPass,
+  limiter,
 };
