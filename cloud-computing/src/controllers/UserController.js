@@ -120,6 +120,24 @@ router.get("/", accessValidation, async (req, res) => {
   }
 });
 
+// Read user by ID
+router.get("/:id", accessValidation, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await prisma.user.findUnique({
+      where: { id },
+    });
+    return res.status(200).json({
+      data: result,
+      message: `Details of UserID: ${id} Listed!`,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error listing users! Error : ${error.message}`,
+    });
+  }
+});
+
 // Update user from id
 router.patch("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
