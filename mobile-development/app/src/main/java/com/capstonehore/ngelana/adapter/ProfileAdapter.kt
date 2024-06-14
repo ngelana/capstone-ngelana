@@ -28,7 +28,7 @@ class ProfileAdapter(private val listProfile: ArrayList<Profile>) :
     override fun getItemCount(): Int = listProfile.size
 
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
-        val (name, icon) = listProfile[position]
+        val (_, name, icon) = listProfile[position]
         with(holder.binding) {
             tvName.text = name
             ivIconLeft.setImageResource(icon)

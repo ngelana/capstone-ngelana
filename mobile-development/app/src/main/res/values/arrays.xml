@@ -27,16 +27,22 @@
     </string-array>
 
     <!-- Category -->
+    <string-array name="data_category_code">
+        <item>NGELANA-TA</item>
+        <item>NGELANA-CS</item>
+        <item>NGELANA-LO</item>
+    </string-array>
+
     <string-array name="data_category_name">
-        <item>Tourist Attractions</item>
-        <item>Culinary Spot</item>
-        <item>Lodging</item>
+        <item>@string/tourist_attractions</item>
+        <item>@string/culinary_spot</item>
+        <item>@string/lodging</item>
     </string-array>
 
     <string-array name="data_category_description">
-        <item>Popular destinations like landmarks, historical sites, and natural attractions.</item>
-        <item>Places known for local dishes, street food, and unique dining experiences.</item>
-        <item>Accommodation options such as hotels, hostels, and resorts.</item>
+        <item>@string/tourist_attractions_desc</item>
+        <item>@string/culinary_spot_desc</item>
+        <item>@string/lodging_desc</item>
     </string-array>
 
     <string-array name="data_category_image">
@@ -46,11 +52,19 @@
     </string-array>
 
     <!-- Profile -->
+    <!-- Account -->
+    <string-array name="data_account_code">
+        <item>ngelana-personal-information</item>
+        <item>ngelana-my-interest</item>
+        <item>ngelana-my-favorite</item>
+        <item>ngelana-my-review</item>
+    </string-array>
+
     <string-array name="data_account_name">
-        <item>Personal Information</item>
-        <item>My Interest</item>
-        <item>My Favorite</item>
-        <item>My Review</item>
+        <item>@string/personal_information</item>
+        <item>@string/my_interest</item>
+        <item>@string/my_favorite</item>
+        <item>@string/my_review</item>
     </string-array>
 
     <integer-array name="data_account_icon">
@@ -60,17 +74,28 @@
         <item>@drawable/ic_star_border</item>
     </integer-array>
 
+    <!-- Settings -->
+    <string-array name="data_settings_code">
+        <item>ngelana-language</item>
+    </string-array>
+
     <string-array name="data_settings_name">
-        <item>Language</item>
+        <item>@string/language</item>
     </string-array>
 
     <integer-array name="data_settings_icon">
         <item>@drawable/ic_language</item>
     </integer-array>
 
+    <!-- Information -->
+    <string-array name="data_information_code">
+        <item>ngelana-help-center</item>
+        <item>ngelana-about-us</item>
+    </string-array>
+
     <string-array name="data_information_name">
-        <item>Help Center</item>
-        <item>About Us</item>
+        <item>@string/help_center</item>
+        <item>@string/about_us</item>
     </string-array>
 
     <integer-array name="data_information_icon">
@@ -80,11 +105,12 @@
 
     <!-- Personal Information -->
     <string-array name="data_personal_title">
-        <item>Name</item>
-        <item>Date of Birth</item>
-        <item>Gender</item>
-        <item>No. Handphone</item>
-        <item>Email</item>
+        <item>@string/name</item>
+        <item>@string/date_of_birth</item>
+        <item>@string/gender</item>
+        <item>@string/phone_number</item>
+        <item>@string/email</item>
+        <item>@string/joined_at</item>
     </string-array>
 
     <string-array name="data_personal_name">
@@ -93,6 +119,7 @@
         <item>Perempuan</item>
         <item>083813699536</item>
         <item>anisanurjanah2705@gmail.com</item>
+        <item>1 hari yang lalu</item>
     </string-array>
 
     <!-- Interest -->

@@ -15,6 +15,13 @@
     <string name="recommendation_place">Tempat Rekomendasi</string>
     <string name="customize_place">Sesuaikan Tempat</string>
     <string name="plan_result">Hasil Perencanaan</string>
+    <string name="personal_information">Informasi Pribadi</string>
+    <string name="my_interest">Minat Saya</string>
+    <string name="my_favorite">Favorit Saya</string>
+    <string name="my_review">Ulasan Saya</string>
+    <string name="language">Bahasa</string>
+    <string name="help_center">Pusat Bantuan</string>
+    <string name="about_us">Tentang Kami</string>
 
     <!-- Fragment -->
     <string name="upcoming_trip">Perjalanan Mendatang</string>
@@ -63,24 +70,25 @@
     <string name="trip_name">Nama Perjalanan:</string>
     <string name="date">Tanggal:</string>
 
+    <!-- Explore -->
+    <string name="tourist_attractions_desc">Destinasi populer seperti landmark, situs bersejarah, dan atraksi alam.</string>
+    <string name="culinary_spot_desc">Tempat-tempat yang dikenal karena hidangan lokal, makanan jalanan, dan pengalaman makan unik.</string>
+    <string name="lodging_desc">Pilihan akomodasi seperti hotel, hostel, dan resor.</string>
+
     <!-- My Trip -->
     <string name="completed">Selesai</string>
     <string name="q_completed">Apakah Anda sudah menyelesaikan perjalanan Anda?</string>
     <string name="write_a_review">Tulis ulasan..</string>
     <string name="already_review">Anda sudah meninggalkan ulasan untuk tempat ini.</string>
+    <string name="cancel_the_trip">Batalkan Perjalanan</string>
+    <string name="start_plan_completed_button">Rencanakan Perjalanan Selanjutnya</string>
+    <string name="start_plan_canceled_button">Rencanakan Perjalanan Baru</string>
 
     <!-- Profile -->
     <string name="welcome">Selamat datang,</string>
     <string name="my_account">Akun Saya</string>
     <string name="settings">Pengaturan</string>
     <string name="information">Informasi</string>
-    <string name="personal_information">Informasi Pribadi</string>
-    <string name="my_interest">Minat Saya</string>
-    <string name="my_favorite">Favorit Saya</string>
-    <string name="my_review">Ulasan Saya</string>
-    <string name="language">Bahasa</string>
-    <string name="help_center">Pusat Bantuan</string>
-    <string name="about_us">Tentang Kami</string>
 
     <string name="edit">Edit</string>
     <string name="date_of_birth">Tanggal Lahir</string>
@@ -88,8 +96,10 @@
     <string name="woman">Wanita</string>
     <string name="man">Pria</string>
     <string name="phone_number">Nomor Telepon</string>
+    <string name="joined_at">Bergabung Pada</string>
 
     <string name="add_interest">Tambahkan Minat</string>
+    <string name="add_favorite">Tambahkan ke Favorit</string>
 
     <string name="help_topics">Tema Bantuan</string>
     <string name="can_t_find_what_you_re_looking_for">Tidak dapat menemukan yang Anda cari?</string>

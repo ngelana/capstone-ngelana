@@ -1,9 +1,11 @@
 package com.capstonehore.ngelana.view.profile.favorite
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityMyFavoriteBinding
+import com.capstonehore.ngelana.view.main.MainActivity
 
 class MyFavoriteActivity : AppCompatActivity() {
 
@@ -14,8 +16,15 @@ class MyFavoriteActivity : AppCompatActivity() {
         binding = ActivityMyFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupAction()
         setupToolbar()
         setupView()
+    }
+
+    private fun setupAction() {
+        binding.addFavorite.setOnClickListener {
+            startActivity(Intent(this@MyFavoriteActivity, MainActivity::class.java))
+        }
     }
 
     private fun setupToolbar() {

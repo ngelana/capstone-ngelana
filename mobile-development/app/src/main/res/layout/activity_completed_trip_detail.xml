@@ -25,9 +25,7 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/plan_result"
-                app:titleTextColor="?attr/colorOnPrimary"
-                app:titleCentered="true"/>
+                app:titleTextColor="?attr/colorOnPrimary"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,6 +35,158 @@
             android:layout_height="0.5dp"
             android:background="@color/light_grey"
             app:layout_constraintBottom_toBottomOf="@+id/appBarLayout" />
+
+        <TextView
+            android:id="@+id/tvPlanName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/trip_name"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_1" />
+
+        <TextView
+            android:id="@+id/planName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/name"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvPlanName"
+            app:layout_constraintTop_toTopOf="@+id/tvPlanName" />
+
+        <TextView
+            android:id="@+id/tvPlanDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/date"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPlanName" />
+
+        <TextView
+            android:id="@+id/planDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/_0"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvPlanDate"
+            app:layout_constraintTop_toTopOf="@+id/tvPlanDate" />
+
+        <View
+            android:id="@+id/divider_2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="?attr/colorOnSecondary"
+            app:layout_constraintEnd_toEndOf="@+id/planDate"
+            app:layout_constraintStart_toStartOf="@+id/tvPlanDate"
+            app:layout_constraintTop_toBottomOf="@+id/tvPlanDate" />
+
+        <View
+            android:id="@+id/circleView_1"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_2" />
+
+        <View
+            android:id="@+id/verticalLine_1"
+            android:layout_width="4dp"
+            android:layout_height="16dp"
+            android:background="?attr/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/circleView_1"
+            app:layout_constraintStart_toStartOf="@+id/circleView_1"
+            app:layout_constraintTop_toBottomOf="@+id/circleView_1" />
+
+        <TextView
+            android:id="@+id/tvStartDestination"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/start_destination"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/circleView_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/circleView_1"
+            app:layout_constraintTop_toTopOf="@+id/circleView_1" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlan"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/verticalLine_1"/>
+
+        <View
+            android:id="@+id/verticalLine_2"
+            android:layout_width="4dp"
+            android:layout_height="16dp"
+            android:background="?attr/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/circleView_2"
+            app:layout_constraintStart_toStartOf="@+id/circleView_2"
+            app:layout_constraintTop_toBottomOf="@+id/rvPlan" />
+
+        <View
+            android:id="@+id/circleView_2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/verticalLine_2" />
+
+        <TextView
+            android:id="@+id/tvEndDestination"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/end_destination"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/circleView_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/circleView_2"
+            app:layout_constraintTop_toBottomOf="@+id/verticalLine_2" />
+
+        <Button
+            android:id="@+id/startPlanningButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:text="@string/start_plan_completed_button"
+            android:textColor="?attr/colorSecondaryVariant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEndDestination"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.profile.language
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
@@ -9,18 +10,21 @@ import com.capstonehore.ngelana.adapter.LanguageAdapter
 import com.capstonehore.ngelana.data.local.entity.Language
 import com.capstonehore.ngelana.databinding.ActivityLanguageBinding
 import com.capstonehore.ngelana.utils.LanguagePreference
-import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.MainActivity.Companion.setLocale
+import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 
 class LanguageActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLanguageBinding
+
+    private var delay: Long = 3000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLanguageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        showLoading(false)
         setupToolbar()
         setupView()
     }
@@ -72,10 +76,16 @@ class LanguageActivity : AppCompatActivity() {
     }
 
     private fun restartApp() {
-        val intent = Intent(this@LanguageActivity, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        finish()
+        showLoading(true)
+        window.decorView.postDelayed({
+            val intent = Intent(this@LanguageActivity, OnboardingActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }, delay)
     }
 
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 }

@@ -145,7 +145,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:alpha="0.8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rvSettings"
@@ -158,15 +158,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:alpha="0.8"
             android:text="@string/dark_mode"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSwitchLeft"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivSwitchLeft"
-            app:layout_constraintTop_toBottomOf="@id/rvSettings"
+            app:layout_constraintTop_toTopOf="@+id/ivSwitchLeft"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
@@ -181,7 +181,7 @@
             android:textColor="?attr/colorOnSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/switchThemes"/>
+            app:layout_constraintTop_toBottomOf="@id/ivSwitchLeft"/>
 
         <View
             android:id="@+id/divider_4"

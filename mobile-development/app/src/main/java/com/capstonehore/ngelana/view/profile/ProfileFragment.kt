@@ -79,50 +79,52 @@ class ProfileFragment : Fragment() {
 
         accountList.addAll(
             getListProfile(
+                R.array.data_account_code,
                 R.array.data_account_name,
                 R.array.data_account_icon
             )
         )
         settingsList.addAll(
             getListProfile(
+                R.array.data_settings_code,
                 R.array.data_settings_name,
                 R.array.data_settings_icon
             )
         )
         informationList.addAll(
             getListProfile(
+                R.array.data_information_code,
                 R.array.data_information_name,
                 R.array.data_information_icon
             )
         )
 
         showList(binding.rvAccount, accountList) { item ->
-            val intent = when (item.name) {
-                "Personal Information" -> Intent(
+            val intent = when (item.code) {
+                "ngelana-personal-information" -> Intent(
                     requireContext(),
                     PersonalInformationActivity::class.java
                 )
-
-                "My Interest" -> Intent(requireContext(), MyInterestActivity::class.java)
-                "My Favorite" -> Intent(requireContext(), MyFavoriteActivity::class.java)
-                "My Review" -> Intent(requireContext(), MyReviewActivity::class.java)
+                "ngelana-my-interest" -> Intent(requireContext(), MyInterestActivity::class.java)
+                "ngelana-my-favorite" -> Intent(requireContext(), MyFavoriteActivity::class.java)
+                "ngelana-my-review" -> Intent(requireContext(), MyReviewActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }
         }
 
         showList(binding.rvSettings, settingsList) { item ->
-            val intent = when (item.name) {
-                "Language" -> Intent(requireContext(), LanguageActivity::class.java)
+            val intent = when (item.code) {
+                "ngelana-language" -> Intent(requireContext(), LanguageActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }
         }
 
         showList(binding.rvInformation, informationList) { item ->
-            val intent = when (item.name) {
-                "Help Center" -> Intent(requireContext(), HelpCenterActivity::class.java)
-                "About Us" -> Intent(requireContext(), AboutUsActivity::class.java)
+            val intent = when (item.code) {
+                "ngelana-help-center" -> Intent(requireContext(), HelpCenterActivity::class.java)
+                "ngelana-about-us" -> Intent(requireContext(), AboutUsActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }
@@ -134,12 +136,13 @@ class ProfileFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
     }
 
-    private fun getListProfile(namesResId: Int, iconsResId: Int): ArrayList<Profile> {
+    private fun getListProfile(codeResId: Int, namesResId: Int, iconsResId: Int): ArrayList<Profile> {
+        val dataCode = resources.getStringArray(codeResId)
         val dataName = resources.getStringArray(namesResId)
         val dataIcon = resources.obtainTypedArray(iconsResId)
         val listProfile = ArrayList<Profile>()
         for (i in dataName.indices) {
-            val profile = Profile(dataName[i], dataIcon.getResourceId(i, -1))
+            val profile = Profile(dataCode[i], dataName[i], dataIcon.getResourceId(i, -1))
             listProfile.add(profile)
         }
         dataIcon.recycle()

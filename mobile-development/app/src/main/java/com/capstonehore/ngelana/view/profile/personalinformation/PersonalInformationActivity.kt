@@ -61,13 +61,5 @@ class PersonalInformationActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@PersonalInformationActivity)
             adapter = informationAdapter
         }
-
-        informationAdapter.setOnItemClickCallback(object : PersonalInformationAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: PersonalInformation) {
-                val context = this@PersonalInformationActivity
-                startActivity(Intent(context, EditPersonalInformationActivity::class.java)
-                    .putExtra(EditPersonalInformationActivity.EXTRA_RESULT_INFORMATION, items))
-            }
-        })
     }
 }

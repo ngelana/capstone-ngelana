@@ -14,8 +14,15 @@ class MyInterestActivity : AppCompatActivity() {
         binding = ActivityMyInterestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupAction()
         setupToolbar()
         setupView()
+    }
+
+    private fun setupAction() {
+        binding.addInterest.setOnClickListener {
+
+        }
     }
 
     private fun setupToolbar() {
