@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.databinding.FragmentPasswordBinding
@@ -41,9 +42,9 @@ class PasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupAction()
+        setupImage()
         setupAnimation()
         setupPassword()
-
     }
 
     private fun setupAction() {
@@ -53,6 +54,13 @@ class PasswordFragment : Fragment() {
         binding.submitButton.setOnClickListener {
             setupRegister()
         }
+    }
+
+    private fun setupImage() {
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana_welcome.png"
+        Glide.with(requireActivity())
+            .load(image)
+            .into(binding.logoImage)
     }
 
     private fun setupAnimation() {
@@ -171,7 +179,7 @@ class PasswordFragment : Fragment() {
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, positiveButton, negativeButton)
-        animatorSet.duration = 500
+        animatorSet.duration = 800
         animatorSet.start()
     }
 

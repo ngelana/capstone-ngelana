@@ -64,7 +64,7 @@ class ResultPlanActivity : AppCompatActivity() {
         if (selectedDate != null) {
             binding.planDate.text = selectedDate?.withDateFormat()
         } else {
-            binding.planDate.text = ""
+            binding.planDate.text = getString(R.string.not_available)
         }
     }
 
@@ -137,7 +137,7 @@ class ResultPlanActivity : AppCompatActivity() {
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, negativeButton)
-        animatorSet.duration = 500
+        animatorSet.duration = 800
         animatorSet.start()
     }
 

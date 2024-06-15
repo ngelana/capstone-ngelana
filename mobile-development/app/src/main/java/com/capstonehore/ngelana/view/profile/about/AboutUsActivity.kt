@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.profile.aboutus
+package com.capstonehore.ngelana.view.profile.about
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

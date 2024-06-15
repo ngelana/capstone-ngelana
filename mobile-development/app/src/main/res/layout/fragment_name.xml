@@ -81,14 +81,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestion"
+        app:startIconDrawable="@drawable/ic_person"
+        app:startIconTint="?attr/colorPrimary"
         tools:alpha="100">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="48dp"
             android:hint="@string/enter_your_name"
-            android:inputType="text" />
+            android:inputType="text"
+            tools:ignore="RtlSymmetry" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

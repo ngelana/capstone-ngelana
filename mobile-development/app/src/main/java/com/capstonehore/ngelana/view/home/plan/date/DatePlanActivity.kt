@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityDatePlanBinding
 import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
@@ -29,6 +30,7 @@ class DatePlanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
+        setupImage()
         setupAnimation()
     }
 
@@ -51,6 +53,13 @@ class DatePlanActivity : AppCompatActivity() {
                 showDatePickerDialog()
             }
         }
+    }
+
+    private fun setupImage() {
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana6.png"
+        Glide.with(this@DatePlanActivity)
+            .load(image)
+            .into(binding.logoImage)
     }
 
     private fun setupAnimation() {

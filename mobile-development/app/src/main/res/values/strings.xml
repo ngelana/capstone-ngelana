@@ -44,7 +44,6 @@
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_out">Sign Out</string>
-    <string name="generate">Generate</string>
     <string name="save">Save</string>
     <string name="back_to_home">Back to Home</string>
     <string name="dark_mode">Dark Mode</string>
@@ -184,11 +183,11 @@
 
     <string name="success_completed_title">You\'re all set!</string>
 
-    <string name="registration_completed_message">One more step to complete. Click the Continue button to proceed.</string>
+    <string name="registration_completed_message">One more step to complete. Click the continue button to proceed.</string>
     <string name="registration_failed">Registration Failed</string>
 
     <string name="login_success_title">Success!</string>
-    <string name="login_success_message">You have successfully logged in. Click the Continue button to proceed.</string>
+    <string name="login_success_message">You have successfully logged in. Click the continue button to proceed.</string>
     <string name="login_failed">Login Failed</string>
 
     <string name="plan_creation_success_message">Your travel plan has been successfully created.</string>

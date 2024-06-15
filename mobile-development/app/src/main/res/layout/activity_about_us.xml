@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
-    tools:context=".view.profile.aboutus.AboutUsActivity">
+    tools:context=".view.profile.about.AboutUsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

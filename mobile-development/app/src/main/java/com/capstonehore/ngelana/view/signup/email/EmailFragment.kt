@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.FragmentEmailBinding
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
@@ -36,9 +37,9 @@ class EmailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupAction()
+        setupImage()
         setupAnimation()
         setupEmail()
-
     }
 
     private fun setupAction() {
@@ -49,6 +50,13 @@ class EmailFragment : Fragment() {
             val email = binding.edEmail.text.toString()
             moveToPassword(email)
         }
+    }
+
+    private fun setupImage() {
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana_welcome.png"
+        Glide.with(requireActivity())
+            .load(image)
+            .into(binding.logoImage)
     }
 
     private fun setupAnimation() {

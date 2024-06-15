@@ -30,6 +30,9 @@
             android:name=".view.profile.interest.MyInterestActivity"
             android:exported="false" />
         <activity
+            android:name=".view.profile.interest.edit.EditMyInterestActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.profile.favorite.MyFavoriteActivity"
             android:exported="false" />
         <activity
@@ -42,7 +45,7 @@
             android:name=".view.profile.helpcenter.HelpCenterActivity"
             android:exported="false" />
         <activity
-            android:name=".view.profile.aboutus.AboutUsActivity"
+            android:name=".view.profile.about.AboutUsActivity"
             android:exported="false" />
 
         <!-- My Trip -->
@@ -80,7 +83,6 @@
         <activity
             android:name=".view.home.plan.result.ResultPlanActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.splashscreen.SplashScreenActivity"
             android:exported="true">
@@ -90,7 +92,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.register.RegisterActivity"
             android:exported="false" />

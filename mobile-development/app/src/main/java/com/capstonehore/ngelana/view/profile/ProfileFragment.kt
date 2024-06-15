@@ -26,7 +26,7 @@ import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
-import com.capstonehore.ngelana.view.profile.aboutus.AboutUsActivity
+import com.capstonehore.ngelana.view.profile.about.AboutUsActivity
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteActivity
 import com.capstonehore.ngelana.view.profile.helpcenter.HelpCenterActivity
 import com.capstonehore.ngelana.view.profile.interest.MyInterestActivity

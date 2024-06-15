@@ -1,56 +1,53 @@
-package com.capstonehore.ngelana.view.signup.interest
+package com.capstonehore.ngelana.view.profile.interest.edit
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.SparseBooleanArray
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.InterestAdapter
 import com.capstonehore.ngelana.data.Interest
-import com.capstonehore.ngelana.databinding.FragmentInterestBinding
-import com.capstonehore.ngelana.view.login.LoginActivity
+import com.capstonehore.ngelana.databinding.ActivityEditMyInterestBinding
+import com.capstonehore.ngelana.view.profile.interest.MyInterestActivity
 
-class InterestFragment : Fragment() {
+class EditMyInterestActivity : AppCompatActivity() {
 
-    private var _binding: FragmentInterestBinding? = null
-
-    private val binding get() = _binding!!
+    private lateinit var binding: ActivityEditMyInterestBinding
 
     private lateinit var interestAdapter: InterestAdapter
 
     private val selectedItems = SparseBooleanArray()
     private var interestCount: Int = 0
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentInterestBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityEditMyInterestBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupAction()
+        setupToolbar()
         setupAnimation()
         setupView()
     }
 
     private fun setupAction() {
-        binding.skipButton.setOnClickListener {
-            startActivity(Intent(requireActivity(), LoginActivity::class.java))
-            requireActivity().finish()
+        binding.submitButton.setOnClickListener {
+            startActivity(Intent(this, MyInterestActivity::class.java))
+            finish()
         }
-        binding.nextButton.setOnClickListener {
-            startActivity(Intent(requireActivity(), LoginActivity::class.java))
-            requireActivity().finish()
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
@@ -59,20 +56,15 @@ class InterestFragment : Fragment() {
         val tvDescription =
             ObjectAnimator.ofFloat(binding.tvDescription, View.ALPHA, 1f).setDuration(300)
         val rvInterest = ObjectAnimator.ofFloat(binding.rvInterest, View.ALPHA, 1f).setDuration(300)
-        val nextButton =
-            ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).setDuration(300)
-        val skipButton = ObjectAnimator.ofFloat(binding.skipButton, View.ALPHA, 1f).setDuration(300)
-
-        val together = AnimatorSet().apply {
-            playTogether(nextButton, skipButton)
-        }
+        val submitButton =
+            ObjectAnimator.ofFloat(binding.submitButton, View.ALPHA, 1f).setDuration(300)
 
         AnimatorSet().apply {
             playSequentially(
                 tvTitle,
                 tvDescription,
                 rvInterest,
-                together
+                submitButton
             )
             start()
         }
@@ -106,7 +98,7 @@ class InterestFragment : Fragment() {
 
         binding.rvInterest.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(requireActivity(), 2)
+            layoutManager = GridLayoutManager(this@EditMyInterestActivity, 2)
             adapter = interestAdapter
         }
     }
@@ -120,4 +112,7 @@ class InterestFragment : Fragment() {
         }
     }
 
+    companion object {
+        const val EXTRA_RESULT_INTEREST = "extra_result_interest"
+    }
 }

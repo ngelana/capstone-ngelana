@@ -44,7 +44,6 @@
     <string name="login">Masuk</string>
     <string name="sign_up">Daftar</string>
     <string name="sign_out">Keluar</string>
-    <string name="generate">Buat</string>
     <string name="save">Simpan</string>
     <string name="back_to_home">Kembali ke Beranda</string>
     <string name="dark_mode">Mode Gelap</string>
@@ -184,11 +183,11 @@
 
     <string name="success_completed_title">Anda sudah siap!</string>
 
-    <string name="registration_completed_message">Satu langkah lagi untuk kelengkapannya. Klik tombol Lanjutkan untuk melanjutkan.</string>
+    <string name="registration_completed_message">Satu langkah lagi untuk kelengkapannya. Klik tombol lanjutkan untuk melanjutkan.</string>
     <string name="registration_failed">Registrasi Gagal</string>
 
     <string name="login_success_title">Berhasil!</string>
-    <string name="login_success_message">Anda telah berhasil masuk. Klik tombol Lanjutkan untuk melanjutkan.</string>
+    <string name="login_success_message">Anda telah berhasil masuk. Klik tombol lanjutkan untuk melanjutkan.</string>
     <string name="login_failed">Login Gagal</string>
 
     <string name="plan_creation_success_message">Rencana perjalanan Anda berhasil dibuat.</string>

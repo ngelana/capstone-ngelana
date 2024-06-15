@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -20,14 +21,17 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.preferences.ThemeManager
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
+import com.capstonehore.ngelana.utils.LanguagePreference
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.signup.SignUpActivity
+import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
 
@@ -40,10 +44,13 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setLocale(this)
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupAction()
+        setupImage()
         setupAnimation()
         setupTitle()
         setupButton()
@@ -52,6 +59,13 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener { setupLogin() }
+    }
+
+    private fun setupImage() {
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana10.png"
+        Glide.with(this@LoginActivity)
+            .load(image)
+            .into(binding.logoImage)
     }
 
     private fun setupAnimation() {
@@ -177,7 +191,7 @@ class LoginActivity : AppCompatActivity() {
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, positiveButton, negativeButton)
-        animatorSet.duration = 500
+        animatorSet.duration = 800
         animatorSet.start()
     }
 
@@ -205,5 +219,18 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         const val THEME_SETTINGS = "theme_settings"
+
+        fun setLocale(context: Context) {
+            val languageCode = LanguagePreference.getLanguage(context)
+            if (languageCode != null) {
+                val locale = Locale(languageCode)
+                Locale.setDefault(locale)
+
+                val config = Configuration()
+                config.setLocale(locale)
+                @Suppress("DEPRECATION")
+                context.resources.updateConfiguration(config, context.resources.displayMetrics)
+            }
+        }
     }
 }
