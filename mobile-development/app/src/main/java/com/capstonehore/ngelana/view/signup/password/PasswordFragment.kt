@@ -3,12 +3,15 @@ package com.capstonehore.ngelana.view.signup.password
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -57,10 +60,10 @@ class PasswordFragment : Fragment() {
     }
 
     private fun setupImage() {
-        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana_welcome.png"
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana_customize_plan.jpg"
         Glide.with(requireActivity())
             .load(image)
-            .into(binding.logoImage)
+            .into(binding.imageView)
     }
 
     private fun setupAnimation() {
@@ -70,6 +73,13 @@ class PasswordFragment : Fragment() {
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -15f, 15f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val imageView = ObjectAnimator.ofFloat(binding.imageView, View.ALPHA, 1f).setDuration(500)
         val tvTitle = ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(300)
         val tvDescription =
             ObjectAnimator.ofFloat(binding.tvDescription, View.ALPHA, 1f).setDuration(300)
@@ -86,6 +96,7 @@ class PasswordFragment : Fragment() {
 
         AnimatorSet().apply {
             playSequentially(
+                imageView,
                 tvTitle,
                 tvDescription,
                 tvQuestion,
@@ -148,24 +159,31 @@ class PasswordFragment : Fragment() {
         dialog.show()
 
         if (isSuccess) {
-            alertLayout.alertIcon.setImageResource(R.drawable.ic_check_circle)
-            alertLayout.alertTitle.text = getString(R.string.success_completed_title)
-            alertLayout.alertMessage.text = getString(R.string.registration_completed_message)
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_check_circle)
+                alertTitle.text = getString(R.string.success_completed_title)
+                alertMessage.text = getString(R.string.registration_completed_message)
 
-            alertLayout.positiveButton.setOnClickListener {
-                moveToInterest()
-                dialog.dismiss()
+                submitButton.setOnClickListener {
+                    moveToInterest()
+                    dialog.dismiss()
+                }
             }
-            alertLayout.negativeButton.visibility = View.GONE
         } else {
-            alertLayout.alertIcon.setImageResource(R.drawable.ic_error)
-            alertLayout.alertTitle.text = getString(R.string.registration_failed)
-            alertLayout.alertMessage.text = message
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_error)
+                alertTitle.text = getString(R.string.registration_failed)
+                alertMessage.text = message
 
-            alertLayout.positiveButton.visibility = View.GONE
-            alertLayout.negativeButton.setOnClickListener {
-                moveToOnboarding()
-                dialog.dismiss()
+                submitButton.apply {
+                    text = getString(R.string.cancel)
+                    setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.light_grey))
+                    setTextColor(ContextCompat.getColor(requireActivity(), R.color.black))
+                    setOnClickListener {
+                        moveToOnboarding()
+                        dialog.dismiss()
+                    }
+                }
             }
         }
 
@@ -174,11 +192,10 @@ class PasswordFragment : Fragment() {
         val scaleY = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleY", 0.5f, 1f)
         val tvTitle = ObjectAnimator.ofFloat(alertLayout.alertTitle, View.ALPHA, 0f, 1f)
         val tvMessage = ObjectAnimator.ofFloat(alertLayout.alertMessage, View.ALPHA, 0f, 1f)
-        val positiveButton = ObjectAnimator.ofFloat(alertLayout.positiveButton, View.ALPHA, 0f, 1f)
-        val negativeButton = ObjectAnimator.ofFloat(alertLayout.negativeButton, View.ALPHA, 0f, 1f)
+        val submitButton = ObjectAnimator.ofFloat(alertLayout.submitButton, View.ALPHA, 0f, 1f)
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, positiveButton, negativeButton)
+        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, submitButton)
         animatorSet.duration = 800
         animatorSet.start()
     }

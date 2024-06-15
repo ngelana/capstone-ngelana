@@ -58,13 +58,16 @@ class EditMyInterestActivity : AppCompatActivity() {
         val rvInterest = ObjectAnimator.ofFloat(binding.rvInterest, View.ALPHA, 1f).setDuration(300)
         val submitButton =
             ObjectAnimator.ofFloat(binding.submitButton, View.ALPHA, 1f).setDuration(300)
+        val tvInterestCount =
+            ObjectAnimator.ofFloat(binding.tvInterestCount, View.ALPHA, 1f).setDuration(300)
 
         AnimatorSet().apply {
             playSequentially(
                 tvTitle,
                 tvDescription,
                 rvInterest,
-                submitButton
+                submitButton,
+                tvInterestCount
             )
             start()
         }

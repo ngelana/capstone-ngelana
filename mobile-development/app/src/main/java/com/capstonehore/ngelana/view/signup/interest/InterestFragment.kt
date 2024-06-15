@@ -61,10 +61,12 @@ class InterestFragment : Fragment() {
         val rvInterest = ObjectAnimator.ofFloat(binding.rvInterest, View.ALPHA, 1f).setDuration(300)
         val nextButton =
             ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).setDuration(300)
+        val tvInterestCount =
+            ObjectAnimator.ofFloat(binding.tvInterestCount, View.ALPHA, 1f).setDuration(300)
         val skipButton = ObjectAnimator.ofFloat(binding.skipButton, View.ALPHA, 1f).setDuration(300)
 
         val together = AnimatorSet().apply {
-            playTogether(nextButton, skipButton)
+            playTogether(nextButton, tvInterestCount, skipButton)
         }
 
         AnimatorSet().apply {

@@ -55,7 +55,7 @@ class NameFragment : Fragment() {
         val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana_welcome.png"
         Glide.with(requireActivity())
             .load(image)
-            .into(binding.logoImage)
+            .into(binding.imageView)
     }
 
     private fun setupAnimation() {
@@ -65,6 +65,13 @@ class NameFragment : Fragment() {
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -15f, 15f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val imageView = ObjectAnimator.ofFloat(binding.imageView, View.ALPHA, 1f).setDuration(500)
         val tvTitle = ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(300)
         val tvDescription =
             ObjectAnimator.ofFloat(binding.tvDescription, View.ALPHA, 1f).setDuration(300)
@@ -81,6 +88,7 @@ class NameFragment : Fragment() {
 
         AnimatorSet().apply {
             playSequentially(
+                imageView,
                 tvTitle,
                 tvDescription,
                 tvQuestion,

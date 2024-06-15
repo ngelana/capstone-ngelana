@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -65,11 +66,17 @@ class LoginActivity : AppCompatActivity() {
         val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana10.png"
         Glide.with(this@LoginActivity)
             .load(image)
-            .into(binding.logoImage)
+            .into(binding.imageView)
     }
 
     private fun setupAnimation() {
         ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -15f, 15f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
@@ -85,7 +92,14 @@ class LoginActivity : AppCompatActivity() {
         val tvRegister = ObjectAnimator.ofFloat(binding.tvRegister, View.ALPHA, 1f).setDuration(300)
 
         AnimatorSet().apply {
-            playSequentially(tvTitle, tvDescription, tvEmail, tvPassword, submitButton, tvRegister)
+            playSequentially(
+                tvTitle,
+                tvDescription,
+                tvEmail,
+                tvPassword,
+                submitButton,
+                tvRegister
+            )
             start()
         }
     }
@@ -161,24 +175,31 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
 
         if (isSuccess) {
-            alertLayout.alertIcon.setImageResource(R.drawable.ic_check_circle)
-            alertLayout.alertTitle.text = getString(R.string.login_success_title)
-            alertLayout.alertMessage.text = getString(R.string.login_success_message)
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_check_circle)
+                alertTitle.text = getString(R.string.login_success_title)
+                alertMessage.text = getString(R.string.login_success_message)
 
-            alertLayout.positiveButton.setOnClickListener {
-                moveToMain()
-                dialog.dismiss()
+                submitButton.setOnClickListener {
+                    moveToMain()
+                    dialog.dismiss()
+                }
             }
-            alertLayout.negativeButton.visibility = View.GONE
         } else {
-            alertLayout.alertIcon.setImageResource(R.drawable.ic_error)
-            alertLayout.alertTitle.text = getString(R.string.login_failed)
-            alertLayout.alertMessage.text = message
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_error)
+                alertTitle.text = getString(R.string.login_failed)
+                alertMessage.text = message
 
-            alertLayout.negativeButton.setOnClickListener {
-                dialog.dismiss()
+                submitButton.apply {
+                    text = getString(R.string.cancel)
+                    setBackgroundColor(ContextCompat.getColor(this@LoginActivity, R.color.light_grey))
+                    setTextColor(ContextCompat.getColor(this@LoginActivity, R.color.black))
+                    setOnClickListener {
+                        dialog.dismiss()
+                    }
+                }
             }
-            alertLayout.positiveButton.visibility = View.GONE
         }
 
         // Animation
@@ -186,11 +207,10 @@ class LoginActivity : AppCompatActivity() {
         val scaleY = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleY", 0.5f, 1f)
         val tvTitle = ObjectAnimator.ofFloat(alertLayout.alertTitle, View.ALPHA, 0f, 1f)
         val tvMessage = ObjectAnimator.ofFloat(alertLayout.alertMessage, View.ALPHA, 0f, 1f)
-        val positiveButton = ObjectAnimator.ofFloat(alertLayout.positiveButton, View.ALPHA, 0f, 1f)
-        val negativeButton = ObjectAnimator.ofFloat(alertLayout.negativeButton, View.ALPHA, 0f, 1f)
+        val submitButton = ObjectAnimator.ofFloat(alertLayout.submitButton, View.ALPHA, 0f, 1f)
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, positiveButton, negativeButton)
+        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, submitButton)
         animatorSet.duration = 800
         animatorSet.start()
     }

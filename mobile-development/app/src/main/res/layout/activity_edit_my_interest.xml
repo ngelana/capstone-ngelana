@@ -107,9 +107,11 @@
             android:layout_marginEnd="128dp"
             android:text="@string/_0"
             android:textColor="?attr/colorSecondaryVariant"
+            android:alpha="0"
             app:layout_constraintBottom_toBottomOf="@+id/submitButton"
             app:layout_constraintEnd_toEndOf="@+id/submitButton"
-            app:layout_constraintTop_toTopOf="@+id/submitButton"/>
+            app:layout_constraintTop_toTopOf="@+id/submitButton"
+            tools:alpha="100" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

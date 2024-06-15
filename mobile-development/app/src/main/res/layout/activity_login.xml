@@ -20,32 +20,64 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <ImageView
+    <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/logoImage"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:src="@drawable/ic_image"
-        app:layout_constraintBottom_toTopOf="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="84dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        app:srcCompat="@drawable/img_ngelana_logo_name" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/imageViewCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="?attr/backgroundColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logoImage"
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
         android:alpha="0"
         android:text="@string/login_title"
-        android:textSize="20sp"
         android:textColor="?attr/colorOnPrimary"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewCard"
         tools:alpha="100" />
 
     <TextView
@@ -53,29 +85,29 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:text="@string/login_description"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnSecondary"
         android:alpha="0"
-        tools:alpha="100"
-        app:layout_constraintBottom_toTopOf="@+id/tvEmail"
+        android:text="@string/login_description"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        tools:alpha="100" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tvEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
         android:alpha="0"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/tvPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription"
         app:startIconDrawable="@drawable/ic_email"
         app:startIconTint="?attr/colorPrimary"
         tools:alpha="100">
@@ -84,12 +116,12 @@
             android:id="@+id/edEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="48dp"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
+            android:paddingStart="48dp"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
             tools:ignore="RtlSymmetry" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,14 +130,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
         android:alpha="0"
         app:endIconMode="password_toggle"
         app:endIconTint="?attr/colorOnPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmail"
         app:startIconDrawable="@drawable/ic_lock"
         app:startIconTint="?attr/colorPrimary"
         tools:alpha="100">
@@ -114,11 +146,11 @@
             android:id="@+id/edPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword"
             android:paddingStart="48dp"
             android:paddingTop="17dp"
             android:paddingBottom="17dp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
             tools:ignore="RtlSymmetry" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,16 +159,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
         android:alpha="0"
         android:backgroundTint="?attr/colorPrimary"
         android:text="@string/login"
         android:textColor="?attr/colorSecondaryVariant"
-        app:layout_constraintBottom_toTopOf="@+id/tvRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPassword"
         tools:alpha="100" />
 
     <TextView
@@ -144,16 +176,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="96dp"
         android:alpha="0"
         android:text="@string/register_button_from_login"
         android:textAlignment="center"
         android:textColor="?attr/colorOnSecondary"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
         tools:alpha="100" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

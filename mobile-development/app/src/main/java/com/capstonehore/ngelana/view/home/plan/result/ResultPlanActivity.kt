@@ -3,11 +3,14 @@ package com.capstonehore.ngelana.view.home.plan.result
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlanResultAdapter
@@ -109,23 +112,31 @@ class ResultPlanActivity : AppCompatActivity() {
         dialog.show()
 
         if (isSuccess) {
-            alertLayout.alertIcon.setImageResource(R.drawable.ic_check_circle)
-            alertLayout.alertTitle.text = getString(R.string.success_completed_title)
-            alertLayout.alertMessage.text = getString(R.string.plan_creation_success_message)
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_check_circle)
+                alertTitle.text = getString(R.string.success_completed_title)
+                alertMessage.text = getString(R.string.plan_creation_success_message)
 
-            alertLayout.negativeButton.setOnClickListener {
-                dialog.dismiss()
+                submitButton.setOnClickListener {
+                    dialog.dismiss()
+                }
             }
-            alertLayout.positiveButton.visibility = View.GONE
         } else {
-            alertLayout.alertIcon.setImageResource(R.drawable.ic_error)
-            alertLayout.alertTitle.text = getString(R.string.plan_creation_failed)
-            alertLayout.alertMessage.text = message
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_error)
+                alertTitle.text = getString(R.string.plan_creation_failed)
+                alertMessage.text = message
 
-            alertLayout.negativeButton.setOnClickListener {
-                dialog.dismiss()
+                submitButton.apply {
+                    text = getString(R.string.cancel)
+                    setBackgroundColor(ContextCompat.getColor(this@ResultPlanActivity, R.color.light_grey))
+                    setTextColor(ContextCompat.getColor(this@ResultPlanActivity, R.color.black))
+                    setOnClickListener {
+                        moveToMain()
+                        dialog.dismiss()
+                    }
+                }
             }
-            alertLayout.positiveButton.visibility = View.GONE
         }
 
         // Animation
@@ -133,12 +144,17 @@ class ResultPlanActivity : AppCompatActivity() {
         val scaleY = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleY", 0.5f, 1f)
         val tvTitle = ObjectAnimator.ofFloat(alertLayout.alertTitle, View.ALPHA, 0f, 1f)
         val tvMessage = ObjectAnimator.ofFloat(alertLayout.alertMessage, View.ALPHA, 0f, 1f)
-        val negativeButton = ObjectAnimator.ofFloat(alertLayout.negativeButton, View.ALPHA, 0f, 1f)
+        val submitButton = ObjectAnimator.ofFloat(alertLayout.submitButton, View.ALPHA, 0f, 1f)
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, negativeButton)
+        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, submitButton)
         animatorSet.duration = 800
         animatorSet.start()
+    }
+
+    private fun moveToMain() {
+        startActivity(Intent(this@ResultPlanActivity, MainActivity::class.java))
+        finish()
     }
 
     companion object {

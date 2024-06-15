@@ -37,7 +37,7 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun setupImage() {
-        val image = "https://cdn.discordapp.com/attachments/1224593462951673898/1245771315370135552/Untitled_design__1___1_-removebg-preview.png?ex=6659f672&is=6658a4f2&hm=bd52d66ac5559d895030f6ee527489c5672ce1da97613b773896851bdd8d0f21&"
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png"
         Glide.with(this@SplashScreenActivity)
             .load(image)
             .into(binding.imageLogo)
