@@ -132,6 +132,7 @@
     <!-- Sign Up Page -->
     <string name="back">Back</string>
     <string name="_0">(0)</string>
+    <string name="_5_0">5.0</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="enter_your_email">Enter your email</string>
     <string name="enter_your_password">Enter your password</string>
@@ -160,7 +161,6 @@
     <!-- Success condition -->
     <string name="register_success">Congratulations! Your account has been successfully created.</string>
     <string name="register_message">You can now log in and start exploring our platform. \n Press \'Continue\' to proceed to the log in page.</string>
-    <string name="continue_login">Continue</string>
     <string name="successfully_logged_in">You\'ve successfully logged in. Welcome back!</string>
     <string name="successfully_logged_out">You have successfully logged out. See you later!</string>
     <string name="permission_request_granted">Permission request granted.</string>
@@ -175,5 +175,25 @@
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
     <string name="no_data_available">No data available.</string>
+
+    <!-- Alert Dialog  -->
+    <string name="continue_to_the_next_page">Continue</string>
+    <string name="cancel">Cancel</string>
+    <string name="custom_alert_dialog_message">This is a custom alert dialog message.</string>
+    <string name="title_of_custom_alert_dialog">Title</string>
+
+    <string name="success_completed_title">You\'re all set!</string>
+
+    <string name="registration_completed_message">One more step to complete. Click the Continue button to proceed.</string>
+    <string name="registration_failed">Registration Failed</string>
+
+    <string name="login_success_title">Success!</string>
+    <string name="login_success_message">You have successfully logged in. Click the Continue button to proceed.</string>
+    <string name="login_failed">Login Failed</string>
+
+    <string name="plan_creation_success_message">Your travel plan has been successfully created.</string>
+    <string name="plan_creation_failed">Failed to Create Plan</string>
+
+    <string name="sign_out_confirmation_message">Are you sure you want to sign out?</string>
 
 </resources>

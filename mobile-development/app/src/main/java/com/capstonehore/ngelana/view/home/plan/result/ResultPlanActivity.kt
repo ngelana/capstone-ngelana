@@ -1,12 +1,19 @@
 package com.capstonehore.ngelana.view.home.plan.result
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlanResultAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityResultPlanBinding
+import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.main.MainActivity
@@ -89,6 +96,49 @@ class ResultPlanActivity : AppCompatActivity() {
         val currentDate = dateFormat.format(Date())
 
         return "Ngelana_Plan_Trip-$currentDate"
+    }
+
+    private fun showCustomAlertDialog(isSuccess: Boolean, message: String) {
+        val inflater = LayoutInflater.from(this)
+        val alertLayout = CustomAlertDialogBinding.inflate(inflater)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setView(alertLayout.root)
+
+        val dialog = builder.create()
+        dialog.show()
+
+        if (isSuccess) {
+            alertLayout.alertIcon.setImageResource(R.drawable.ic_check_circle)
+            alertLayout.alertTitle.text = getString(R.string.success_completed_title)
+            alertLayout.alertMessage.text = getString(R.string.plan_creation_success_message)
+
+            alertLayout.negativeButton.setOnClickListener {
+                dialog.dismiss()
+            }
+            alertLayout.positiveButton.visibility = View.GONE
+        } else {
+            alertLayout.alertIcon.setImageResource(R.drawable.ic_error)
+            alertLayout.alertTitle.text = getString(R.string.plan_creation_failed)
+            alertLayout.alertMessage.text = message
+
+            alertLayout.negativeButton.setOnClickListener {
+                dialog.dismiss()
+            }
+            alertLayout.positiveButton.visibility = View.GONE
+        }
+
+        // Animation
+        val scaleX = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleX", 0.5f, 1f)
+        val scaleY = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleY", 0.5f, 1f)
+        val tvTitle = ObjectAnimator.ofFloat(alertLayout.alertTitle, View.ALPHA, 0f, 1f)
+        val tvMessage = ObjectAnimator.ofFloat(alertLayout.alertMessage, View.ALPHA, 0f, 1f)
+        val negativeButton = ObjectAnimator.ofFloat(alertLayout.negativeButton, View.ALPHA, 0f, 1f)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, negativeButton)
+        animatorSet.duration = 500
+        animatorSet.start()
     }
 
     companion object {

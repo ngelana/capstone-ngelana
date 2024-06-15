@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -12,6 +13,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -21,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.preferences.ThemeManager
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
+import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
@@ -130,8 +133,52 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupLogin() {
-        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-        finish()
+        showCustomAlertDialog(true, "")
+    }
+
+    private fun showCustomAlertDialog(isSuccess: Boolean, message: String) {
+        val inflater = LayoutInflater.from(this)
+        val alertLayout = CustomAlertDialogBinding.inflate(inflater)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setView(alertLayout.root)
+
+        val dialog = builder.create()
+        dialog.show()
+
+        if (isSuccess) {
+            alertLayout.alertIcon.setImageResource(R.drawable.ic_check_circle)
+            alertLayout.alertTitle.text = getString(R.string.login_success_title)
+            alertLayout.alertMessage.text = getString(R.string.login_success_message)
+
+            alertLayout.positiveButton.setOnClickListener {
+                moveToMain()
+                dialog.dismiss()
+            }
+            alertLayout.negativeButton.visibility = View.GONE
+        } else {
+            alertLayout.alertIcon.setImageResource(R.drawable.ic_error)
+            alertLayout.alertTitle.text = getString(R.string.login_failed)
+            alertLayout.alertMessage.text = message
+
+            alertLayout.negativeButton.setOnClickListener {
+                dialog.dismiss()
+            }
+            alertLayout.positiveButton.visibility = View.GONE
+        }
+
+        // Animation
+        val scaleX = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleX", 0.5f, 1f)
+        val scaleY = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleY", 0.5f, 1f)
+        val tvTitle = ObjectAnimator.ofFloat(alertLayout.alertTitle, View.ALPHA, 0f, 1f)
+        val tvMessage = ObjectAnimator.ofFloat(alertLayout.alertMessage, View.ALPHA, 0f, 1f)
+        val positiveButton = ObjectAnimator.ofFloat(alertLayout.positiveButton, View.ALPHA, 0f, 1f)
+        val negativeButton = ObjectAnimator.ofFloat(alertLayout.negativeButton, View.ALPHA, 0f, 1f)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, positiveButton, negativeButton)
+        animatorSet.duration = 500
+        animatorSet.start()
     }
 
     private fun themeSettings() {
@@ -149,6 +196,11 @@ class LoginActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
+    }
+
+    private fun moveToMain() {
+        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
     }
 
     companion object {

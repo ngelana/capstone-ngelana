@@ -39,7 +39,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setupAnimation() {
         ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000

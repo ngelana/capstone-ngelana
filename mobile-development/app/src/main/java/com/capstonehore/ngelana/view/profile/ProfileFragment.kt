@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -67,8 +68,25 @@ class ProfileFragment : Fragment() {
 
     private fun setupAction() {
         binding.signOutButton.setOnClickListener {
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
+            AlertDialog.Builder(requireContext()).apply {
+                val message = getString(R.string.sign_out_confirmation_message)
+
+                setTitle(getString(R.string.sign_out))
+                setMessage(message)
+
+                setPositiveButton(getString(R.string.sign_out)) { _, _ ->
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+
+                setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+                create().show()
+            }
         }
     }
 
