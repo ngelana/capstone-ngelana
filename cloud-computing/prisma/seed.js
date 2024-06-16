@@ -45,14 +45,17 @@ const seedPlaces = async () => {
 };
 
 const seedPreferences = async () => {
+  //json url placeholder test (Success!)
   const preferences = [];
   return new Promise((resolve, reject) => {
-    fs.createReadStream("pref.csv")
+    fs.createReadStream("prefJson.csv")
       .pipe(csv())
       .on("data", (row) => {
+        const urlPlaceholder = JSON.parse(row.urlPlaceholder);
         preferences.push({
+          id: row.id,
           name: row.name,
-          urlPlaceholder: row.urlPlaceholder,
+          urlPlaceholder: urlPlaceholder,
         });
       })
       .on("end", async () => {
