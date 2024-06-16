@@ -54,8 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signupButton"
-        tools:alpha="100"
-        />
+        tools:alpha="100" />
 
     <ImageView
         android:id="@+id/logoMenu1"

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.data.repository.GeneralRepository
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.di.Injection
+import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
 
 class ViewModelFactory(
@@ -16,10 +17,15 @@ class ViewModelFactory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        when {
-            modelClass.isAssignableFrom(MyFavoriteViewModel::class.java) -> {
-                return MyFavoriteViewModel(repository) as T
+        return when {
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(repository) as T
             }
+
+            modelClass.isAssignableFrom(MyFavoriteViewModel::class.java) -> {
+                MyFavoriteViewModel(repository) as T
+            }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

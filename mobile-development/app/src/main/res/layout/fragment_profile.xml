@@ -146,11 +146,11 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:alpha="0.8"
+            android:alpha="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rvSettings"
             app:srcCompat="@drawable/ic_dark_mode"
-            app:tint="?attr/colorOnSecondary"
+            app:tint="?attr/colorOnPrimary"
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial

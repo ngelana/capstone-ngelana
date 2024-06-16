@@ -1,5 +1,9 @@
 package com.capstonehore.ngelana.data.repository
 
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
@@ -11,6 +15,7 @@ import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import java.util.Locale
 
 class GeneralRepository(
     private var apiService: ApiService,
@@ -59,6 +64,27 @@ class GeneralRepository(
         } catch (e: Exception) {
             Log.d(TAG, "deleteFavoritePlace: ${e.message}")
             emit(Result.Error("Error deleting data: ${e.message}"))
+        }
+    }
+
+    // Data Location
+    fun getLocationDetails(context: Context, location: Location): LiveData<Result<Address>> = liveData {
+        emit(Result.Loading)
+        try {
+            val geocoder = Geocoder(context, Locale.getDefault())
+            @Suppress("DEPRECATION")
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+            if (addresses != null) {
+                if (addresses.isNotEmpty()) {
+                    emit(Result.Success(addresses[0]))
+                } else {
+                    emit(Result.Error("No address found"))
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "getLocationDetails: ${e.message}", e)
+            emit(Result.Error(e.message ?: "Unknown error"))
         }
     }
 

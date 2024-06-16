@@ -11,12 +11,14 @@ import com.capstonehore.ngelana.data.repository.GeneralRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_session")
-
 object Injection {
+
+    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_session")
+
     fun provideRepository(context: Context): GeneralRepository {
         val pref = UserPreferences.getInstance(context.dataStore)
         val token = runBlocking { pref.getToken().first() }
+
         val apiService = ApiConfig.getApiService(token.toString())
 
         val ngelanaRoomDatabase = NgelanaRoomDatabase.getDatabase(context)

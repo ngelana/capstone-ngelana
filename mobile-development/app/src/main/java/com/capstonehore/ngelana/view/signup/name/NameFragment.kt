@@ -2,16 +2,26 @@ package com.capstonehore.ngelana.view.signup.name
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.FragmentNameBinding
+import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.email.EmailFragment
 
@@ -38,6 +48,7 @@ class NameFragment : Fragment() {
         setupAction()
         setupImage()
         setupAnimation()
+        setupButton()
         setupName()
     }
 
@@ -59,13 +70,13 @@ class NameFragment : Fragment() {
     }
 
     private fun setupAnimation() {
-        ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -30f, 30f).apply {
+        ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -70f, 70f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -15f, 15f).apply {
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -5f, 5f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
@@ -78,6 +89,7 @@ class NameFragment : Fragment() {
         val tvQuestion =
             ObjectAnimator.ofFloat(binding.tvQuestion, View.ALPHA, 1f).setDuration(300)
         val tvName = ObjectAnimator.ofFloat(binding.tvName, View.ALPHA, 1f).setDuration(300)
+        val tvLogin = ObjectAnimator.ofFloat(binding.tvLogin, View.ALPHA, 1f).setDuration(300)
         val nextButton =
             ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).setDuration(500)
         val backButton = ObjectAnimator.ofFloat(binding.backButton, View.ALPHA, 1f).setDuration(500)
@@ -93,10 +105,52 @@ class NameFragment : Fragment() {
                 tvDescription,
                 tvQuestion,
                 tvName,
+                tvLogin,
                 together
             )
             start()
         }
+    }
+
+    private fun setupButton() {
+        val blue = ContextCompat.getColor(requireContext(), R.color.blue)
+
+        val spannable = SpannableString(
+            getString(
+                R.string.login_button_from_register,
+                getString(R.string.login_here)
+            )
+        )
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                startActivity(Intent(requireActivity(), LoginActivity::class.java))
+            }
+        }
+
+        val boldSpan = StyleSpan(Typeface.BOLD)
+        spannable.setSpan(
+            boldSpan,
+            spannable.indexOf(getString(R.string.login_here)),
+            spannable.indexOf(getString(R.string.login_here)) + getString(R.string.login_here).length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            clickableSpan,
+            spannable.indexOf(getString(R.string.login_here)),
+            spannable.indexOf(getString(R.string.login_here)) + getString(R.string.login_here).length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            ForegroundColorSpan(blue),
+            spannable.indexOf(getString(R.string.login_here)),
+            spannable.indexOf(getString(R.string.login_here)) + getString(R.string.login_here).length,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        binding.tvLogin.text = spannable
+        binding.tvLogin.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun setupName() {
