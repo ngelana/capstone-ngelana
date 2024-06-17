@@ -5,6 +5,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -13,14 +14,16 @@ import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.capstonehore.ngelana.data.preferences.UserPreferences
+import com.capstonehore.ngelana.data.remote.response.LoginResponse
+import com.capstonehore.ngelana.data.remote.response.RegisterResponse
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.util.Locale
 
 class GeneralRepository(
-    private var apiService: ApiService,
-    private val userPreferences: UserPreferences,
-    private val ngelanaRoomDatabase: NgelanaRoomDatabase,
+        private var apiService: ApiService,
+        private val userPreferences: UserPreferences,
+        private val ngelanaRoomDatabase: NgelanaRoomDatabase,
 ) {
 
     private var token: String? = null
@@ -29,8 +32,35 @@ class GeneralRepository(
         userPreferences.getToken().first()
     }.also { token = it }
 
-    // Data Remote
+    fun register(
+            name: String,
+            email: String,
+            password: String,
+            birthdate: String,
+    ): LiveData<Result<RegisterResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.register(name, email, password, birthdate)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            Log.d(TAG, "register info : ${e.message}")
+            emit(Result.Error(e.message ?: "Unknown error"))
+        }
+    }
 
+    fun login(
+            email: String,
+            password: String,
+    ): LiveData<Result<LoginResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.login(email, password)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            Log.d(TAG, "login info: ${e.message}")
+            emit(Result.Error(e.message ?: "Unknown error"))
+        }
+    }
 
 
     // Data Local
@@ -72,13 +102,15 @@ class GeneralRepository(
         emit(Result.Loading)
         try {
             val geocoder = Geocoder(context, Locale.getDefault())
+
             @Suppress("DEPRECATION")
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
             if (addresses != null) {
                 if (addresses.isNotEmpty()) {
                     emit(Result.Success(addresses[0]))
-                } else {
+                }
+                else {
                     emit(Result.Error("No address found"))
                 }
             }
@@ -94,9 +126,9 @@ class GeneralRepository(
         private var instance: GeneralRepository? = null
 
         fun getInstance(
-            apiService: ApiService,
-            userPreference: UserPreferences,
-            ngelanaRoomDatabase: NgelanaRoomDatabase
+                apiService: ApiService,
+                userPreference: UserPreferences,
+                ngelanaRoomDatabase: NgelanaRoomDatabase,
         ): GeneralRepository {
             return instance ?: synchronized(this) {
                 instance ?: GeneralRepository(apiService, userPreference, ngelanaRoomDatabase).also {
