@@ -58,7 +58,8 @@
     <string name="popular_places_in_bali">Popular places in Bali</string>
     <string name="see_all">See all</string>
 
-    <string name="choose_the_date_for_your_trip">Choose the date for your trip!</string>
+    <string name="choose_the_date">Choose the date for your trip!</string>
+    <string name="date_description">Set a date for your trip to simplify your travel arrangements.</string>
     <string name="select_date">Select Date</string>
 
     <string name="add_place">Add place</string>
@@ -174,7 +175,6 @@
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
     <string name="no_data_available">No data available.</string>
-    <string name="placeDescription">Description</string>
 
     <!-- Alert Dialog  -->
     <string name="continue_to_the_next_page">Continue</string>

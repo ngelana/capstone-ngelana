@@ -3,7 +3,6 @@ package com.capstonehore.ngelana.view.signup.password
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,6 +93,7 @@ class PasswordFragment : Fragment() {
         val tvQuestion =
             ObjectAnimator.ofFloat(binding.tvQuestion, View.ALPHA, 1f).setDuration(300)
         val tvPassword = ObjectAnimator.ofFloat(binding.tvPassword, View.ALPHA, 1f).setDuration(300)
+        val divider1 = ObjectAnimator.ofFloat(binding.divider1, View.ALPHA, 1f).setDuration(300)
         val tvLogin = ObjectAnimator.ofFloat(binding.tvLogin, View.ALPHA, 1f).setDuration(300)
         val submitButton =
             ObjectAnimator.ofFloat(binding.submitButton, View.ALPHA, 1f).setDuration(300)
@@ -111,6 +110,7 @@ class PasswordFragment : Fragment() {
                 tvDescription,
                 tvQuestion,
                 tvPassword,
+                divider1,
                 tvLogin,
                 together
             )

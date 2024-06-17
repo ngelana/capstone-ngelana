@@ -1,10 +1,7 @@
 package com.capstonehore.ngelana.data.remote.retrofit
 
 import com.capstonehore.ngelana.data.Place
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.POST
 
 interface ApiService {
     @GET("places")
@@ -26,10 +23,5 @@ interface ApiService {
 //            @Field("email") email: String,
 //            @Field("password") password: String,
 //    ):
-
-
-
-
-
 
 }

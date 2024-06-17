@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
-    tools:context=".view.home.plan.date.DatePlanActivity">
+    tools:context=".view.home.plan.PlanFragment">
 
     <ImageView
-        android:id="@+id/logoImage"
+        android:id="@+id/imageView"
         android:layout_width="256dp"
         android:layout_height="256dp"
         android:layout_marginTop="48dp"
@@ -24,17 +24,33 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:alpha="0"
-        android:text="@string/choose_the_date_for_your_trip"
+        android:text="@string/choose_the_date"
         android:textColor="?attr/colorPrimary"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoImage"
-        tools:alpha="100"/>
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:alpha="100" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0"
+        android:text="@string/date_description"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        tools:alpha="100" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tvDate"
@@ -49,7 +65,7 @@
         app:endIconTint="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription"
         tools:alpha="100">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -67,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/rounded_corners_transparent"
         android:drawableLeft="@drawable/ic_keyboard_arrow_left"
         android:drawableTint="?attr/colorOnPrimary"

@@ -90,6 +90,7 @@ class EmailFragment : Fragment() {
         val tvQuestion =
             ObjectAnimator.ofFloat(binding.tvQuestion, View.ALPHA, 1f).setDuration(300)
         val tvEmail = ObjectAnimator.ofFloat(binding.tvEmail, View.ALPHA, 1f).setDuration(300)
+        val divider1 = ObjectAnimator.ofFloat(binding.divider1, View.ALPHA, 1f).setDuration(300)
         val tvLogin = ObjectAnimator.ofFloat(binding.tvLogin, View.ALPHA, 1f).setDuration(300)
         val nextButton =
             ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).setDuration(300)
@@ -106,6 +107,7 @@ class EmailFragment : Fragment() {
                 tvDescription,
                 tvQuestion,
                 tvEmail,
+                divider1,
                 tvLogin,
                 together
             )

@@ -1,11 +1,7 @@
 package com.capstonehore.ngelana.view.home
 
-import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -13,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -24,9 +19,6 @@ import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
-import com.capstonehore.ngelana.view.home.plan.date.DatePlanActivity
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 
 class HomeFragment : Fragment() {
 
@@ -38,8 +30,6 @@ class HomeFragment : Fragment() {
 
     private val navController by lazy { findNavController() }
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,8 +40,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
 //        homeViewModel = obtainViewModel(requireActivity())
 
@@ -72,12 +60,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.submitButton.setOnClickListener {
-            if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-                    checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                getUserLastLocation()
-            } else {
-                requestLocationPermission()
-            }
+            navController.navigate(R.id.action_navigation_home_to_navigation_plan)
         }
     }
 
@@ -154,56 +137,6 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            when {
-                permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true -> {
-                    getUserLastLocation()
-                }
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true -> {
-                    getUserLastLocation()
-                }
-                else -> {
-                    showToast(getString(R.string.permission_request_denied))
-                }
-            }
-        }
-
-    private fun checkPermission(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestLocationPermission() {
-        requestPermissionLauncher.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        )
-    }
-
-    private fun getUserLastLocation() {
-        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-        ) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    moveToDatePlan()
-//                    updateLocationUI(location)
-                } else {
-                    showToast(getString(R.string.enable_location_first))
-                }
-            }
-        } else {
-            requestLocationPermission()
-        }
-    }
-
 //    private fun updateLocationUI(location: Location) {
 //        homeViewModel.updateLocationUI(requireContext(), location)
 //        moveToDatePlan()
@@ -233,10 +166,6 @@ class HomeFragment : Fragment() {
 //            }
 //        })
 //    }
-
-    private fun moveToDatePlan() {
-        startActivity(Intent(requireActivity(), DatePlanActivity::class.java))
-    }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()

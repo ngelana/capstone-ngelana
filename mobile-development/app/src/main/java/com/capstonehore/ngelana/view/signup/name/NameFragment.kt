@@ -89,6 +89,7 @@ class NameFragment : Fragment() {
         val tvQuestion =
             ObjectAnimator.ofFloat(binding.tvQuestion, View.ALPHA, 1f).setDuration(300)
         val tvName = ObjectAnimator.ofFloat(binding.tvName, View.ALPHA, 1f).setDuration(300)
+        val divider1 = ObjectAnimator.ofFloat(binding.divider1, View.ALPHA, 1f).setDuration(300)
         val tvLogin = ObjectAnimator.ofFloat(binding.tvLogin, View.ALPHA, 1f).setDuration(300)
         val nextButton =
             ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).setDuration(500)
@@ -105,6 +106,7 @@ class NameFragment : Fragment() {
                 tvDescription,
                 tvQuestion,
                 tvName,
+                divider1,
                 tvLogin,
                 together
             )
