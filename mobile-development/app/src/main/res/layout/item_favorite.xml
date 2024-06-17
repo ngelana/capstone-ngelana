@@ -58,6 +58,41 @@
                 app:layout_constraintStart_toStartOf="@id/placeImage"
                 app:layout_constraintTop_toTopOf="@+id/rectView" />
 
+            <View
+                android:id="@+id/ratingView"
+                android:layout_width="48dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_corners_review"
+                app:layout_constraintEnd_toEndOf="@+id/placeImage"
+                app:layout_constraintTop_toTopOf="@+id/placeImage" />
+
+            <ImageView
+                android:id="@+id/placeRatingIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_star"
+                app:tint="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingView"
+                app:layout_constraintStart_toStartOf="@id/ratingView"
+                app:layout_constraintTop_toTopOf="@+id/ratingView"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/placeRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_5_0"
+                android:textColor="@color/yellow"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingView"
+                app:layout_constraintEnd_toEndOf="@+id/ratingView"
+                app:layout_constraintStart_toEndOf="@+id/placeRatingIcon"
+                app:layout_constraintTop_toTopOf="@+id/ratingView" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

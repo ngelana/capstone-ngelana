@@ -5,17 +5,16 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
-import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.LoginResponse
 import com.capstonehore.ngelana.data.remote.response.RegisterResponse
+import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -30,6 +29,7 @@ class GeneralRepository(
 
     private var token: String? = null
 
+    // Data Remote
     private suspend fun getToken(): String? = token ?: runBlocking {
         userPreferences.getToken().first()
     }.also { token = it }
@@ -42,10 +42,17 @@ class GeneralRepository(
         emit(Result.Loading)
         try {
             val response = apiService.register(name, email, password)
+
             emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+
+            emit(Result.Error(errorResponse.message.toString()))
         } catch (e: Exception) {
-            Log.d(TAG, "register info : ${e.message}")
-            emit(Result.Error(e.message ?: "Unknown error"))
+            Log.d(TAG, "register: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
         }
     }
 
@@ -56,21 +63,17 @@ class GeneralRepository(
         emit(Result.Loading)
         try {
             val response = apiService.login(email, password)
-            val loginResult = response.data
 
-            if (loginResult != null) {
-                emit(Result.Success(response)) //if sukses
-            }
+            emit(Result.Success(response))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
-            Log.e("Login Server error", "Login HTTP : ${e.message}")
+
             emit(Result.Error(errorResponse.message.toString()))
-
         } catch (e: Exception) {
-            Log.d("Login Result error :", "Login  : ${e.message}")
-            emit(Result.Error(e.message.toString()))
+            Log.d(TAG, "login  : ${e.message}")
 
+            emit(Result.Error(e.message.toString()))
         }
     }
 
@@ -80,9 +83,11 @@ class GeneralRepository(
         emit(Result.Loading)
         try {
             val data = ngelanaRoomDatabase.favoriteDao().getAllFavorites()
+
             emitSource(data.map { Result.Success(it) })
         } catch (e: Exception) {
             Log.d(TAG, "getAllFavorites: ${e.message}")
+
             emit(Result.Error("Error fetching data: ${e.message}"))
         }
     }
@@ -90,10 +95,12 @@ class GeneralRepository(
     fun insertFavoritePlace(favorite: Favorite): LiveData<Result<Unit>> = liveData {
         emit(Result.Loading)
         try {
-            ngelanaRoomDatabase.favoriteDao().insertFavoritePlace(favorite)
-            emit(Result.Success(Unit))
+            val data = ngelanaRoomDatabase.favoriteDao().insertFavoritePlace(favorite)
+
+            emit(Result.Success(data))
         } catch (e: Exception) {
             Log.d(TAG, "insertFavoritePlace: ${e.message}")
+
             emit(Result.Error("Error inserting data: ${e.message}"))
         }
     }
@@ -101,10 +108,12 @@ class GeneralRepository(
     fun deleteFavoritePlace(favorite: Favorite): LiveData<Result<Unit>> = liveData {
         emit(Result.Loading)
         try {
-            ngelanaRoomDatabase.favoriteDao().deleteFavoritePlace(favorite)
-            emit(Result.Success(Unit))
+            val data = ngelanaRoomDatabase.favoriteDao().deleteFavoritePlace(favorite)
+
+            emit(Result.Success(data))
         } catch (e: Exception) {
             Log.d(TAG, "deleteFavoritePlace: ${e.message}")
+
             emit(Result.Error("Error deleting data: ${e.message}"))
         }
     }
@@ -128,6 +137,7 @@ class GeneralRepository(
             }
         } catch (e: Exception) {
             Log.e(TAG, "getLocationDetails: ${e.message}", e)
+
             emit(Result.Error(e.message ?: "Unknown error"))
         }
     }

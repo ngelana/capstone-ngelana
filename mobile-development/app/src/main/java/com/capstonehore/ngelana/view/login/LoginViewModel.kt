@@ -11,12 +11,12 @@ class LoginViewModel(
         private val preferences: UserPreferences,
 ): ViewModel()
 {
-    // Login function to call repository login function to login activity
-    fun loginViewModel(email: String, password: String) = repository.login(
-            email,
-            password) // not yet to be implemented
 
-    // Save login token to preferences
+    fun doLogin(
+        email: String,
+        password: String
+    ) = repository.login(email, password)
+
     fun saveLogin(token: String) {
         viewModelScope.launch {
             preferences.saveToken(token)

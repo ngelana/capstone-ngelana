@@ -9,6 +9,7 @@ import com.capstonehore.ngelana.di.Injection
 import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.login.LoginViewModel
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
+import com.capstonehore.ngelana.view.signup.SignUpViewModel
 
 class ViewModelFactory(
     private val repository: GeneralRepository,
@@ -19,16 +20,18 @@ class ViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
+
+            modelClass.isAssignableFrom(SignUpViewModel::class.java) -> {
+                SignUpViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
+                LoginViewModel(repository, pref) as T
+            }
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
                 HomeViewModel(repository) as T
             }
-
             modelClass.isAssignableFrom(MyFavoriteViewModel::class.java) -> {
                 MyFavoriteViewModel(repository) as T
-            }
-
-            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
-                LoginViewModel(repository, pref) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

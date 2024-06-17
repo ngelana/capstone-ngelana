@@ -19,18 +19,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.databinding.FragmentPasswordBinding
+import com.capstonehore.ngelana.di.Injection.dataStore
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.email.EmailFragment
 import com.capstonehore.ngelana.view.signup.interest.InterestFragment
-
-import com.capstonehore.ngelana.data.Result
 
 class PasswordFragment : Fragment() {
 
@@ -45,7 +48,7 @@ class PasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPasswordBinding.inflate(inflater, container, false)
-        signUpViewModel = ViewModelProvider(requireActivity())[SignUpViewModel::class.java]
+        signUpViewModel = obtainViewModel(requireActivity())
 
         return binding.root
     }
@@ -172,32 +175,28 @@ class PasswordFragment : Fragment() {
                 signUpViewModel.setPassword(password)
             } else {
                 showToast(getString(R.string.empty_password))
-                return@setOnClickListener
             }
 
-            /*
-            * Register user with name, email, and password
-            * this one use fragment instead using intent
-             */
-            signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner){
-                if(it != null ){
-                // Observe the result
+            signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner) {
+                if( it != null ){
                     when (it) {
                         is Result.Success -> {
                             showLoading(false)
+
                             val response = it.data
                             showCustomAlertDialog(true, "")
                             Log.d(TAG, "Success registering: $response")
-
                         }
                         is Result.Error -> {
-                            // Show error message
+                            showLoading(false)
+
                             val response = it.error
-                            Log.e(TAG, "Error observing favorites: $response")
                             showCustomAlertDialog(false, response)
+                            Log.e(TAG, "Error registering: $response")
                         }
-                        Result.Loading                           -> {
+                        is Result.Loading                           -> {
                             showLoading(true)
+
                             Log.d(TAG, "Loading Register User ....")
                         }
                     }
@@ -284,9 +283,19 @@ class PasswordFragment : Fragment() {
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
+
     private fun showLoading(isLoading:Boolean){
-        binding.progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
+    private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
+        val factory = ViewModelFactory.getInstance(
+            requireContext(),
+            UserPreferences.getInstance(requireContext().dataStore)
+        )
+        return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
+    }
+
     companion object {
         private const val TAG = "PasswordFragment"
     }
