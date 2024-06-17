@@ -1,29 +1,33 @@
 const express = require("express");
-const { user } = require("../db");
 const prisma = require("../db");
 const router = express.Router();
 const { accessValidation } = require("../services/AuthServices");
-const parseDate = require("../services/UtilServices");
+const { isValidUserId } = require("../services/UserServices");
+const { parseDate, reverseParseDate } = require("../services/UtilServices");
 
 // get all reviews from one user
 router.get("/", accessValidation, async (req, res) => {
   const { userId } = req.body;
 
   try {
-    const user = await prisma.userReview.findMany({
-      where: { userId: userId },
-    });
-
-    if (!user) {
+    if (!isValidUserId(userId)) {
       return res.status(404).json({
-        message: "Invalid User ID!",
+        message: `User not found!`,
       });
     }
 
     const reviews = await prisma.userReview.findMany({
       where: { userId },
+      select: {
+        id: true,
+        placeId: true,
+        userId: true,
+        review: true,
+        star: true,
+        date: true,
+      },
     });
-    if (!reviews) {
+    if (reviews.length == 0 || !reviews) {
       return res.status(404).json({
         message: "Reviews not found or empty",
       });
@@ -33,8 +37,9 @@ router.get("/", accessValidation, async (req, res) => {
       message: `Reviews from userId:${userId} listed!`,
     });
   } catch (error) {
+    console.error(error);
     return res.status(400).json({
-      message: `Failed listing reviews from user : ${userId}, error:${error.message}`,
+      message: `Failed listing reviews from user : ${userId}`,
     });
   }
 });
@@ -44,15 +49,9 @@ router.post("/", accessValidation, async (req, res) => {
   const { userId, review, star, date, placeId } = req.body;
   const formattedDate = parseDate(date);
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!user) {
+    if (!isValidUserId(userId)) {
       return res.status(404).json({
-        message: "Invalid User ID!",
+        message: `User not found!`,
       });
     }
 
@@ -76,14 +75,23 @@ router.post("/", accessValidation, async (req, res) => {
         placeId,
         userId,
       },
+      select: {
+        id: true,
+        review: true,
+        star: true,
+        date: true,
+        placeId: true,
+        userId: true,
+      },
     });
     return res.status(200).json({
       data: reviews,
       message: `Review ID : ${userId} created!`,
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Failed creating review from user : ${userId}, error:${error.message}`,
+      message: `Failed creating review from user : ${userId}`,
     });
   }
 });
@@ -94,17 +102,26 @@ router.get("/:id", accessValidation, async (req, res) => {
   const { userId } = req.body;
 
   try {
-    const reviews = await prisma.userReview.findUnique({
-      where: { userId, id },
-    });
-    if (!reviews.userId) {
+    if (!isValidUserId(userId)) {
       return res.status(404).json({
-        message: "User not found",
+        message: `User not found!`,
       });
     }
-    if (!reviews) {
+    const reviews = await prisma.userReview.findUnique({
+      where: { userId, id },
+      select: {
+        id: true,
+        review: true,
+        star: true,
+        date: true,
+        placeId: true,
+        userId: true,
+      },
+    });
+
+    if (reviews.length == 0 || !reviews) {
       return res.status(404).json({
-        message: "Review not found or empty",
+        message: "Reviews not found or empty",
       });
     }
     return res.status(200).json({
@@ -112,8 +129,9 @@ router.get("/:id", accessValidation, async (req, res) => {
       message: `Review id :${id} listed!`,
     });
   } catch (error) {
+    console.error(error);
     return res.status(400).json({
-      message: `Failed listing reviews from user : ${id}, error:${error.message}`,
+      message: `Failed listing reviews from user : ${id}`,
     });
   }
 });
@@ -124,6 +142,11 @@ router.patch("/:id", accessValidation, async (req, res) => {
   const { userId, review, star, date, placeId } = req.body;
   const formattedDate = parseDate(date);
   try {
+    if (!isValidUserId(userId)) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
     const result = await prisma.userReview.update({
       data: {
         review,
@@ -135,6 +158,14 @@ router.patch("/:id", accessValidation, async (req, res) => {
         placeId,
         userId,
       },
+      select: {
+        id: true,
+        review: true,
+        star: true,
+        date: true,
+        placeId: true,
+        userId: true,
+      },
     });
     if (!result) {
       return res.status(404).json({
@@ -142,13 +173,14 @@ router.patch("/:id", accessValidation, async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       data: result,
       message: `Review id:${id} from User ${userId} Updated!`,
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Error updating review! Error : ${error.message}`,
+      message: `Error updating review! `,
     });
   }
 });
@@ -182,8 +214,9 @@ router.delete("/:id", accessValidation, async (req, res) => {
       .status(200)
       .json({ message: `Success. Deleted Review ID : ${id}` });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Error deleting review! Error : ${error.message}`,
+      message: `Error deleting review!`,
     });
   }
 });

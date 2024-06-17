@@ -1,6 +1,7 @@
 const express = require("express");
 const prisma = require("../db");
 const router = express.Router();
+const { isValidUserId } = require("../services/UserServices");
 const { accessValidation } = require("../services/AuthServices");
 const parseDate = require("../services/UtilServices");
 
@@ -20,75 +21,140 @@ router.get("/", accessValidation, async (req, res) => {
   const { userId } = req.body;
 
   try {
+    if (!isValidUserId(userId)) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
+
     const plans = await prisma.plan.findMany({
       where: { userId },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+        date: true,
         places: {
-          include: {
-            place: true, // Include place data
-          },
-        },
-      },
-    });
-
-    res.status(200).json({
-      data: plans,
-      message: "Plans listed successfully!",
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error retrieving plans",
-      error: error.message,
-    });
-  }
-});
-
-// Create a new plan
-router.post("/", accessValidation, async (req, res) => {
-  const { date, userId } = req.body; // Expecting date in the request body
-  const formattedDate = date ? parseDate(date) : null;
-  const placeIds = await generatePlaceIds();
-
-  console.log(placeIds);
-  console.log(placeIds[0]);
-  if (!date) {
-    return res.status(400).json({
-      message: "Date is required",
-    });
-  }
-  try {
-    const createPlan = await prisma.plan.create({
-      data: {
-        date: formattedDate,
-        userId,
-        places: {
-          create: placeIds.map((placeId) => ({
-            placeId,
-            assignedBy: userId,
-            assignedAt: new Date(),
-          })),
-        },
-      },
-      include: {
-        places: {
-          include: {
+          select: {
             place: true,
           },
         },
       },
     });
 
-    return res.status(201).json({
-      data: createPlan,
-      message: "Success created a plan!",
+    if (!plans) {
+      return res.status(400).json({
+        message: `No plans made from user : ${userId}`,
+      });
+    }
+
+    return res.status(200).json({
+      data: plans,
+      message: "Plans listed successfully!",
     });
   } catch (error) {
-    res.status(500).json({
-      message: "Error creating a plan",
-      error: error.message,
+    console.log(error.message);
+    return res.status(500).json({
+      message: "Error retrieving plans",
     });
   }
 });
+
+// Get plan details from plan ID
+router.get("/:id", accessValidation, async (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    if (!isValidUserId(userId)) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
+
+    const plans = await prisma.plan.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+        date: true,
+        places: {
+          select: {
+            place: true,
+          },
+        },
+      },
+    });
+
+    if (!plans) {
+      return res.status(400).json({
+        message: `No plans made from user : ${userId}`,
+      });
+    }
+
+    return res.status(200).json({
+      data: plans,
+      message: "Plans listed successfully!",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      message: "Error retrieving plans",
+    });
+  }
+});
+
+// Create a new plan
+// router.post("/", accessValidation, async (req, res) => {
+//   const { date, userId } = req.body; // Expecting date in the request body
+//   const formattedDate = date ? parseDate(date) : null;
+//   const placeIds = await generatePlaceIds();
+
+//   console.log(placeIds);
+//   console.log(placeIds[0]);
+//   try {
+//     if (!isValidUserId(userId)) {
+//       return res.status(404).json({
+//         message: `User not found!`,
+//       });
+//     }
+//     if (!date) {
+//       return res.status(400).json({
+//         message: "Date is required",
+//       });
+//     }
+//     const createPlan = await prisma.plan.create({
+//       data: {
+//         date: formattedDate,
+//         userId,
+//         places: {
+//           create: placeIds.map((placeId) => ({
+//             placeId,
+//             assignedBy: userId,
+//             assignedAt: new Date(),
+//           })),
+//         },
+//       },
+//       include: {
+//         places: {
+//           include: {
+//             place: true,
+//           },
+//         },
+//       },
+//     });
+
+//     return res.status(201).json({
+//       data: createPlan,
+//       message: "Success created a plan!",
+//     });
+//   } catch (error) {
+//     console.log(error.message);
+//     res.status(500).json({
+//       message: "Error creating a plan",
+//     });
+//   }
+// });
 
 router.post("/recommend", accessValidation, async (req, res) => {
   const { date, userId } = req.body;
@@ -99,13 +165,9 @@ router.post("/recommend", accessValidation, async (req, res) => {
         message: "Date is required",
       });
     }
-    const userExists = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!userExists) {
-      return res.status(400).json({
-        message: "User ID does not exist",
+    if (!isValidUserId(userId)) {
+      return res.status(404).json({
+        message: `User not found!`,
       });
     }
     const placeIds = await generatePlaceIds();
@@ -120,9 +182,9 @@ router.post("/recommend", accessValidation, async (req, res) => {
       message: "Successfully generated recommendations",
     });
   } catch (error) {
+    console.log(error.message);
     return res.status(500).json({
       message: "Error generating recommendations",
-      error: error.message,
     });
   }
 });
@@ -130,23 +192,20 @@ router.post("/recommend", accessValidation, async (req, res) => {
 router.post("/finalize", accessValidation, async (req, res) => {
   const { date, userId, places, planName } = req.body;
   const formattedDate = date ? parseDate(date) : null;
-  if (!date || !places || !planName) {
-    return res.status(400).json({
-      message: "Date, places, and plan name are required",
-    });
-  }
 
   try {
-    // Check if the userId exists
-    const userExists = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!userExists) {
+    if (!date || !places || !planName) {
       return res.status(400).json({
-        message: "User ID does not exist",
+        message: "Date, places, and plan name are required",
       });
     }
+    // Check if the userId exists
+    if (!isValidUserId(userId)) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
+
     const createPlan = await prisma.plan.create({
       data: {
         date: formattedDate,
@@ -160,9 +219,13 @@ router.post("/finalize", accessValidation, async (req, res) => {
           })),
         },
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+        date: true,
         places: {
-          include: {
+          select: {
             place: true,
           },
         },
@@ -174,9 +237,9 @@ router.post("/finalize", accessValidation, async (req, res) => {
       message: "Successfully created a plan!",
     });
   } catch (error) {
+    console.log(error.message);
     return res.status(500).json({
       message: "Error creating a plan",
-      error: error.message,
     });
   }
 });
@@ -186,13 +249,19 @@ router.put("/:id", accessValidation, async (req, res) => {
   const { date, places, userId } = req.body;
 
   const formattedDate = date ? parseDate(date) : null;
-  if (!date && (!places || places.length === 0)) {
-    return res
-      .status(400)
-      .json({ message: "Either date or places must be provided for update" });
-  }
 
   try {
+    if (!date && (!places || places.length === 0)) {
+      return res
+        .status(400)
+        .json({ message: "Either date or places must be provided for update" });
+    }
+    // Check if the userId exists
+    if (!isValidUserId(userId)) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
     const updateData = {};
 
     // Update date if provided
@@ -215,23 +284,27 @@ router.put("/:id", accessValidation, async (req, res) => {
     const updatedPlan = await prisma.plan.update({
       where: { id },
       data: updateData,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+        date: true,
         places: {
-          include: {
+          select: {
             place: true,
           },
         },
       },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       data: updatedPlan,
       message: "Plan updated successfully!",
     });
   } catch (error) {
-    res.status(500).json({
+    console.log(error.message);
+    return res.status(500).json({
       message: "Error updating plan",
-      error: error.message,
     });
   }
 });
@@ -241,14 +314,10 @@ router.delete("/:id", accessValidation, async (req, res) => {
   const { userId } = req.body;
 
   try {
-    // Check if the user exists
-    const userExists = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!userExists) {
-      return res.status(400).json({
-        message: "User ID does not exist",
+    // Check if the userId exists
+    if (!isValidUserId(userId)) {
+      return res.status(404).json({
+        message: `User not found!`,
       });
     }
 
@@ -280,13 +349,13 @@ router.delete("/:id", accessValidation, async (req, res) => {
       where: { id },
     });
 
-    res.status(200).json({
-      message: "Plan and its related places deleted successfully",
+    return res.status(200).json({
+      message: `Plan ${id} and its related places deleted successfully`,
     });
   } catch (error) {
-    res.status(500).json({
+    console.log(error.message);
+    return res.status(500).json({
       message: "Error deleting plan",
-      error: error.message,
     });
   }
 });
