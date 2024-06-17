@@ -195,5 +195,7 @@
     <string name="plan_creation_failed">Failed to Create Plan</string>
 
     <string name="sign_out_confirmation_message">Are you sure you want to sign out?</string>
+    <string name="email_empty">Email Empty\n</string>
+    <string name="password_empty">Invalid Password</string>
 
 </resources>

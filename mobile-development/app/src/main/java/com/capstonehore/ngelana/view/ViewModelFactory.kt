@@ -7,6 +7,7 @@ import com.capstonehore.ngelana.data.repository.GeneralRepository
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.di.Injection
 import com.capstonehore.ngelana.view.home.HomeViewModel
+import com.capstonehore.ngelana.view.login.LoginViewModel
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
 
 class ViewModelFactory(
@@ -24,6 +25,10 @@ class ViewModelFactory(
 
             modelClass.isAssignableFrom(MyFavoriteViewModel::class.java) -> {
                 MyFavoriteViewModel(repository) as T
+            }
+
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
+                LoginViewModel(repository, pref) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

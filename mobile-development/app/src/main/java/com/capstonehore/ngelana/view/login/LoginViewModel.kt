@@ -20,7 +20,7 @@ class LoginViewModel(
     fun saveLogin(token: String) {
         viewModelScope.launch {
             preferences.saveToken(token)
-            preferences.login()
+            preferences.prefLogin()
         }
     }
 }

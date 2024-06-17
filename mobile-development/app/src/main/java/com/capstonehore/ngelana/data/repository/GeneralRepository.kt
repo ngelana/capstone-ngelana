@@ -16,8 +16,10 @@ import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.LoginResponse
 import com.capstonehore.ngelana.data.remote.response.RegisterResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import retrofit2.HttpException
 import java.util.Locale
 
 class GeneralRepository(
@@ -54,10 +56,21 @@ class GeneralRepository(
         emit(Result.Loading)
         try {
             val response = apiService.login(email, password)
-            emit(Result.Success(response))
+            val loginResult = response.data
+
+            if (loginResult != null) {
+                emit(Result.Success(response)) //if sukses
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+            Log.e("Login Server error", "Login HTTP : ${e.message}")
+            emit(Result.Error(errorResponse.message.toString()))
+
         } catch (e: Exception) {
-            Log.d(TAG, "login info: ${e.message}")
-            emit(Result.Error(e.message ?: "Unknown error"))
+            Log.d("Login Result error :", "Login  : ${e.message}")
+            emit(Result.Error(e.message.toString()))
+
         }
     }
 

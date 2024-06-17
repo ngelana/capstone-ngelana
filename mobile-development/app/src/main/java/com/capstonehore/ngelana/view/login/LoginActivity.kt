@@ -14,24 +14,31 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.ThemeManager
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.LanguagePreference
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.signup.SignUpActivity
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
@@ -41,6 +48,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var themeManager: ThemeManager
     private lateinit var themeViewModel: ThemeViewModel
 
+    private lateinit var userPreferences: UserPreferences
+
     private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
     private val Context.sessionDataStore by preferencesDataStore("SESSION")
 
@@ -49,7 +58,15 @@ class LoginActivity : AppCompatActivity() {
         setLocale(this)
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
+        userPreferences = UserPreferences.getInstance(sessionDataStore)
+        showLoading(false)
         setContentView(binding.root)
+
+        lifecycleScope.launch{
+//            try{
+//                userPreferences.prefLogin().collect{}
+//            }
+        }
 
         setupAction()
         setupImage()
@@ -164,7 +181,58 @@ class LoginActivity : AppCompatActivity() {
     private fun setupLogin() {
         showCustomAlertDialog(true, "")
 
+        val loginViewModel  = getViewModel(this@LoginActivity)
+        val email = binding.edEmail.text.toString()
+        val password = binding.edPassword.text.toString()
+
+        when{
+            // ! Check if email and password is empty
+            email.isEmpty() -> {
+                showCustomAlertDialog(false, getString(R.string.email_empty))
+            }
+            password.isEmpty() -> {
+                showCustomAlertDialog(false, getString(R.string.password_empty))
+            }
+            else -> {
+                loginViewModel.loginViewModel(email, password).observe(this@LoginActivity){
+                    if(it != null){
+                        when(it){
+                            is Result.Success -> {
+                                Log.d("LoginActivity", "Success")
+                                showLoading(false)
+                                showCustomAlertDialog(true, "Success Login")
+                                val response = it.data
+                                loginViewModel.saveLogin(response.token.toString())
+                                Toast.makeText(this@LoginActivity, "Login Success", Toast.LENGTH_SHORT).show()
+
+                            }
+                            is Result.Error -> {
+                                Log.e("LoginActivity", "Error : ${it.error}")
+                                showLoading(false)
+                                showCustomAlertDialog(false, it.error)
+
+                            }
+                            is Result.Loading -> {
+                                showLoading(true)
+
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
     }
+
+    private fun getViewModel(activity: AppCompatActivity): LoginViewModel {
+        val factory = ViewModelFactory.getInstance(
+                activity.application,
+                UserPreferences.getInstance(activity.sessionDataStore)
+        )
+        return ViewModelProvider(activity, factory)[LoginViewModel::class.java]
+    }
+
 
     private fun showCustomAlertDialog(isSuccess: Boolean, message: String) {
         val inflater = LayoutInflater.from(this)
@@ -237,6 +305,9 @@ class LoginActivity : AppCompatActivity() {
     private fun moveToMain() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         finish()
+    }
+    private fun showLoading(isLoading: Boolean) {
+       binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {
