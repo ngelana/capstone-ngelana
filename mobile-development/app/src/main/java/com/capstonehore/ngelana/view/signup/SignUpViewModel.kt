@@ -3,8 +3,11 @@ package com.capstonehore.ngelana.view.signup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.capstonehore.ngelana.data.repository.GeneralRepository
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(
+        private val repository: GeneralRepository,
+) : ViewModel() {
 
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> get() = _name
@@ -27,9 +30,9 @@ class SignUpViewModel : ViewModel() {
         _password.value = password
     }
 
-//    fun submitData() {
-//        // Logic to submit name, email, and password to API
-//        // Example: apiService.submitData(name.value, email.value, password.value)
-//    }
-
+    fun doRegister(
+            name: String,
+            email: String,
+            password: String,
+    ) = repository.register(name, email, password)
 }

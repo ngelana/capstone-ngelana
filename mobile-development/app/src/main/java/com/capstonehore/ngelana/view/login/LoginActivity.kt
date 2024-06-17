@@ -42,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var themeViewModel: ThemeViewModel
 
     private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
+    private val Context.sessionDataStore by preferencesDataStore("SESSION")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,6 +163,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupLogin() {
         showCustomAlertDialog(true, "")
+
     }
 
     private fun showCustomAlertDialog(isSuccess: Boolean, message: String) {
@@ -239,6 +241,7 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         const val THEME_SETTINGS = "theme_settings"
+        const val SESSION = "session"
 
         fun setLocale(context: Context) {
             val languageCode = LanguagePreference.getLanguage(context)

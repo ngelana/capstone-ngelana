@@ -12,6 +12,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,8 @@ import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.email.EmailFragment
 import com.capstonehore.ngelana.view.signup.interest.InterestFragment
+
+import com.capstonehore.ngelana.data.Result
 
 class PasswordFragment : Fragment() {
 
@@ -161,8 +164,8 @@ class PasswordFragment : Fragment() {
 
     private fun setupRegister() {
         binding.submitButton.setOnClickListener {
-            val name = signUpViewModel.name.value
-            val email = signUpViewModel.email.value
+            val name = signUpViewModel.name.value.toString()
+            val email = signUpViewModel.email.value.toString()
             val password = binding.edPassword.text.toString()
 
             if (password.isNotEmpty()) {
@@ -172,25 +175,34 @@ class PasswordFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            showCustomAlertDialog(true, "")
+            /*
+            * Register user with name, email, and password
+            * this one use fragment instead using intent
+             */
+            signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner){
+                if(it != null ){
+                // Observe the result
+                    when (it) {
+                        is Result.Success -> {
+                            showLoading(false)
+                            val response = it.data
+                            showCustomAlertDialog(true, "")
+                            Log.d(TAG, "Success registering: $response")
 
-//            viewModel.allFavorites.observe(viewLifecycleOwner, Observer { result ->
-//                when (it) {
-//                    is Result.Success -> {
-                        //            submitDataToApi(name, email, password)
-//                        showCustomAlertDialog(true)
-//                    }
-//                    is Result.Error -> {
-//                        // Show error message
-//                        val error = result.error
-//                        Log.e(TAG, "Error observing favorites: $error")
-//                    }
-//                    Result.Loading -> {
-//                        // Show loading indicator
-//                        Log.d(TAG, "Loading favorites...")
-//                    }
-//                }
-//            })
+                        }
+                        is Result.Error -> {
+                            // Show error message
+                            val response = it.error
+                            Log.e(TAG, "Error observing favorites: $response")
+                            showCustomAlertDialog(false, response)
+                        }
+                        Result.Loading                           -> {
+                            showLoading(true)
+                            Log.d(TAG, "Loading Register User ....")
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -271,5 +283,11 @@ class PasswordFragment : Fragment() {
 
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+    }
+    private fun showLoading(isLoading:Boolean){
+        binding.progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
+    }
+    companion object {
+        private const val TAG = "PasswordFragment"
     }
 }

@@ -35,12 +35,11 @@ class GeneralRepository(
     fun register(
             name: String,
             email: String,
-            password: String,
-            birthdate: String,
+            password: String
     ): LiveData<Result<RegisterResponse>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService.register(name, email, password, birthdate)
+            val response = apiService.register(name, email, password)
             emit(Result.Success(response))
         } catch (e: Exception) {
             Log.d(TAG, "register info : ${e.message}")

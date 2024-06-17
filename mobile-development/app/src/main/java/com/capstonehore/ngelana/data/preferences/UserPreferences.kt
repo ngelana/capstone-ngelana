@@ -16,22 +16,23 @@ class UserPreferences constructor(private val dataStore: DataStore<Preferences>)
         }
     }
 
-    fun isLoggedIn(): Flow<Boolean?> = dataStore.data.map {
-        it[STATE_KEY]
+    suspend fun saveToken(token: String) {
+        dataStore.edit { preferences ->
+            preferences[TOKEN_KEY] = token
+        }
     }
+
 
     fun getToken(): Flow<String?> = dataStore.data.map {
         it[TOKEN_KEY]
     }
 
-    suspend fun saveToken(token: String) = dataStore.edit {
-        it[TOKEN_KEY] = token
-    }
 
     suspend fun logout() = dataStore.edit {
         it[TOKEN_KEY] = ""
         it[STATE_KEY] = false
     }
+
 
     companion object {
         @Volatile

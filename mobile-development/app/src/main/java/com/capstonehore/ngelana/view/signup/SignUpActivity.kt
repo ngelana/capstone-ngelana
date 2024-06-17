@@ -5,6 +5,8 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
@@ -24,6 +26,9 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var themeViewModel: ThemeViewModel
 
     private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
+
+    private val Context.sessionDataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +65,8 @@ class SignUpActivity : AppCompatActivity() {
 
     companion object {
         const val THEME_SETTINGS = "theme_settings"
+            // this session is used to store user session like token
+        const val SESSION = "session"
 
         fun setLocale(context: Context) {
             val languageCode = LanguagePreference.getLanguage(context)
