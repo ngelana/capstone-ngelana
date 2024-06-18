@@ -48,29 +48,53 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_1"/>
 
+        <View
+            android:id="@+id/bgBottom"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_corners_border"
+            app:layout_constraintEnd_toStartOf="@+id/filterButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
+
         <com.google.android.material.search.SearchBar
             android:id="@+id/searchBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:hint="@string/destinations"
-            app:backgroundTint="?attr/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressIndicator" />
+            app:backgroundTint="?attr/colorSecondary"
+            app:layout_constraintBottom_toTopOf="@+id/bgBottom"
+            app:layout_constraintEnd_toEndOf="@+id/bgBottom"
+            app:layout_constraintStart_toStartOf="@+id/bgBottom"
+            app:layout_constraintTop_toBottomOf="@+id/bgBottom" />
 
         <com.google.android.material.search.SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:hint="@string/destinations"
-            android:textColor="?attr/colorSecondaryVariant"
-            app:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
+            app:backgroundTint="?attr/colorSecondary"
             app:layout_anchor="@id/searchBar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+
+        <ImageButton
+            android:id="@+id/filterButton"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_corners_border"
+            android:src="@drawable/ic_filter_alt"
+            app:layout_constraintBottom_toBottomOf="@+id/bgBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bgBottom"
+            tools:ignore="ContentDescription" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPlaces"
@@ -80,7 +104,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+            app:layout_constraintTop_toBottomOf="@+id/bgBottom" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

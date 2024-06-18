@@ -44,7 +44,6 @@
     <string name="login">Masuk</string>
     <string name="sign_up">Daftar</string>
     <string name="sign_out">Keluar</string>
-    <string name="generate">Buat</string>
     <string name="save">Simpan</string>
     <string name="back_to_home">Kembali ke Beranda</string>
     <string name="dark_mode">Mode Gelap</string>
@@ -56,10 +55,12 @@
     <string name="home_title">Atur %1$s Anda!</string>
     <string name="home_description">Mulai merencanakan perjalanan Anda dengan Ngelana dengan mengklik gambar di samping.</string>
     <string name="favorite_place">Temukan tempat favorit Anda</string>
+    <string name="recommended_place_for_you">Tempat yang direkomendasikan untuk Anda</string>
     <string name="popular_places_in_bali">Tempat populer di Bali</string>
     <string name="see_all">Lihat semua</string>
 
-    <string name="choose_the_date_for_your_trip">Pilih tanggal untuk perjalanan Anda!</string>
+    <string name="choose_the_date">Pilih tanggal untuk perjalanan Anda!</string>
+    <string name="date_description">Tentukan tanggal perjalanan Anda untuk menyederhanakan persiapan perjalanan Anda.</string>
     <string name="select_date">Pilih Tanggal</string>
 
     <string name="add_place">Tambahkan tempat</string>
@@ -132,6 +133,7 @@
     <!-- Sign Up Page -->
     <string name="back">Kembali</string>
     <string name="_0">(0)</string>
+    <string name="_5_0">5.0</string>
     <string name="enter_your_name">Masukkan nama Anda</string>
     <string name="enter_your_email">Masukkan email Anda</string>
     <string name="enter_your_password">Masukkan kata sandi Anda</string>
@@ -160,7 +162,6 @@
     <!-- Success condition -->
     <string name="register_success">Selamat! Akun Anda berhasil dibuat.</string>
     <string name="register_message">Anda sekarang dapat masuk dan mulai menjelajahi platform kami. \n Tekan \'Lanjutkan\' untuk melanjutkan ke halaman masuk.</string>
-    <string name="continue_login">Lanjutkan</string>
     <string name="successfully_logged_in">Anda berhasil masuk. Selamat datang kembali!</string>
     <string name="successfully_logged_out">Anda telah berhasil keluar. Sampai jumpa lagi!</string>
     <string name="permission_request_granted">Permintaan izin disetujui.</string>
@@ -175,5 +176,25 @@
     <string name="enable_location_first">Harap aktifkan lokasi terlebih dahulu untuk melanjutkan</string>
     <string name="location_not_found">Lokasi tidak ditemukan. Coba Lagi</string>
     <string name="no_data_available">Tidak ada data tersedia.</string>
+
+    <!-- Alert Dialog -->
+    <string name="continue_to_the_next_page">Lanjutkan</string>
+    <string name="cancel">Batal</string>
+    <string name="custom_alert_dialog_message">Ini adalah pesan dialog khusus.</string>
+    <string name="title_of_custom_alert_dialog">Judul</string>
+
+    <string name="success_completed_title">Anda sudah siap!</string>
+
+    <string name="registration_completed_message">Satu langkah lagi untuk kelengkapannya. Klik tombol lanjutkan untuk melanjutkan.</string>
+    <string name="registration_failed">Registrasi Gagal</string>
+
+    <string name="login_success_title">Berhasil!</string>
+    <string name="login_success_message">Anda telah berhasil masuk. Klik tombol lanjutkan untuk melanjutkan.</string>
+    <string name="login_failed">Login Gagal</string>
+
+    <string name="plan_creation_success_message">Rencana perjalanan Anda berhasil dibuat.</string>
+    <string name="plan_creation_failed">Gagal membuat rencana</string>
+
+    <string name="sign_out_confirmation_message">Apakah Anda yakin ingin keluar?</string>
 
 </resources>

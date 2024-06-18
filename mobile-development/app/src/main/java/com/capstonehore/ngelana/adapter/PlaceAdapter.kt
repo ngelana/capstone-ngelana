@@ -32,7 +32,7 @@ class PlaceAdapter(private val listPlace: ArrayList<Place>) :
         val (name, description, image) = listPlace[position]
         with(holder.binding) {
             placeName.text = name
-            placeDescription.text = description
+            placeCity.text = description
             Glide.with(holder.itemView.context)
                 .load(image)
                 .into(placeImage)

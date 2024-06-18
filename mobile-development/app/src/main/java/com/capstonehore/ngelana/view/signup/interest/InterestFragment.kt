@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,11 @@ class InterestFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    private lateinit var interestAdapter: InterestAdapter
+
+    private val selectedItems = SparseBooleanArray()
+    private var interestCount: Int = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +42,6 @@ class InterestFragment : Fragment() {
         setupAnimation()
         setupView()
     }
-
 
     private fun setupAction() {
         binding.skipButton.setOnClickListener {
@@ -56,10 +61,12 @@ class InterestFragment : Fragment() {
         val rvInterest = ObjectAnimator.ofFloat(binding.rvInterest, View.ALPHA, 1f).setDuration(300)
         val nextButton =
             ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).setDuration(300)
+        val tvInterestCount =
+            ObjectAnimator.ofFloat(binding.tvInterestCount, View.ALPHA, 1f).setDuration(300)
         val skipButton = ObjectAnimator.ofFloat(binding.skipButton, View.ALPHA, 1f).setDuration(300)
 
         val together = AnimatorSet().apply {
-            playTogether(nextButton, skipButton)
+            playTogether(nextButton, tvInterestCount, skipButton)
         }
 
         AnimatorSet().apply {
@@ -88,17 +95,31 @@ class InterestFragment : Fragment() {
     private fun setupView() {
         val interestList = getListInterest()
 
-        val interestAdapter = InterestAdapter(interestList)
+        interestAdapter = InterestAdapter(interestList, selectedItems) { position ->
+            val isSelected = selectedItems[position]
+            if (isSelected) {
+                selectedItems.delete(position)
+            } else {
+                selectedItems.put(position, true)
+            }
+            updateInterestCount()
+            interestAdapter.notifyItemChanged(position)
+        }
 
         binding.rvInterest.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(requireActivity(), 2)
             adapter = interestAdapter
         }
-
-//        interestAdapter.setOnItemClickCallback(object : InterestAdapter.OnItemClickCallback {
-//            override fun onItemClicked(items: Place) {
-//            }
-//        })
     }
+
+    private fun updateInterestCount() {
+        interestCount = selectedItems.size()
+        binding.tvInterestCount.text = interestCount.toString()
+
+        if (binding.tvInterestCount.alpha == 0f) {
+            binding.tvInterestCount.alpha = 1f
+        }
+    }
+
 }

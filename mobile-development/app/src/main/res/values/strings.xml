@@ -44,7 +44,6 @@
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_out">Sign Out</string>
-    <string name="generate">Generate</string>
     <string name="save">Save</string>
     <string name="back_to_home">Back to Home</string>
     <string name="dark_mode">Dark Mode</string>
@@ -56,10 +55,12 @@
     <string name="home_title">Arrange Your %1$s!</string>
     <string name="home_description">Start planning your journey with Ngelana by clicking the image beside.</string>
     <string name="favorite_place">Find your favorite place</string>
+    <string name="recommended_place_for_you">Recommended place for you</string>
     <string name="popular_places_in_bali">Popular places in Bali</string>
     <string name="see_all">See all</string>
 
-    <string name="choose_the_date_for_your_trip">Choose the date for your trip!</string>
+    <string name="choose_the_date">Choose the date for your trip!</string>
+    <string name="date_description">Set a date for your trip to simplify your travel arrangements.</string>
     <string name="select_date">Select Date</string>
 
     <string name="add_place">Add place</string>
@@ -132,6 +133,7 @@
     <!-- Sign Up Page -->
     <string name="back">Back</string>
     <string name="_0">(0)</string>
+    <string name="_5_0">5.0</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="enter_your_email">Enter your email</string>
     <string name="enter_your_password">Enter your password</string>
@@ -160,7 +162,6 @@
     <!-- Success condition -->
     <string name="register_success">Congratulations! Your account has been successfully created.</string>
     <string name="register_message">You can now log in and start exploring our platform. \n Press \'Continue\' to proceed to the log in page.</string>
-    <string name="continue_login">Continue</string>
     <string name="successfully_logged_in">You\'ve successfully logged in. Welcome back!</string>
     <string name="successfully_logged_out">You have successfully logged out. See you later!</string>
     <string name="permission_request_granted">Permission request granted.</string>
@@ -175,5 +176,25 @@
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
     <string name="no_data_available">No data available.</string>
+
+    <!-- Alert Dialog  -->
+    <string name="continue_to_the_next_page">Continue</string>
+    <string name="cancel">Cancel</string>
+    <string name="custom_alert_dialog_message">This is a custom alert dialog message.</string>
+    <string name="title_of_custom_alert_dialog">Title</string>
+
+    <string name="success_completed_title">You\'re all set!</string>
+
+    <string name="registration_completed_message">One more step to complete. Click the continue button to proceed.</string>
+    <string name="registration_failed">Registration Failed</string>
+
+    <string name="login_success_title">Success!</string>
+    <string name="login_success_message">You have successfully logged in. Click the continue button to proceed.</string>
+    <string name="login_failed">Login Failed</string>
+
+    <string name="plan_creation_success_message">Your travel plan has been successfully created.</string>
+    <string name="plan_creation_failed">Failed to Create Plan</string>
+
+    <string name="sign_out_confirmation_message">Are you sure you want to sign out?</string>
 
 </resources>
