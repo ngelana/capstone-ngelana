@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.databinding.FragmentDetailPlaceBinding
+import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class DetailPlaceFragment : BottomSheetDialogFragment() {
@@ -17,6 +18,10 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentDetailPlaceBinding? = null
 
     private val binding get() = _binding!!
+
+    private lateinit var myFavoriteViewModel: MyFavoriteViewModel
+    private lateinit var favorite: Favorite
+    private var isFavorite = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,12 +46,18 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     private fun setupDetailPlace(place: Place) {
         binding.apply {
             placeName.text = place.name
-            placeDescription.text = place.description
-            Glide.with(this@DetailPlaceFragment)
-                .load(place.image)
-                .centerCrop()
-                .into(placeImage)
+//            placeDescription.text = place.description
+//            Glide.with(this@DetailPlaceFragment)
+//                .load(place.image)
+//                .centerCrop()
+//                .into(placeImage)
         }
+    }
+
+    private fun setIcon() {
+        binding.favoriteButton.setImageResource(
+            if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+        )
     }
 
     private fun showToast(message: String) {

@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.home
+package com.capstonehore.ngelana.view.home.plan.customize
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,7 +6,7 @@ import com.capstonehore.ngelana.data.Place
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class PlanViewModel(context: Context) {
+class CustomizePlanViewModel(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 

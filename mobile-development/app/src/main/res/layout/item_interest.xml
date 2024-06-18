@@ -4,18 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/backgroundColor"
+    android:background="@drawable/rounded_corners_white"
+    android:padding="32dp"
     android:layout_margin="8dp">
-
-    <View
-        android:id="@+id/viewInterest"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:background="@drawable/rounded_corners_light_grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/icInterest"
@@ -23,11 +14,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:src="@drawable/ic_fastfood"
-        app:layout_constraintBottom_toBottomOf="@+id/viewInterest"
-        app:layout_constraintEnd_toEndOf="@+id/viewInterest"
-        app:layout_constraintStart_toStartOf="@+id/viewInterest"
-        app:layout_constraintTop_toTopOf="@+id/viewInterest"
-        app:tint="?attr/colorPrimaryVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorOnPrimary"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -36,10 +27,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/app_name"
-        android:textColor="?attr/colorPrimaryVariant"
-        app:layout_constraintBottom_toBottomOf="@+id/viewInterest"
-        app:layout_constraintEnd_toEndOf="@+id/viewInterest"
-        app:layout_constraintStart_toStartOf="@+id/viewInterest"
-        app:layout_constraintTop_toTopOf="@+id/viewInterest" />
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityCompletedTripDetailBinding
-import com.capstonehore.ngelana.view.home.plan.date.DatePlanActivity
+import com.capstonehore.ngelana.view.main.MainActivity
 
 class CompletedTripDetailActivity : AppCompatActivity() {
 
@@ -22,7 +22,7 @@ class CompletedTripDetailActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.startPlanningButton.setOnClickListener {
-            startActivity(Intent(this@CompletedTripDetailActivity, DatePlanActivity::class.java))
+            startActivity(Intent(this@CompletedTripDetailActivity, MainActivity::class.java))
         }
     }
 

@@ -1,7 +1,26 @@
 package com.capstonehore.ngelana.view.login
 
-class LoginViewModel {
-    fun login(email: String, password: String) {
-        // Do login here
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.capstonehore.ngelana.data.preferences.UserPreferences
+import com.capstonehore.ngelana.data.repository.GeneralRepository
+import kotlinx.coroutines.launch
+
+class LoginViewModel(
+        private val repository: GeneralRepository,
+        private val preferences: UserPreferences,
+): ViewModel()
+{
+
+    fun doLogin(
+        email: String,
+        password: String
+    ) = repository.login(email, password)
+
+    fun saveLogin(token: String) {
+        viewModelScope.launch {
+            preferences.saveToken(token)
+            preferences.prefLogin()
+        }
     }
 }

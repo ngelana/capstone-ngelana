@@ -1,6 +1,7 @@
 package com.capstonehore.ngelana.view.signup
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -9,9 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.preferences.ThemeManager
 import com.capstonehore.ngelana.databinding.ActivitySignUpBinding
+import com.capstonehore.ngelana.utils.LanguagePreference
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.signup.name.NameFragment
+import java.util.Locale
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -24,6 +27,8 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setLocale(this)
+
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -55,5 +60,18 @@ class SignUpActivity : AppCompatActivity() {
 
     companion object {
         const val THEME_SETTINGS = "theme_settings"
+
+        fun setLocale(context: Context) {
+            val languageCode = LanguagePreference.getLanguage(context)
+            if (languageCode != null) {
+                val locale = Locale(languageCode)
+                Locale.setDefault(locale)
+
+                val config = Configuration()
+                config.setLocale(locale)
+                @Suppress("DEPRECATION")
+                context.resources.updateConfiguration(config, context.resources.displayMetrics)
+            }
+        }
     }
 }
