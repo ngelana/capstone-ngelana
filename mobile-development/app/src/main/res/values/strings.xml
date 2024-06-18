@@ -196,5 +196,6 @@
     <string name="plan_creation_failed">Failed to Create Plan</string>
 
     <string name="sign_out_confirmation_message">Are you sure you want to sign out?</string>
+    <string name="tv_similiar_place">You might also like these places</string>
 
 </resources>

@@ -1,16 +1,16 @@
-package com.capstonehore.ngelana.data.remote.response
+package com.capstonehore.ngelana.data.remote.response.users
 
 import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
 
-	@field:SerializedName("data")
+    @field:SerializedName("data")
 	val data: DataLogin? = null,
 
-	@field:SerializedName("message")
+    @field:SerializedName("message")
 	val message: String? = null,
 
-	@field:SerializedName("token")
+    @field:SerializedName("token")
 	val token: String? = null
 )
 

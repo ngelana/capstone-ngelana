@@ -1,8 +1,8 @@
-package com.capstonehore.ngelana.data.remote.response
+package com.capstonehore.ngelana.data.remote.response.users
 
 import com.google.gson.annotations.SerializedName
 
-data class DeleteUserResponse(
+data class RegisterResponse(
 
 	@field:SerializedName("message")
 	val message: String? = null

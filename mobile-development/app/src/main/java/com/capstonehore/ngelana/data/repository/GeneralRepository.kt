@@ -12,8 +12,8 @@ import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.preferences.UserPreferences
-import com.capstonehore.ngelana.data.remote.response.LoginResponse
-import com.capstonehore.ngelana.data.remote.response.RegisterResponse
+import com.capstonehore.ngelana.data.remote.response.users.LoginResponse
+import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first

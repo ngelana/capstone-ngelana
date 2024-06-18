@@ -1,8 +1,9 @@
-package com.capstonehore.ngelana.data.remote.response
+package com.capstonehore.ngelana.data.remote.response.users
 
+import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.google.gson.annotations.SerializedName
 
-data class DetailUserResponse(
+data class UserResponse(
 
 	@field:SerializedName("data")
 	val data: UserInformationItem? = null,
