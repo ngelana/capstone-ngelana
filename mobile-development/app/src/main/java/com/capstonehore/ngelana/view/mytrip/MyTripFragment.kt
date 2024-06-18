@@ -42,6 +42,11 @@ class MyTripFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
         @StringRes
         private val TAB_TITLES = intArrayOf(

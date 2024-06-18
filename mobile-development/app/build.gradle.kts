@@ -76,6 +76,7 @@ dependencies {
 
     // Maps & Location
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     // Coroutines
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

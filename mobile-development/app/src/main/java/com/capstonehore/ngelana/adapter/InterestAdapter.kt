@@ -1,19 +1,19 @@
 package com.capstonehore.ngelana.adapter
 
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Interest
 import com.capstonehore.ngelana.databinding.ItemInterestBinding
 
-class InterestAdapter(private val listInterest: ArrayList<Interest>) :
+class InterestAdapter(
+    private val listInterest: ArrayList<Interest>,
+    private val selectedItems: SparseBooleanArray,
+    private val onItemClickCallback: (Int) -> Unit
+) :
     RecyclerView.Adapter<InterestAdapter.InterestViewHolder>() {
-
-    private lateinit var onItemClickCallback: OnItemClickCallback
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterestViewHolder {
         val binding = ItemInterestBinding.inflate(
@@ -29,20 +29,26 @@ class InterestAdapter(private val listInterest: ArrayList<Interest>) :
 
     override fun onBindViewHolder(holder: InterestViewHolder, position: Int) {
         val (name, icon) = listInterest[position]
-        with(holder.binding) {
-            tvInterest.text = name
-            icInterest.setImageResource(icon)
-        }
+        holder.bind(name, icon, selectedItems[position])
 
         holder.itemView.setOnClickListener {
-            @Suppress("DEPRECATION")
-            onItemClickCallback.onItemClicked(listInterest[holder.adapterPosition])
+            onItemClickCallback.invoke(position)
         }
     }
 
-    class InterestViewHolder(var binding: ItemInterestBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class InterestViewHolder(private val binding: ItemInterestBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    interface OnItemClickCallback {
-        fun onItemClicked(items: Interest)
+        fun bind(name: String, icon: Int, isSelected: Boolean) {
+            with(binding) {
+                tvInterest.text = name
+                icInterest.setImageResource(icon)
+
+                root.setBackgroundResource(
+                    if (isSelected) R.drawable.selected_item_background else R.drawable.rounded_corners_white
+                )
+            }
+        }
     }
+
 }

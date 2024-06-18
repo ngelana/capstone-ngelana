@@ -1,9 +1,14 @@
 package com.capstonehore.ngelana.view.profile.interest
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.adapter.MyInterestAdapter
+import com.capstonehore.ngelana.data.Interest
 import com.capstonehore.ngelana.databinding.ActivityMyInterestBinding
+import com.capstonehore.ngelana.view.profile.interest.edit.EditMyInterestActivity
 
 class MyInterestActivity : AppCompatActivity() {
 
@@ -21,7 +26,7 @@ class MyInterestActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.addInterest.setOnClickListener {
-
+            startActivity(Intent(this@MyInterestActivity, EditMyInterestActivity::class.java))
         }
     }
 
@@ -35,25 +40,34 @@ class MyInterestActivity : AppCompatActivity() {
         }
     }
 
+    private fun getListInterest(): ArrayList<Interest> {
+        val dataName = resources.getStringArray(R.array.data_interest_name)
+        val dataIcon = resources.obtainTypedArray(R.array.data_interest_icon)
+        val listInterest = ArrayList<Interest>()
+        for (i in dataName.indices) {
+            val interest = Interest(dataName[i], dataIcon.getResourceId(i, -1))
+            listInterest.add(interest)
+        }
+        dataIcon.recycle()
+        return listInterest
+    }
+
     private fun setupView() {
-//        val languageList = getListLanguage()
-//        val languageAdapter = LanguageAdapter(languageList)
-//
-//        binding.rvLanguage.apply {
-//            setHasFixedSize(true)
-//            layoutManager = LinearLayoutManager(this@LanguageActivity)
-//            adapter = languageAdapter
-//        }
-//
-//        languageAdapter.setOnItemClickCallback(object : LanguageAdapter.OnItemClickCallback {
-//            override fun onItemClicked(language: Language) {
-//                LanguagePreference.setLanguage(this@LanguageActivity, language.code)
-//                MainActivity.updateResources(this@LanguageActivity, language.code)
-//
-//                finish()
-//                startActivity(intent)
-//            }
-//        })
+        val interestList = getListInterest()
+        val myInterestAdapter = MyInterestAdapter(interestList)
+
+        binding.rvInterest.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@MyInterestActivity)
+            adapter = myInterestAdapter
+        }
+
+        myInterestAdapter.setOnItemClickCallback(object : MyInterestAdapter.OnItemClickCallback {
+            override fun onItemClicked(items: Interest) {
+                startActivity(Intent(this@MyInterestActivity, EditMyInterestActivity::class.java)
+                    .putExtra(EditMyInterestActivity.EXTRA_RESULT_INTEREST, items))
+            }
+        })
     }
 
 }

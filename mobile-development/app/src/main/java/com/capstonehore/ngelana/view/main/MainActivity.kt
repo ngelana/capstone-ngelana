@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             when (itemId) {
                 R.id.navigation_home -> navController.navigate(R.id.navigation_home)
                 R.id.navigation_explore -> navController.navigate(R.id.navigation_explore)
+                R.id.navigation_plan -> navController.navigate(R.id.navigation_plan)
                 R.id.navigation_trip -> navController.navigate(R.id.navigation_trip)
                 R.id.navigation_profile -> navController.navigate(R.id.navigation_profile)
             }

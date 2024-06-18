@@ -8,7 +8,7 @@
 
         <item name="colorSecondary">@color/dark_blue</item>
         <item name="colorSecondaryVariant">@color/white</item>
-        <item name="colorOnSecondary">@color/grey</item>
+        <item name="colorOnSecondary">@color/light_grey</item>
 
         <item name="android:progressBackgroundTint">@color/blue</item>
 

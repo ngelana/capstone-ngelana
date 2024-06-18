@@ -2,8 +2,10 @@ package com.capstonehore.ngelana.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -12,19 +14,28 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.ThemeManager
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
+import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
+import com.capstonehore.ngelana.utils.LanguagePreference
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.signup.SignUpActivity
+import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
 
@@ -33,14 +44,22 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var themeManager: ThemeManager
     private lateinit var themeViewModel: ThemeViewModel
 
+    private lateinit var loginViewModel: LoginViewModel
+
     private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
+    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setLocale(this)
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        loginViewModel = obtainViewModel(this@LoginActivity)
+
         setupAction()
+        setupImage()
         setupAnimation()
         setupTitle()
         setupButton()
@@ -51,8 +70,21 @@ class LoginActivity : AppCompatActivity() {
         binding.submitButton.setOnClickListener { setupLogin() }
     }
 
+    private fun setupImage() {
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-assets/img_ngelana10.png"
+        Glide.with(this@LoginActivity)
+            .load(image)
+            .into(binding.imageView)
+    }
+
     private fun setupAnimation() {
-        ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -30f, 30f).apply {
+        ObjectAnimator.ofFloat(binding.logoImage, View.TRANSLATION_X, -70f, 70f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -5f, 5f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
@@ -68,7 +100,14 @@ class LoginActivity : AppCompatActivity() {
         val tvRegister = ObjectAnimator.ofFloat(binding.tvRegister, View.ALPHA, 1f).setDuration(300)
 
         AnimatorSet().apply {
-            playSequentially(tvTitle, tvDescription, tvEmail, tvPassword, submitButton, tvRegister)
+            playSequentially(
+                tvTitle,
+                tvDescription,
+                tvEmail,
+                tvPassword,
+                submitButton,
+                tvRegister
+            )
             start()
         }
     }
@@ -130,8 +169,98 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupLogin() {
-        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-        finish()
+        val email = binding.edEmail.text.toString()
+        val password = binding.edPassword.text.toString()
+
+        when {
+            email.isEmpty() -> {
+                binding.edEmail.error = getString(R.string.empty_email)
+            }
+            password.isEmpty() -> {
+                binding.edPassword.error = getString(R.string.empty_password)
+            }
+            else -> {
+                loginViewModel.doLogin(email, password).observe(this@LoginActivity){
+                    if(it != null){
+                        when(it) {
+                            is Result.Success -> {
+                                showLoading(false)
+
+                                val response = it.data
+                                loginViewModel.saveLogin(response.token.toString())
+                                showCustomAlertDialog(true, "")
+                                Log.d(TAG, "Success registering: $response")
+                            }
+                            is Result.Error -> {
+                                showLoading(false)
+
+                                val response = it.error
+                                showCustomAlertDialog(false, response)
+                                Log.e(TAG, "Error login: $response")
+                            }
+                            is Result.Loading -> {
+                                showLoading(true)
+
+                                Log.d(TAG, "Loading Login User ....")
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    private fun showCustomAlertDialog(isSuccess: Boolean, message: String) {
+        val inflater = LayoutInflater.from(this)
+        val alertLayout = CustomAlertDialogBinding.inflate(inflater)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setView(alertLayout.root)
+
+        val dialog = builder.create()
+        dialog.show()
+
+        if (isSuccess) {
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_check_circle)
+                alertTitle.text = getString(R.string.login_success_title)
+                alertMessage.text = getString(R.string.login_success_message)
+
+                submitButton.setOnClickListener {
+                    moveToMain()
+                    dialog.dismiss()
+                }
+            }
+        } else {
+            with(alertLayout) {
+                alertIcon.setImageResource(R.drawable.ic_error)
+                alertTitle.text = getString(R.string.login_failed)
+                alertMessage.text = message
+
+                submitButton.apply {
+                    text = getString(R.string.cancel)
+                    setBackgroundColor(ContextCompat.getColor(this@LoginActivity, R.color.light_grey))
+                    setTextColor(ContextCompat.getColor(this@LoginActivity, R.color.black))
+                    setOnClickListener {
+                        dialog.dismiss()
+                    }
+                }
+            }
+        }
+
+        // Animation
+        val scaleX = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleX", 0.5f, 1f)
+        val scaleY = ObjectAnimator.ofFloat(alertLayout.alertIcon, "scaleY", 0.5f, 1f)
+        val tvTitle = ObjectAnimator.ofFloat(alertLayout.alertTitle, View.ALPHA, 0f, 1f)
+        val tvMessage = ObjectAnimator.ofFloat(alertLayout.alertMessage, View.ALPHA, 0f, 1f)
+        val submitButton = ObjectAnimator.ofFloat(alertLayout.submitButton, View.ALPHA, 0f, 1f)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(scaleX, scaleY, tvTitle, tvMessage, submitButton)
+        animatorSet.duration = 800
+        animatorSet.start()
     }
 
     private fun themeSettings() {
@@ -151,7 +280,39 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun moveToMain() {
+        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+       binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): LoginViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(sessionDataStore)
+        )
+        return ViewModelProvider(activity, factory)[LoginViewModel::class.java]
+    }
+
     companion object {
+        private const val TAG = "LoginActivity"
         const val THEME_SETTINGS = "theme_settings"
+        const val USER_SESSION = "user_session"
+
+        fun setLocale(context: Context) {
+            val languageCode = LanguagePreference.getLanguage(context)
+            if (languageCode != null) {
+                val locale = Locale(languageCode)
+                Locale.setDefault(locale)
+
+                val config = Configuration()
+                config.setLocale(locale)
+                @Suppress("DEPRECATION")
+                context.resources.updateConfiguration(config, context.resources.displayMetrics)
+            }
+        }
     }
 }
