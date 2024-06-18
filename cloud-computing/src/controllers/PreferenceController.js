@@ -1,7 +1,7 @@
 const express = require("express");
 const prisma = require("../db");
 const router = express.Router();
-const { isValidUserId } = require("../services/UserServices");
+const { isValidUserId } = require("../services/DbServices");
 const { accessValidation } = require("../services/AuthServices");
 
 // Get preferences list

@@ -2,8 +2,8 @@ const express = require("express");
 const prisma = require("../db");
 const router = express.Router();
 const { accessValidation } = require("../services/AuthServices");
-const { isValidUserId } = require("../services/UserServices");
-const { parseDate, reverseParseDate } = require("../services/UtilServices");
+const { isValidUserId } = require("../services/DbServices");
+const { parseDate } = require("../services/UtilServices");
 
 // get all reviews from one user
 router.get("/", accessValidation, async (req, res) => {

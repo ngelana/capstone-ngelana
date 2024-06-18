@@ -1,9 +1,9 @@
 const express = require("express");
 const prisma = require("../db");
 const router = express.Router();
-const { isValidUserId } = require("../services/UserServices");
+const { isValidUserId } = require("../services/DbServices");
 const { accessValidation } = require("../services/AuthServices");
-const parseDate = require("../services/UtilServices");
+const { parseDate } = require("../services/UtilServices");
 
 // Placeholder function to simulate ML model for generating placeIds
 const generatePlaceIds = async () => {
@@ -190,11 +190,11 @@ router.post("/recommend", accessValidation, async (req, res) => {
 });
 
 router.post("/finalize", accessValidation, async (req, res) => {
-  const { date, userId, places, planName } = req.body;
+  const { date, userId, places, name } = req.body;
   const formattedDate = date ? parseDate(date) : null;
 
   try {
-    if (!date || !places || !planName) {
+    if (!date || !places || !name) {
       return res.status(400).json({
         message: "Date, places, and plan name are required",
       });
@@ -210,7 +210,7 @@ router.post("/finalize", accessValidation, async (req, res) => {
       data: {
         date: formattedDate,
         userId,
-        name: planName,
+        name,
         places: {
           create: places.map((place) => ({
             placeId: place.id,

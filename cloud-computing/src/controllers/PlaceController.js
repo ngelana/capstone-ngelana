@@ -1,16 +1,22 @@
 const express = require("express");
 const prisma = require("../db");
 const router = express.Router();
-const { isValidUserId } = require("../services/UserServices");
+const axios = require("axios");
 const { accessValidation } = require("../services/AuthServices");
+const {
+  getPlacesWithUrlPlaceholder,
+  getPlaceWithUrlPlaceholderbyId,
+  getPlacesWithUrlPlaceholderByQuery,
+  getPlacesWithUrlPlaceholderByType,
+} = require("../services/DbServices");
 
 // Get places list
 router.get("/", accessValidation, async (req, res) => {
   try {
-    const result = await prisma.place.findMany();
+    const result = await getPlacesWithUrlPlaceholder();
     return res.status(200).json({
       data: result,
-      message: "Place Listed!",
+      message: "Places Listed!",
     });
   } catch (error) {
     console.error(error);
@@ -25,14 +31,31 @@ router.get("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await prisma.place.findUnique({
-      where: {
-        id,
-      },
-    });
+    // const getResponseSimilarPlacesId = await axios.post(
+    //   `https://YOUR_FASTAPI_APP_URL/${id}`
+    // );
+
+    // const placeIds = getResponseSimilarPlacesId.data.ids;
+    // const placeIdsArray = placeIds.split(",");
+
+    // const similarPlaces = await prisma.place.findMany({
+    //   where: {
+    //     id: {
+    //       in: placeIdsArray,
+    //     },
+    //   },
+    //   select: {
+    //     id: true,
+    //     name: true,
+    //     rating: true,
+    //   },
+    // });
+
+    const result = await getPlaceWithUrlPlaceholderbyId(id);
     return res.status(200).json({
       data: result,
-      message: `Place with id ${id} Listed!`,
+      // similarPlaces,
+      message: `Place with id ${id} and similar places listed!`,
     });
   } catch (error) {
     console.log(error.message);
@@ -43,56 +66,20 @@ router.get("/:id", accessValidation, async (req, res) => {
 });
 
 // get places by QUERY params | request example : /search-place?query=park
-router.get("/search-place", accessValidation, async (req, res) => {
-  const { query } = req.query;
-
-  try {
-    const result = await prisma.place.findMany({
-      where: {
-        name: {
-          contains: query,
-        },
-      },
-    });
-
-    if (!result) {
-      return res.status(404).json({
-        message: "Invalid query input!",
-      });
-    }
-    return res.status(200).json({
-      data: result,
-      message: `Places with query name ${query} Listed!`,
-    });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({
-      message: `Error retrieving places!`,
-    });
-  }
-});
-
-// get places by QUERY params | request example : /search-place?query=park
 router.post("/search-place/", accessValidation, async (req, res) => {
   const { query } = req.query;
 
   try {
-    const result = await prisma.place.findMany({
-      where: {
-        name: {
-          contains: query,
-        },
-      },
-    });
+    const result = await getPlacesWithUrlPlaceholderByQuery(query);
 
-    if (!result) {
+    if (!result || result.length === 0) {
       return res.status(404).json({
-        message: "Invalid query input!",
+        message: "Invalid query input or no places found!",
       });
     }
     return res.status(200).json({
       data: result,
-      message: `Places with query name ${query} Listed!`,
+      message: `Places with query name ${query} listed!`,
     });
   } catch (error) {
     console.log(error.message);
@@ -107,15 +94,11 @@ router.post("/:type", accessValidation, async (req, res) => {
   const { type } = req.params;
 
   try {
-    const result = await prisma.place.findMany({
-      where: {
-        primaryTypes: type,
-      },
-    });
+    const result = await getPlacesWithUrlPlaceholderByType(type);
 
-    if (!result) {
+    if (!result || result.length === 0) {
       return res.status(404).json({
-        message: "Invalid query input!",
+        message: "Invalid query input or no places found!",
       });
     }
     return res.status(200).json({

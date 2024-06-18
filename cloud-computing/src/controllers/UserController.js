@@ -8,7 +8,7 @@ const {
   compareHashedPass,
 } = require("../services/AuthServices");
 const parseDate = require("../services/UtilServices");
-const { isValidUserId } = require("../services/UserServices");
+const { isValidUserId } = require("../services/DbServices");
 
 // Middleware auth
 
