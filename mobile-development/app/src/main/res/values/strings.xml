@@ -55,6 +55,7 @@
     <string name="home_title">Arrange Your %1$s!</string>
     <string name="home_description">Start planning your journey with Ngelana by clicking the image beside.</string>
     <string name="favorite_place">Find your favorite place</string>
+    <string name="recommended_place_for_you">Recommended place for you</string>
     <string name="popular_places_in_bali">Popular places in Bali</string>
     <string name="see_all">See all</string>
 
@@ -195,7 +196,5 @@
     <string name="plan_creation_failed">Failed to Create Plan</string>
 
     <string name="sign_out_confirmation_message">Are you sure you want to sign out?</string>
-    <string name="email_empty">Email Empty\n</string>
-    <string name="password_empty">Invalid Password</string>
 
 </resources>

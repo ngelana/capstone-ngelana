@@ -17,7 +17,6 @@ import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -284,10 +283,6 @@ class LoginActivity : AppCompatActivity() {
     private fun moveToMain() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         finish()
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showLoading(isLoading: Boolean) {

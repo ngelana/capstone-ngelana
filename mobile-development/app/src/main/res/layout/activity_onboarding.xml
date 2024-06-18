@@ -27,11 +27,11 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:alpha="0"
-        android:background="@drawable/rounded_corners_border"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right"
         android:drawableTint="?attr/colorSecondaryVariant"
         android:text="@string/onboarding"
         android:textColor="?attr/colorSecondaryVariant"
+        android:backgroundTint="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bgView"
@@ -59,110 +59,98 @@
     <ImageView
         android:id="@+id/logoMenu1"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="240dp"
         android:src="@drawable/img_ngelana1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
         tools:ignore="ContentDescription" />
-
 
     <ImageView
         android:id="@+id/logoMenu2"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="240dp"
         android:src="@drawable/img_ngelana2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/logoMenu3"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="240dp"
         android:src="@drawable/img_ngelana3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/logoMenu4"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="240dp"
         android:src="@drawable/img_ngelana4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
         tools:ignore="ContentDescription" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/menu1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:altSrc="@drawable/ic_circle_full"
+        app:layout_constraintBottom_toTopOf="@+id/bgView"
+        app:layout_constraintEnd_toStartOf="@+id/menu2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_circle"
+        app:tint="@color/blue" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/menu2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:altSrc="@drawable/ic_circle_full"
         app:layout_constraintBottom_toBottomOf="@+id/menu1"
         app:layout_constraintEnd_toStartOf="@+id/menu3"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/menu1"
         app:layout_constraintTop_toTopOf="@+id/menu1"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_circle"
-        app:tint="@color/blue" />
-
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/menu1"
-        android:layout_width="56dp"
-        android:layout_height="174dp"
-        android:layout_marginStart="60dp"
-        app:altSrc="@drawable/ic_circle_full"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_circle"
-        app:tint="@color/blue" />
-
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/menu4"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="32dp"
-        app:altSrc="@drawable/ic_circle_full"
-        app:layout_constraintBottom_toBottomOf="@+id/menu3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/menu3"
-        app:layout_constraintTop_toTopOf="@+id/menu3"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_circle"
         app:tint="@color/blue" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/menu3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:altSrc="@drawable/ic_circle_full"
         app:layout_constraintBottom_toBottomOf="@+id/menu2"
         app:layout_constraintEnd_toStartOf="@+id/menu4"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/menu2"
         app:layout_constraintTop_toTopOf="@+id/menu2"
-        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_circle"
+        app:tint="@color/blue" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/menu4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:altSrc="@drawable/ic_circle_full"
+        app:layout_constraintBottom_toBottomOf="@+id/menu3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/menu3"
+        app:layout_constraintTop_toTopOf="@+id/menu3"
         app:srcCompat="@drawable/ic_circle"
         app:tint="@color/blue" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/imageView"
         android:layout_width="0dp"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/img_ngelana_logo_name" />
-
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

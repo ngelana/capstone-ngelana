@@ -8,12 +8,13 @@ import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.di.Injection
 import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.login.LoginViewModel
+import com.capstonehore.ngelana.view.profile.ProfileViewModel
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 
 class ViewModelFactory(
     private val repository: GeneralRepository,
-    private val pref: UserPreferences,
+    private val preferences: UserPreferences,
 ) :
     ViewModelProvider.NewInstanceFactory() {
 
@@ -25,10 +26,13 @@ class ViewModelFactory(
                 SignUpViewModel(repository) as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
-                LoginViewModel(repository, pref) as T
+                LoginViewModel(repository, preferences) as T
             }
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
                 HomeViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(repository, preferences) as T
             }
             modelClass.isAssignableFrom(MyFavoriteViewModel::class.java) -> {
                 MyFavoriteViewModel(repository) as T
@@ -41,9 +45,9 @@ class ViewModelFactory(
     companion object {
         @Volatile
         private var instance: ViewModelFactory? = null
-        fun getInstance(context: Context, pref: UserPreferences): ViewModelFactory =
+        fun getInstance(context: Context, preferences: UserPreferences): ViewModelFactory =
             instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideRepository(context), pref)
+                instance ?: ViewModelFactory(Injection.provideRepository(context), preferences)
             }.also { instance = it }
     }
 }

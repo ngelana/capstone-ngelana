@@ -3,6 +3,7 @@ package com.capstonehore.ngelana.view.signup.password
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -18,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +29,6 @@ import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.databinding.FragmentPasswordBinding
-import com.capstonehore.ngelana.di.Injection.dataStore
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
@@ -42,6 +43,8 @@ class PasswordFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var signUpViewModel: SignUpViewModel
+
+    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -166,39 +169,37 @@ class PasswordFragment : Fragment() {
     }
 
     private fun setupRegister() {
-        binding.submitButton.setOnClickListener {
-            val name = signUpViewModel.name.value.toString()
-            val email = signUpViewModel.email.value.toString()
-            val password = binding.edPassword.text.toString()
+        val name = signUpViewModel.name.value.toString()
+        val email = signUpViewModel.email.value.toString()
+        val password = binding.edPassword.text.toString()
 
-            if (password.isNotEmpty()) {
-                signUpViewModel.setPassword(password)
-            } else {
-                showToast(getString(R.string.empty_password))
-            }
+        if (password.isNotEmpty()) {
+            signUpViewModel.setPassword(password)
+        } else {
+            showToast(getString(R.string.empty_password))
+        }
 
-            signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner) {
-                if( it != null ){
-                    when (it) {
-                        is Result.Success -> {
-                            showLoading(false)
+        signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner) {
+            if( it != null ){
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
 
-                            val response = it.data
-                            showCustomAlertDialog(true, "")
-                            Log.d(TAG, "Success registering: $response")
-                        }
-                        is Result.Error -> {
-                            showLoading(false)
+                        val response = it.data
+                        showCustomAlertDialog(true, "")
+                        Log.d(TAG, "Success registering: $response")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
 
-                            val response = it.error
-                            showCustomAlertDialog(false, response)
-                            Log.e(TAG, "Error registering: $response")
-                        }
-                        is Result.Loading                           -> {
-                            showLoading(true)
+                        val response = it.error
+                        showCustomAlertDialog(false, response)
+                        Log.e(TAG, "Error registering: $response")
+                    }
+                    is Result.Loading                           -> {
+                        showLoading(true)
 
-                            Log.d(TAG, "Loading Register User ....")
-                        }
+                        Log.d(TAG, "Loading Register User ....")
                     }
                 }
             }
@@ -291,12 +292,13 @@ class PasswordFragment : Fragment() {
     private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
         val factory = ViewModelFactory.getInstance(
             requireContext(),
-            UserPreferences.getInstance(requireContext().dataStore)
+            UserPreferences.getInstance(activity.sessionDataStore)
         )
         return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "PasswordFragment"
+        const val USER_SESSION = "user_session"
     }
 }
