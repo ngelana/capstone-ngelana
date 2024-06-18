@@ -1,0 +1,7 @@
+### GET request to example server
+
+
+GET localhost:8000/similar-places/ChIJYcGr7GSb0S0RckePBrCWikw
+Accept: application/json
+
+###
