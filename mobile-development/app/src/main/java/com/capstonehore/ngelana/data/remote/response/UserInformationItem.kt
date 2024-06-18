@@ -1,6 +1,7 @@
 package com.capstonehore.ngelana.data.remote.response
 
 import android.os.Parcelable
+import com.bumptech.glide.annotation.Excludes
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -24,7 +25,4 @@ data class UserInformationItem (
 
         @field:SerializedName("email")
         val email: String? = null,
-
-        @field:SerializedName("password")
-        val password: String? = null,
 ) : Parcelable

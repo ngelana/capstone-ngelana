@@ -1,20 +1,25 @@
 package com.capstonehore.ngelana.data.remote.retrofit
 
+import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponseById
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
 import com.capstonehore.ngelana.data.remote.response.preferences.UserPreference
+import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferenceResponse
+import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferencesItem
 import com.capstonehore.ngelana.data.remote.response.review.ReviewItem
 import com.capstonehore.ngelana.data.remote.response.review.ReviewResponse
 import com.capstonehore.ngelana.data.remote.response.users.LoginResponse
 import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
 import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -37,24 +42,39 @@ interface ApiService {
         @Field("password") password: String,
     ): LoginResponse
 
-    @GET("user/:id")
+    @GET("user/{id}")
     suspend fun getUserById(
         @Path("id") id: String
     ): UserResponse
 
+    @PATCH("user/{id}")
+    suspend fun updateUserById(
+        @Path("id") id: String,
+        @Body userInformationItem: UserInformationItem
+    ): UserResponse
+
+    @DELETE("user/{id}")
+    suspend fun deleteUserById(
+        @Path("id") id: String
+    ): UserResponse
 
     // Places
     @GET("place")
     suspend fun getAllPlaces(): PlacesResponse
 
-    @GET("place/:id")
+    @GET("place/{id}")
     suspend fun getPlaceById(
         @Path("id") id: String
     ): PlacesResponse
 
-    @GET("place/search-place")
+    @POST("place/search-place")
     suspend fun searchPlaceByName(
         @Query("query") name: String,
+    ): PlacesResponse
+
+    @POST("place/{type}")
+    suspend fun getPrimaryTypePlace(
+        @Path("type") primaryTypes: String,
     ): PlacesResponse
 
 
@@ -72,16 +92,16 @@ interface ApiService {
     @POST("preference")
     suspend fun createPreference(
         @Body userDataPreferencesItem: UserDataPreferencesItem
-    ): UserPreference
+    ): UserPreferenceResponse
 
-    @GET("preference/:id")
+    @GET("preference/{id}")
     suspend fun getPreferenceById(
         @Path("id") id: String
     ): PreferencesResponseById
 
 
     // Review
-    @GET("review/:id")
+    @GET("review/{id}")
     suspend fun getReviewById(
         @Path("id") id: String
     ): ReviewResponse

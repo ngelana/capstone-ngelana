@@ -196,7 +196,7 @@ class PasswordFragment : Fragment() {
                         showCustomAlertDialog(false, response)
                         Log.e(TAG, "Error registering: $response")
                     }
-                    is Result.Loading                           -> {
+                    is Result.Loading -> {
                         showLoading(true)
 
                         Log.d(TAG, "Loading Register User ....")

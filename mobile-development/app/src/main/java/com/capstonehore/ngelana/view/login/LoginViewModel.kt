@@ -23,4 +23,12 @@ class LoginViewModel(
             preferences.prefLogin()
         }
     }
+
+    fun saveUserId(userId: String) {
+        viewModelScope.launch {
+            preferences.saveUserId(userId)
+            preferences.prefLogin()
+        }
+    }
+
 }

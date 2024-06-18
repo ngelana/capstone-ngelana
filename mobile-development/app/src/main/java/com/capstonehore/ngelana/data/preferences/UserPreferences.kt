@@ -30,9 +30,20 @@ class UserPreferences constructor(private val dataStore: DataStore<Preferences>)
         }
     }
 
+    suspend fun saveUserId(userId: String) {
+        dataStore.edit {
+            it[USER_ID_KEY] = userId
+        }
+    }
+
+    fun getUserId(): Flow<String?> = dataStore.data.map {
+        it[USER_ID_KEY]
+    }
+
     suspend fun logout() = dataStore.edit {
         it[TOKEN_KEY] = ""
         it[STATE_KEY] = false
+        it[USER_ID_KEY] = ""
     }
 
     companion object {
@@ -41,6 +52,7 @@ class UserPreferences constructor(private val dataStore: DataStore<Preferences>)
 
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
+        private val USER_ID_KEY = stringPreferencesKey("user_id")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreferences {
             return INSTANCE ?: synchronized(this) {

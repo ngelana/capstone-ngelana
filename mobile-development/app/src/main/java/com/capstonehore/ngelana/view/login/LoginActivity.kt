@@ -45,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var themeViewModel: ThemeViewModel
 
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var userPreferences: UserPreferences
 
     private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
     private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
@@ -57,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loginViewModel = obtainViewModel(this@LoginActivity)
+        userPreferences = UserPreferences.getInstance(sessionDataStore)
 
         setupAction()
         setupImage()
@@ -187,7 +189,13 @@ class LoginActivity : AppCompatActivity() {
                                 showLoading(false)
 
                                 val response = it.data
-                                loginViewModel.saveLogin(response.token.toString())
+
+                                val token = response.token ?: ""
+                                val userId = response.data?.id ?: ""
+
+                                loginViewModel.saveLogin(token)
+                                loginViewModel.saveUserId(userId)
+
                                 showCustomAlertDialog(true, "")
                                 Log.d(TAG, "Success registering: $response")
                             }
@@ -207,9 +215,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
-
     }
 
     private fun showCustomAlertDialog(isSuccess: Boolean, message: String) {
@@ -292,7 +298,7 @@ class LoginActivity : AppCompatActivity() {
     private fun obtainViewModel(activity: AppCompatActivity): LoginViewModel {
         val factory = ViewModelFactory.getInstance(
             activity.application,
-            UserPreferences.getInstance(sessionDataStore)
+            userPreferences
         )
         return ViewModelProvider(activity, factory)[LoginViewModel::class.java]
     }

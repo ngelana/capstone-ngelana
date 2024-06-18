@@ -12,8 +12,11 @@ import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.preferences.UserPreferences
+import com.capstonehore.ngelana.data.remote.response.UserInformationItem
+import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferencesItem
 import com.capstonehore.ngelana.data.remote.response.users.LoginResponse
 import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
+import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
@@ -22,22 +25,26 @@ import retrofit2.HttpException
 import java.util.Locale
 
 class GeneralRepository(
-        private var apiService: ApiService,
-        private val userPreferences: UserPreferences,
-        private val ngelanaRoomDatabase: NgelanaRoomDatabase,
+    private var apiService: ApiService,
+    private val userPreferences: UserPreferences,
+    private val ngelanaRoomDatabase: NgelanaRoomDatabase,
 ) {
 
     private var token: String? = null
+    private var userId: String? = null
 
     // Data Remote
     private suspend fun getToken(): String? = token ?: runBlocking {
         userPreferences.getToken().first()
     }.also { token = it }
 
+    private suspend fun getUserId(): String? =
+        userId ?: userPreferences.getUserId().first().also { userId = it }
+
     fun register(
-            name: String,
-            email: String,
-            password: String
+        name: String,
+        email: String,
+        password: String
     ): LiveData<Result<RegisterResponse>> = liveData {
         emit(Result.Loading)
         try {
@@ -57,8 +64,8 @@ class GeneralRepository(
     }
 
     fun login(
-            email: String,
-            password: String,
+        email: String,
+        password: String,
     ): LiveData<Result<LoginResponse>> = liveData {
         emit(Result.Loading)
         try {
@@ -72,6 +79,75 @@ class GeneralRepository(
             emit(Result.Error(errorResponse.message.toString()))
         } catch (e: Exception) {
             Log.d(TAG, "login  : ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun getUser(): LiveData<Result<UserResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val userId = getUserId()
+
+            if (userId != null) {
+                val response = apiService.getUserById(userId)
+                emit(Result.Success(response))
+            } else {
+                emit(Result.Error("User ID not found"))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UserResponse::class.java)
+
+            emit(Result.Error(errorResponse.message.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getUserById: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun updateUser(userInformationItem: UserInformationItem): LiveData<Result<UserResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val userId = getUserId()
+
+            if (userId != null) {
+                val response = apiService.updateUserById(userId, userInformationItem)
+                emit(Result.Success(response))
+            } else {
+                emit(Result.Error("User ID not found"))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UserResponse::class.java)
+
+            emit(Result.Error(errorResponse.message.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "updateUserById: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun deleteUser(): LiveData<Result<UserResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val userId = getUserId()
+
+            if (userId != null) {
+                val response = apiService.deleteUserById(userId)
+                emit(Result.Success(response))
+            } else {
+                emit(Result.Error("User ID not found"))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UserResponse::class.java)
+
+            emit(Result.Error(errorResponse.message.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "deleteUserById: ${e.message}")
 
             emit(Result.Error(e.message.toString()))
         }
@@ -119,28 +195,28 @@ class GeneralRepository(
     }
 
     // Data Location
-    fun getLocationDetails(context: Context, location: Location): LiveData<Result<Address>> = liveData {
-        emit(Result.Loading)
-        try {
-            val geocoder = Geocoder(context, Locale.getDefault())
+    fun getLocationDetails(context: Context, location: Location): LiveData<Result<Address>> =
+        liveData {
+            emit(Result.Loading)
+            try {
+                val geocoder = Geocoder(context, Locale.getDefault())
 
-            @Suppress("DEPRECATION")
-            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                @Suppress("DEPRECATION")
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
-            if (addresses != null) {
-                if (addresses.isNotEmpty()) {
-                    emit(Result.Success(addresses[0]))
+                if (addresses != null) {
+                    if (addresses.isNotEmpty()) {
+                        emit(Result.Success(addresses[0]))
+                    } else {
+                        emit(Result.Error("No address found"))
+                    }
                 }
-                else {
-                    emit(Result.Error("No address found"))
-                }
+            } catch (e: Exception) {
+                Log.e(TAG, "getLocationDetails: ${e.message}", e)
+
+                emit(Result.Error(e.message ?: "Unknown error"))
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "getLocationDetails: ${e.message}", e)
-
-            emit(Result.Error(e.message ?: "Unknown error"))
         }
-    }
 
     companion object {
         private const val TAG = "GeneralRepository"
@@ -148,12 +224,16 @@ class GeneralRepository(
         private var instance: GeneralRepository? = null
 
         fun getInstance(
-                apiService: ApiService,
-                userPreference: UserPreferences,
-                ngelanaRoomDatabase: NgelanaRoomDatabase,
+            apiService: ApiService,
+            userPreference: UserPreferences,
+            ngelanaRoomDatabase: NgelanaRoomDatabase,
         ): GeneralRepository {
             return instance ?: synchronized(this) {
-                instance ?: GeneralRepository(apiService, userPreference, ngelanaRoomDatabase).also {
+                instance ?: GeneralRepository(
+                    apiService,
+                    userPreference,
+                    ngelanaRoomDatabase
+                ).also {
                     instance = it
                 }
             }

@@ -94,8 +94,8 @@
     <string name="edit">Edit</string>
     <string name="date_of_birth">Tanggal Lahir</string>
     <string name="gender">Jenis Kelamin</string>
-    <string name="woman">Wanita</string>
-    <string name="man">Pria</string>
+    <string name="female">Wanita</string>
+    <string name="male">Pria</string>
     <string name="phone_number">Nomor Telepon</string>
     <string name="joined_at">Bergabung Pada</string>
 
