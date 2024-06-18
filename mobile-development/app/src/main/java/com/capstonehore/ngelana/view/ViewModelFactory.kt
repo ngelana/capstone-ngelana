@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.data.repository.GeneralRepository
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.di.Injection
+import com.capstonehore.ngelana.view.explore.place.culinary.CulinarySpotViewModel
 import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.login.LoginViewModel
 import com.capstonehore.ngelana.view.profile.ProfileViewModel
@@ -37,6 +38,12 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(MyFavoriteViewModel::class.java) -> {
                 MyFavoriteViewModel(repository) as T
             }
+            // culinary spot view model
+            modelClass.isAssignableFrom(CulinarySpotViewModel::class.java) -> {
+                CulinarySpotViewModel(repository) as T
+            }
+
+
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

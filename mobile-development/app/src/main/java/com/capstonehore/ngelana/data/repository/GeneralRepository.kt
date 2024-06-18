@@ -13,7 +13,15 @@ import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
+import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
+import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
+import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponse
+import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponseById
+import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
+import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferenceResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferencesItem
+import com.capstonehore.ngelana.data.remote.response.review.ReviewItem
+import com.capstonehore.ngelana.data.remote.response.review.ReviewResponse
 import com.capstonehore.ngelana.data.remote.response.users.LoginResponse
 import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
 import com.capstonehore.ngelana.data.remote.response.users.UserResponse
@@ -154,6 +162,131 @@ class GeneralRepository(
     }
 
 
+    //places
+    //? @GET
+    fun getPlaces(): LiveData<Result<PlacesResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getAllPlaces()
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getPlaces: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    // getplacebyid
+    //? @GET
+    fun getPlaceById(id: String): LiveData<Result<PlacesResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getPlaceById(id)
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getPlaceById: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    // get place by name
+    //! @GET
+    fun searchPlaceByName(name: String): LiveData<Result<PlacesResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.searchPlaceByName(name)
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "searchPlaceByName: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    // User Preferences
+    //? @GET
+    fun getUserPreferences(): LiveData<Result<PreferencesResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val userId = getUserId()
+
+            if (userId != null) {
+                val response = apiService.getAllPreferences()
+                emit(Result.Success(response))
+            } else {
+                emit(Result.Error("User ID not found"))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UserPreferencesItem::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getUserPreferencesById: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    // get primary type place
+    //! @POST
+    fun getPrimaryTypePlace(primaryTypes: String): LiveData<Result<PlacesResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getPrimaryTypePlace(primaryTypes)
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getPrimaryTypePlace: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    // get plan by user id
+    //? @GET
+    fun getPlanByUserId(userId: String): LiveData<Result<PlanResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getPlanByUserId(userId)
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getPlanByUserId: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+
+
     // Data Local
     fun getAllFavorites(): LiveData<Result<List<Favorite>>> = liveData {
         emit(Result.Loading)
@@ -165,6 +298,86 @@ class GeneralRepository(
             Log.d(TAG, "getAllFavorites: ${e.message}")
 
             emit(Result.Error("Error fetching data: ${e.message}"))
+        }
+    }
+
+    // create createPreference
+    //? @POST
+    fun createPreference(userDataPreferencesItem: UserDataPreferencesItem): LiveData<Result<UserPreferenceResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.createPreference(userDataPreferencesItem)
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UserPreferencesItem::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "createPreference: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    // getPreferenceById
+    //? @GET
+    fun getPreferenceById(id: String): LiveData<Result<PreferencesResponseById>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getPreferenceById(id)
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PreferencesResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getPreferenceById: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    // getReviewById
+    //? @GET
+    fun getReviewById(id: String): LiveData<Result<ReviewResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getReviewById(id)
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PreferencesResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getReviewById: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    //review
+    //? @POST
+    fun createReview(reviewItem: ReviewItem): LiveData<Result<ReviewResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.createReview(reviewItem)
+
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, ReviewResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "createReview: ${e.message}")
+
+            emit(Result.Error(e.message.toString()))
         }
     }
 
