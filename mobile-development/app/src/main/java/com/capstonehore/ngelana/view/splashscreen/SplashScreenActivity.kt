@@ -1,21 +1,33 @@
 package com.capstonehore.ngelana.view.splashscreen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivitySplashScreenBinding
+import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
+import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashScreenBinding
+
+    private lateinit var userPreferences: UserPreferences
+
+    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
 
     private var delay: Long = 3000
 
@@ -27,8 +39,8 @@ class SplashScreenActivity : AppCompatActivity() {
         installSplashScreen()
 
         setStatusBarColor()
-        setupLogo()
-        moveToOnboarding()
+        setupImage()
+        isUserLoggedIn()
     }
 
     private fun setStatusBarColor() {
@@ -36,11 +48,30 @@ class SplashScreenActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.blue)
     }
 
-    private fun setupLogo() {
-        val logo = "https://cdn.discordapp.com/attachments/1224593462951673898/1245771315370135552/Untitled_design__1___1_-removebg-preview.png?ex=6659f672&is=6658a4f2&hm=bd52d66ac5559d895030f6ee527489c5672ce1da97613b773896851bdd8d0f21&"
+    private fun setupImage() {
+        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png"
         Glide.with(this@SplashScreenActivity)
-            .load(logo)
+            .load(image)
             .into(binding.imageLogo)
+    }
+
+    private fun isUserLoggedIn() {
+        userPreferences = UserPreferences.getInstance(sessionDataStore)
+
+        lifecycleScope.launch {
+            try {
+                userPreferences.isLoggedIn().collect { isLoggedIn ->
+                    if (isLoggedIn == true) {
+                        moveToMain()
+                    } else {
+                        moveToOnboarding()
+                    }
+                }
+            } catch (_: CancellationException) {
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in collecting user login status", e)
+            }
+        }
     }
 
     private fun moveToOnboarding() {
@@ -50,4 +81,15 @@ class SplashScreenActivity : AppCompatActivity() {
         }, delay)
     }
 
+    private fun moveToMain() {
+        window.decorView.postDelayed({
+            startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+            finish()
+        }, delay)
+    }
+
+    companion object {
+        private const val TAG = "SplashScreenActivity"
+        const val USER_SESSION = "user_session"
+    }
 }

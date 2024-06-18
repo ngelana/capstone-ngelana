@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/placeImage"
+                android:id="@+id/planImage"
                 android:layout_width="match_parent"
                 android:layout_height="84dp"
                 android:background="@drawable/rounded_corners_transparent"
@@ -42,7 +42,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/placeName"
+                android:id="@+id/planName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -54,10 +54,10 @@
                 app:layout_constraintBottom_toBottomOf="@+id/bgTop"
                 app:layout_constraintEnd_toEndOf="@id/bgTop"
                 app:layout_constraintStart_toStartOf="@id/bgTop"
-                app:layout_constraintTop_toBottomOf="@+id/placeImage" />
+                app:layout_constraintTop_toBottomOf="@+id/planImage" />
 
             <TextView
-                android:id="@+id/placeDescription"
+                android:id="@+id/planDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -66,7 +66,7 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/placeImage" />
+                app:layout_constraintTop_toTopOf="@id/planImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

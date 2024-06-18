@@ -14,7 +14,6 @@ import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
-import com.capstonehore.ngelana.view.home.PlanViewModel
 import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 import com.capstonehore.ngelana.view.home.plan.result.ResultPlanActivity
 
@@ -22,7 +21,7 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCustomizePlanBinding
 
-    private lateinit var planViewModel: PlanViewModel
+    private lateinit var customizePlanViewModel: CustomizePlanViewModel
 
     private var planList = ArrayList<Place>()
 
@@ -36,9 +35,9 @@ class CustomizePlanActivity : AppCompatActivity() {
         binding = ActivityCustomizePlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        planViewModel = PlanViewModel(this)
+        customizePlanViewModel = CustomizePlanViewModel(this)
 
-        planList = planViewModel.loadPlanList()
+        planList = customizePlanViewModel.loadPlanList()
 
         newPlace = intent.getParcelableExtra(EXTRA_PLACE)
 
@@ -114,7 +113,7 @@ class CustomizePlanActivity : AppCompatActivity() {
             override fun onClearButtonClicked(item: Place) {
                 planList.remove(item)
                 planAdapter.notifyDataSetChanged()
-                planViewModel.savePlanList(planList)
+                customizePlanViewModel.savePlanList(planList)
                 setupData()
 
                 val returnIntent = Intent().apply {
@@ -130,7 +129,7 @@ class CustomizePlanActivity : AppCompatActivity() {
         newPlace?.let {
             if (!planList.contains(it)) {
                 planList.add(it)
-                planViewModel.savePlanList(planList)
+                customizePlanViewModel.savePlanList(planList)
                 setupData()
             }
         }

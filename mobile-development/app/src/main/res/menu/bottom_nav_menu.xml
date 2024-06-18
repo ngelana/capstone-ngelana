@@ -12,6 +12,11 @@
         android:title="@string/explore"/>
 
     <item
+        android:id="@+id/navigation_plan"
+        android:icon="@drawable/ic_route"
+        android:title="@string/app_name"/>
+
+    <item
         android:id="@+id/navigation_trip"
         android:icon="@drawable/ic_home_repair_service"
         android:title="@string/my_trips"/>

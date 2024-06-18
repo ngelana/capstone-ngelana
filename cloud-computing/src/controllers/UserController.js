@@ -8,6 +8,8 @@ const {
   compareHashedPass,
 } = require("../services/AuthServices");
 const parseDate = require("../services/UtilServices");
+const { isValidUserId } = require("../services/UserServices");
+
 // Middleware auth
 
 // Register user
@@ -22,10 +24,11 @@ router.post("/register", async (req, res) => {
         password: hashedPassword,
       },
     });
-    res.status(201).json({ message: "User registered successfully!" });
+    return res.status(201).json({ message: "User registered successfully!" });
   } catch (error) {
-    res.status(500).json({
-      message: `Error registering user, Error:${error.message}`,
+    console.error(error);
+    return res.status(500).json({
+      message: `Error registering user`,
     });
   }
 });
@@ -76,8 +79,9 @@ router.post("/login", async (req, res) => {
       });
     }
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Error! Cannot login to app, Error:${error.message}`,
+      message: `Error! Cannot login to app`,
     });
   }
 });
@@ -93,19 +97,28 @@ router.post("/", accessValidation, async (req, res) => {
         email: email,
         password: password,
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        birthdate: true,
+        gender: true,
+      },
     });
     res.status(201).json({
       data: result,
       message: "User Created!",
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Error creating user! Error : ${error.message}`,
+      message: `Error creating user!`,
     });
   }
 });
 
-// Read user
+// Read all users
 router.get("/", accessValidation, async (req, res) => {
   try {
     const result = await prisma.user.findMany();
@@ -114,8 +127,42 @@ router.get("/", accessValidation, async (req, res) => {
       message: "Users Listed!",
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Error listing users! Error : ${error.message}`,
+      message: `Error listing users! `,
+    });
+  }
+});
+
+// Read user by ID
+router.get("/:id", accessValidation, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        birthdate: true,
+        gender: true,
+      },
+    });
+
+    if (!isValidUserId(id)) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
+    return res.status(200).json({
+      data: result,
+      message: `Details of UserID: ${id} Listed!`,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: `Error reading user!`,
     });
   }
 });
@@ -126,18 +173,11 @@ router.patch("/:id", accessValidation, async (req, res) => {
   const { name, email, password, phone, birthdate, gender } = req.body;
   const hashedPassword = createHashedPass(password);
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!user) {
+    if (!isValidUserId(id)) {
       return res.status(404).json({
-        message: "User not found",
+        message: `User not found!`,
       });
     }
-
     // Parse the birthdate
     const parsedBirthdate = birthdate ? parseDate(birthdate) : null;
 
@@ -153,14 +193,24 @@ router.patch("/:id", accessValidation, async (req, res) => {
       where: {
         id: id,
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        birthdate: true,
+        gender: true,
+        updatedAt: true,
+      },
     });
 
     return res
       .status(201)
       .json({ data: result, message: `User ${id} Updated!` });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Error updating user! Error : ${error.message}`,
+      message: `Error updating user! `,
     });
   }
 });
@@ -188,8 +238,9 @@ router.delete("/:id", accessValidation, async (req, res) => {
     });
     return res.status(200).json({ message: `User ${id} Deleted!` });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
-      message: `Error deleting user! Error : ${error.message}`,
+      message: `Error deleting user!`,
     });
   }
 });
@@ -208,8 +259,9 @@ router.post("/logout", accessValidation, (req, res) => {
       token: token,
     });
   } catch (error) {
-    res.status(500).json({
-      message: `Error logging out user from server. Error:${error.message}`,
+    console.error(error);
+    return res.status(500).json({
+      message: `Error logging out user from server.`,
     });
   }
 });
