@@ -1,20 +1,30 @@
 package com.capstonehore.ngelana.view.profile
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.ProfileAdapter
 import com.capstonehore.ngelana.data.local.entity.Profile
+import com.capstonehore.ngelana.data.preferences.ThemeManager
 import com.capstonehore.ngelana.databinding.FragmentProfileBinding
 import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.login.LoginActivity
+import com.capstonehore.ngelana.view.main.ThemeViewModel
+import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.profile.aboutus.AboutUsActivity
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteActivity
 import com.capstonehore.ngelana.view.profile.helpcenter.HelpCenterActivity
@@ -34,6 +44,11 @@ class ProfileFragment : Fragment() {
     private val settingsList = ArrayList<Profile>()
     private val informationList = ArrayList<Profile>()
 
+    private lateinit var themeManager: ThemeManager
+    private lateinit var themeViewModel: ThemeViewModel
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(THEME_SETTINGS)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,13 +62,12 @@ class ProfileFragment : Fragment() {
 
         setupAction()
         setupData()
+        themeSettings()
     }
 
     private fun setupAction() {
         binding.signOutButton.setOnClickListener {
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
             requireActivity().finish()
         }
     }
@@ -64,47 +78,53 @@ class ProfileFragment : Fragment() {
         setupRecyclerView(binding.rvInformation)
 
         accountList.addAll(
-            getListFromResources(
+            getListProfile(
+                R.array.data_account_code,
                 R.array.data_account_name,
                 R.array.data_account_icon
             )
         )
         settingsList.addAll(
-            getListFromResources(
+            getListProfile(
+                R.array.data_settings_code,
                 R.array.data_settings_name,
                 R.array.data_settings_icon
             )
         )
         informationList.addAll(
-            getListFromResources(
+            getListProfile(
+                R.array.data_information_code,
                 R.array.data_information_name,
                 R.array.data_information_icon
             )
         )
 
         showList(binding.rvAccount, accountList) { item ->
-            val intent = when (item.name) {
-                "Personal Information" -> Intent(requireContext(), PersonalInformationActivity::class.java)
-                "My Interest" -> Intent(requireContext(), MyInterestActivity::class.java)
-                "My Favorite" -> Intent(requireContext(), MyFavoriteActivity::class.java)
-                "My Review" -> Intent(requireContext(), MyReviewActivity::class.java)
+            val intent = when (item.code) {
+                "ngelana-personal-information" -> Intent(
+                    requireContext(),
+                    PersonalInformationActivity::class.java
+                )
+                "ngelana-my-interest" -> Intent(requireContext(), MyInterestActivity::class.java)
+                "ngelana-my-favorite" -> Intent(requireContext(), MyFavoriteActivity::class.java)
+                "ngelana-my-review" -> Intent(requireContext(), MyReviewActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }
         }
 
         showList(binding.rvSettings, settingsList) { item ->
-            val intent = when (item.name) {
-                "Language" -> Intent(requireContext(), LanguageActivity::class.java)
+            val intent = when (item.code) {
+                "ngelana-language" -> Intent(requireContext(), LanguageActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }
         }
 
         showList(binding.rvInformation, informationList) { item ->
-            val intent = when (item.name) {
-                "Help Center" -> Intent(requireContext(), HelpCenterActivity::class.java)
-                "About Us" -> Intent(requireContext(), AboutUsActivity::class.java)
+            val intent = when (item.code) {
+                "ngelana-help-center" -> Intent(requireContext(), HelpCenterActivity::class.java)
+                "ngelana-about-us" -> Intent(requireContext(), AboutUsActivity::class.java)
                 else -> null
             }
             intent?.let { startActivity(it) }
@@ -116,16 +136,17 @@ class ProfileFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
     }
 
-    private fun getListFromResources(namesResId: Int, iconsResId: Int): ArrayList<Profile> {
+    private fun getListProfile(codeResId: Int, namesResId: Int, iconsResId: Int): ArrayList<Profile> {
+        val dataCode = resources.getStringArray(codeResId)
         val dataName = resources.getStringArray(namesResId)
         val dataIcon = resources.obtainTypedArray(iconsResId)
-        val list = ArrayList<Profile>()
+        val listProfile = ArrayList<Profile>()
         for (i in dataName.indices) {
-            val profile = Profile(dataName[i], dataIcon.getResourceId(i, -1))
-            list.add(profile)
+            val profile = Profile(dataCode[i], dataName[i], dataIcon.getResourceId(i, -1))
+            listProfile.add(profile)
         }
         dataIcon.recycle()
-        return list
+        return listProfile
     }
 
     private fun showList(
@@ -143,8 +164,36 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    private fun themeSettings() {
+        themeManager = ThemeManager.getInstance(requireContext().dataStore)
+
+        themeViewModel = ViewModelProvider(
+            requireActivity(),
+            ThemeViewModelFactory(themeManager)
+        )[ThemeViewModel::class.java]
+
+        themeViewModel.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                binding.switchThemes.isChecked = true
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                binding.switchThemes.isChecked = false
+            }
+        }
+
+        binding.switchThemes.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            themeViewModel.saveThemeSetting(isChecked)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+        private const val THEME_SETTINGS = "theme_settings"
+    }
+
 }

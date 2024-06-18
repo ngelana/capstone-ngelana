@@ -1,0 +1,179 @@
+<resources>
+
+    <string name="app_name">Ngelana</string>
+
+    <!-- Navigation -->
+    <string name="home">Beranda</string>
+    <string name="explore">Jelajahi</string>
+    <string name="my_trips">Perjalanan Saya</string>
+    <string name="me">Profil Saya</string>
+
+    <!-- Toolbar Title -->
+    <string name="tourist_attractions">Objek Wisata</string>
+    <string name="culinary_spot">Tempat Kuliner</string>
+    <string name="lodging">Penginapan</string>
+    <string name="recommendation_place">Tempat Rekomendasi</string>
+    <string name="customize_place">Sesuaikan Tempat</string>
+    <string name="plan_result">Hasil Perencanaan</string>
+    <string name="personal_information">Informasi Pribadi</string>
+    <string name="my_interest">Minat Saya</string>
+    <string name="my_favorite">Favorit Saya</string>
+    <string name="my_review">Ulasan Saya</string>
+    <string name="language">Bahasa</string>
+    <string name="help_center">Pusat Bantuan</string>
+    <string name="about_us">Tentang Kami</string>
+
+    <!-- Fragment -->
+    <string name="upcoming_trip">Perjalanan Mendatang</string>
+    <string name="canceled_trip">Perjalanan Dibatalkan</string>
+    <string name="completed_trip">Perjalanan Selesai</string>
+
+    <!-- Field -->
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+
+    <!-- Empty Field -->
+    <string name="empty_name">Mohon masukkan nama Anda untuk melanjutkan.</string>
+    <string name="empty_email">Mohon masukkan alamat email Anda untuk melanjutkan.</string>
+    <string name="empty_password">Mohon masukkan kata sandi Anda untuk melanjutkan.</string>
+    <string name="empty_date">Anda perlu memilih tanggal terlebih dahulu untuk melanjutkan.</string>
+    <string name="empty_place">Anda perlu memilih setidaknya satu tempat sebelum mengirimkan.</string>
+
+    <!-- Button -->
+    <string name="login">Masuk</string>
+    <string name="sign_up">Daftar</string>
+    <string name="sign_out">Keluar</string>
+    <string name="generate">Buat</string>
+    <string name="save">Simpan</string>
+    <string name="back_to_home">Kembali ke Beranda</string>
+    <string name="dark_mode">Mode Gelap</string>
+
+    <!-- Home -->
+    <string name="plan">Rencana</string>
+    <string name="location">Lokasi</string>
+    <string name="destinations">Destinasi</string>
+    <string name="home_title">Atur %1$s Anda!</string>
+    <string name="home_description">Mulai merencanakan perjalanan Anda dengan Ngelana dengan mengklik gambar di samping.</string>
+    <string name="favorite_place">Temukan tempat favorit Anda</string>
+    <string name="popular_places_in_bali">Tempat populer di Bali</string>
+    <string name="see_all">Lihat semua</string>
+
+    <string name="choose_the_date_for_your_trip">Pilih tanggal untuk perjalanan Anda!</string>
+    <string name="select_date">Pilih Tanggal</string>
+
+    <string name="add_place">Tambahkan tempat</string>
+    <string name="start_destination">Tujuan Awal</string>
+    <string name="end_destination">Tujuan Akhir</string>
+    <string name="set_your_trip_name">Atur Nama Perjalanan Anda</string>
+    <string name="enter_trip_name">Masukkan Nama Perjalanan</string>
+    <string name="trip_name">Nama Perjalanan:</string>
+    <string name="date">Tanggal:</string>
+
+    <!-- Explore -->
+    <string name="tourist_attractions_desc">Destinasi populer seperti landmark, situs bersejarah, dan atraksi alam.</string>
+    <string name="culinary_spot_desc">Tempat-tempat yang dikenal karena hidangan lokal, makanan jalanan, dan pengalaman makan unik.</string>
+    <string name="lodging_desc">Pilihan akomodasi seperti hotel, hostel, dan resor.</string>
+
+    <!-- My Trip -->
+    <string name="completed">Selesai</string>
+    <string name="q_completed">Apakah Anda sudah menyelesaikan perjalanan Anda?</string>
+    <string name="write_a_review">Tulis ulasan..</string>
+    <string name="already_review">Anda sudah meninggalkan ulasan untuk tempat ini.</string>
+    <string name="cancel_the_trip">Batalkan Perjalanan</string>
+    <string name="start_plan_completed_button">Rencanakan Perjalanan Selanjutnya</string>
+    <string name="start_plan_canceled_button">Rencanakan Perjalanan Baru</string>
+
+    <!-- Profile -->
+    <string name="welcome">Selamat datang,</string>
+    <string name="my_account">Akun Saya</string>
+    <string name="settings">Pengaturan</string>
+    <string name="information">Informasi</string>
+
+    <string name="edit">Edit</string>
+    <string name="date_of_birth">Tanggal Lahir</string>
+    <string name="gender">Jenis Kelamin</string>
+    <string name="woman">Wanita</string>
+    <string name="man">Pria</string>
+    <string name="phone_number">Nomor Telepon</string>
+    <string name="joined_at">Bergabung Pada</string>
+
+    <string name="add_interest">Tambahkan Minat</string>
+    <string name="add_favorite">Tambahkan ke Favorit</string>
+
+    <string name="help_topics">Tema Bantuan</string>
+    <string name="can_t_find_what_you_re_looking_for">Tidak dapat menemukan yang Anda cari?</string>
+    <string name="contact_us">Hubungi Kami</string>
+    <string name="about_us_description">
+        Ngelana adalah aplikasi mobile inovatif yang dirancang untuk meningkatkan pengalaman wisata
+        dengan menyediakan informasi lokasi di objek wisata bagi pengguna. Aplikasi ini bertujuan
+        untuk mengatasi masalah umum di destinasi wisata yang ramai, di mana hal itu dapat menyebabkan
+        jadwal menjadi berantakan dan membuat pengguna kecewa. Dengan memanfaatkan algoritma data
+        yang dihasilkan oleh pengguna, Ngelana dapat membuat prediksi tentang destinasi wisata potensial
+        berdasarkan lokasi dan minat pengguna saat ini. Dengan begitu, pengguna dapat membuat keputusan
+        lebih tepat dan mengoptimalkan waktu mereka dalam melakukan perjalanan.
+    </string>
+
+    <!-- Onboarding Page  -->
+    <string name="onboarding">Buat Akun</string>
+
+    <!-- Login Page -->
+    <string name="login_title">Selamat Datang Kembali di %1$s!</string>
+    <string name="login_description">Masuk ke Ngelana dan lanjutkan perjalanan unik Anda dari tempat terakhir Anda berhenti.</string>
+    <string name="login_button_from_register">Sudah punya akun? %1$s di sini.</string>
+    <string name="login_here">Masuk</string>
+
+    <!-- Register Page -->
+    <string name="register_title">Bergabung dengan %1$s dan Mulailah Perjalanan Anda!</string>
+    <string name="register_description">Petualangan pribadi Anda menunggu! Daftar di Ngelana dan temukan keajaiban dunia.</string>
+    <string name="register_button_from_login">Belum punya akun? %1$s di sini.</string>
+    <string name="sign_up_here">Daftar</string>
+
+    <!-- Sign Up Page -->
+    <string name="back">Kembali</string>
+    <string name="_0">(0)</string>
+    <string name="enter_your_name">Masukkan nama Anda</string>
+    <string name="enter_your_email">Masukkan email Anda</string>
+    <string name="enter_your_password">Masukkan kata sandi Anda</string>
+    <string name="what_s_your_name">Siapa nama Anda?</string>
+    <string name="what_s_your_email">Apa email Anda?</string>
+    <string name="set_your_password">Atur kata sandi Anda!</string>
+    <string name="signup_title">Bergabung dengan Ngelana dan Mulailah Perjalanan Anda!</string>
+    <string name="signup_description">Petualangan pribadi Anda menunggu! Daftar di Ngelana dan temukan keajaiban dunia.</string>
+    <string name="recommendation_title">Jelajahi Lebih Jauh dengan Rekomendasi Ngelana</string>
+    <string name="recommendation_description">Biarkan Ngelana membimbing Anda melampaui batas. Temukan destinasi baru, cicipi berbagai budaya, dan mulailah perjalanan penemuan Anda.</string>
+    <string name="customize_description">Sesuaikan rencana perjalanan Anda dengan mudah menggunakan perencana destinasi yang ramah pengguna dari Ngelana. Rencanakan perjalanan Anda, tambahkan tempat favorit, dan nikmati pengaturan perjalanan yang mulus.</string>
+    <string name="customize_title">Penyesuaian Tanpa Upaya: Perencana Destinasi Ngelana yang Mudah Digunakan</string>
+
+    <!-- Interest Page -->
+    <string name="interest">Minat</string>
+    <string name="interest_title">Temukan Rekomendasi Anda yang Sempurna!</string>
+    <string name="interest_description">Silakan pilih minat Anda di bawah ini. Kami akan menggunakan informasi ini untuk mempersonalisasi rekomendasi yang paling cocok dengan preferensi dan kebutuhan Anda.</string>
+    <string name="skip">Lewati</string>
+    <string name="next">Selanjutnya</string>
+
+    <!-- Tab Pager -->
+    <string name="tab_text_1">Mendatang</string>
+    <string name="tab_text_2">Selesai</string>
+    <string name="tab_text_3">Dibatalkan</string>
+
+    <!-- Success condition -->
+    <string name="register_success">Selamat! Akun Anda berhasil dibuat.</string>
+    <string name="register_message">Anda sekarang dapat masuk dan mulai menjelajahi platform kami. \n Tekan \'Lanjutkan\' untuk melanjutkan ke halaman masuk.</string>
+    <string name="continue_login">Lanjutkan</string>
+    <string name="successfully_logged_in">Anda berhasil masuk. Selamat datang kembali!</string>
+    <string name="successfully_logged_out">Anda telah berhasil keluar. Sampai jumpa lagi!</string>
+    <string name="permission_request_granted">Permintaan izin disetujui.</string>
+    <string name="successfully_take_pictures">Berhasil mengambil foto.</string>
+
+    <!-- Failed Condition  -->
+    <string name="not_available">Tidak tersedia.</string>
+    <string name="failed_to_load_data">Gagal memuat data.</string>
+    <string name="permission_request_denied">Permintaan izin ditolak.</string>
+    <string name="invalid_email_format">Format email tidak valid.</string>
+    <string name="passwords_must_have_at_least_8_characters">Kata sandi harus memiliki minimal 8 karakter.</string>
+    <string name="enable_location_first">Harap aktifkan lokasi terlebih dahulu untuk melanjutkan</string>
+    <string name="location_not_found">Lokasi tidak ditemukan. Coba Lagi</string>
+    <string name="no_data_available">Tidak ada data tersedia.</string>
+
+</resources>

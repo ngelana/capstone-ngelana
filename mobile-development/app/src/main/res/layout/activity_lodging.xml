@@ -33,8 +33,8 @@
         <View
             android:id="@+id/divider_1"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?attr/colorOnSecondary"
+            android:layout_height="0.5dp"
+            android:background="@color/light_grey"
             app:layout_constraintBottom_toBottomOf="@+id/appBarLayout" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -48,17 +48,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_1"/>
 
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/searchBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rounded_croners_searchview"
+            android:hint="@string/destinations"
+            app:backgroundTint="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progressIndicator" />
+
+        <com.google.android.material.search.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:hint="@string/destinations"
+            android:textColor="?attr/colorSecondaryVariant"
+            app:backgroundTint="?attr/colorPrimary"
+            app:layout_anchor="@id/searchBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchBar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPlaces"
@@ -68,7 +80,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchView" />
+            app:layout_constraintTop_toBottomOf="@+id/searchBar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

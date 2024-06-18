@@ -13,15 +13,23 @@ class LodgingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLodgingBinding
 
-    private val placeList = ArrayList<Place>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLodgingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        placeList.addAll(getListPlace())
+        setupToolbar()
         setupView()
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            setSupportActionBar(topAppBar)
+            topAppBar.setNavigationIcon(R.drawable.ic_arrow_back)
+            topAppBar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 
     private fun getListPlace(): ArrayList<Place> {
@@ -38,6 +46,7 @@ class LodgingActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
+        val placeList = getListPlace()
         val placeAdapter = PlaceAdapter(placeList)
 
         binding.rvPlaces.apply {

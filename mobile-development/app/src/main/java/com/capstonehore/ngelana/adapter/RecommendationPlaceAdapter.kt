@@ -7,7 +7,8 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ItemRecommendationPlaceBinding
 
-class RecommendationPlaceAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapter<RecommendationPlaceAdapter.ListViewHolder>() {
+class RecommendationPlaceAdapter(private val listPlace: ArrayList<Place>) :
+    RecyclerView.Adapter<RecommendationPlaceAdapter.RecommendationPlaceViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
     private lateinit var onClearButtonClickCallback: OnClearButtonClickCallback
@@ -25,19 +26,19 @@ class RecommendationPlaceAdapter(private val listPlace: ArrayList<Place>) : Recy
         this.onAddButtonClickCallback = onAddButtonClickCallback
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendationPlaceViewHolder {
         val binding = ItemRecommendationPlaceBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return ListViewHolder(binding)
+        return RecommendationPlaceViewHolder(binding)
     }
 
     override fun getItemCount(): Int = listPlace.size
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecommendationPlaceViewHolder, position: Int) {
         val (name, description, image) = listPlace[position]
         with(holder.binding) {
             placeName.text = name
@@ -62,7 +63,8 @@ class RecommendationPlaceAdapter(private val listPlace: ArrayList<Place>) : Recy
         }
     }
 
-    class ListViewHolder(var binding: ItemRecommendationPlaceBinding) : RecyclerView.ViewHolder(binding.root)
+    class RecommendationPlaceViewHolder(var binding: ItemRecommendationPlaceBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
         fun onItemClicked(items: Place)

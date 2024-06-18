@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/backgroundColor">
+
+    <View
+        android:id="@+id/verticalLine_1"
+        android:layout_width="4dp"
+        android:layout_height="140dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/circleView_1"
+        app:layout_constraintEnd_toEndOf="@+id/circleView_1"
+        app:layout_constraintStart_toStartOf="@+id/circleView_1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/circleView_1"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/verticalLine_2"
+        android:layout_width="4dp"
+        android:layout_height="140dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/circleView_1"
+        app:layout_constraintEnd_toEndOf="@+id/circleView_1"
+        app:layout_constraintStart_toStartOf="@+id/circleView_1"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:cardBackgroundColor="?attr/backgroundColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/circleView_1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/cornersView"
+                android:layout_width="8dp"
+                android:layout_height="128dp"
+                android:background="@drawable/rounded_corners_left"
+                app:layout_constraintBottom_toBottomOf="@+id/placeImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/placeImage" />
+
+            <ImageView
+                android:id="@+id/placeImage"
+                android:layout_width="0dp"
+                android:layout_height="128dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_image"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/placeName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/name"
+                android:textColor="?attr/colorSecondaryVariant"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/placeImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/placeImage" />
+
+            <View
+                android:id="@+id/bgReview"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_corners_light_grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/placeImage" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                app:layout_constraintEnd_toEndOf="@id/bgReview"
+                app:layout_constraintStart_toStartOf="@id/bgReview"
+                app:layout_constraintTop_toTopOf="@+id/bgReview" />
+
+            <EditText
+                android:id="@+id/edReviewDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_corners_white"
+                android:gravity="start|top"
+                android:hint="@string/write_a_review"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:maxLength="1000"
+                android:minLines="4"
+                android:padding="8dp"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/bgReview"
+                app:layout_constraintEnd_toEndOf="@+id/bgReview"
+                app:layout_constraintStart_toStartOf="@id/bgReview"
+                app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="84dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_corners_light_grey"
+                android:text="@string/save"
+                android:textColor="?attr/colorSecondaryVariant"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+                app:layout_constraintEnd_toEndOf="@id/bgReview"
+                app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+
+            <TextView
+                android:id="@+id/tvReviewDone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/already_review"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/bgReview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/bgReview"
+                app:layout_constraintTop_toTopOf="@+id/bgReview" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,27 +7,33 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ItemPlanBinding
 
-class PlanAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapter<PlanAdapter.ListViewHolder>() {
+class PlanAdapter(private val listPlace: ArrayList<Place>) :
+    RecyclerView.Adapter<PlanAdapter.PlanViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
+    private lateinit var onClearButtonClickCallback: OnClearButtonClickCallback
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+    fun setOnClearButtonClickCallback(onClearButtonClickCallback: OnClearButtonClickCallback) {
+        this.onClearButtonClickCallback = onClearButtonClickCallback
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanViewHolder {
         val binding = ItemPlanBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return ListViewHolder(binding)
+        return PlanViewHolder(binding)
     }
 
     override fun getItemCount(): Int = listPlace.size
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlanViewHolder, position: Int) {
         val (name, _, image) = listPlace[position]
         with(holder.binding) {
             placeName.text = name
@@ -40,11 +46,20 @@ class PlanAdapter(private val listPlace: ArrayList<Place>) : RecyclerView.Adapte
             @Suppress("DEPRECATION")
             onItemClickCallback.onItemClicked(listPlace[holder.adapterPosition])
         }
+
+        holder.binding.clearButton.setOnClickListener {
+            @Suppress("DEPRECATION")
+            onClearButtonClickCallback.onClearButtonClicked(listPlace[holder.adapterPosition])
+        }
     }
 
-    class ListViewHolder(var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root)
+    class PlanViewHolder(var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
         fun onItemClicked(items: Place)
+    }
+
+    interface OnClearButtonClickCallback {
+        fun onClearButtonClicked(item: Place)
     }
 }

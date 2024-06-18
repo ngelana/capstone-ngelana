@@ -2,8 +2,8 @@ package com.capstonehore.ngelana.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -14,17 +14,26 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.preferences.ThemeManager
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.view.main.MainActivity
-import com.capstonehore.ngelana.view.register.RegisterActivity
+import com.capstonehore.ngelana.view.main.ThemeViewModel
+import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
+import com.capstonehore.ngelana.view.signup.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+
+    private lateinit var themeManager: ThemeManager
+    private lateinit var themeViewModel: ThemeViewModel
+
+    private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,30 +41,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
-        setupStatusBar()
         setupAnimation()
         setupTitle()
         setupButton()
+        themeSettings()
     }
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener { setupLogin() }
-    }
-
-    private fun setupStatusBar() {
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.dark_blue)
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-            }
-        }
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.isAppearanceLightStatusBars = true
     }
 
     private fun setupAnimation() {
@@ -106,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
         )
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+                startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
             }
         }
 
@@ -141,4 +134,24 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun themeSettings() {
+        themeManager = ThemeManager.getInstance(dataStore)
+
+        themeViewModel = ViewModelProvider(
+            this@LoginActivity,
+            ThemeViewModelFactory(themeManager)
+        )[ThemeViewModel::class.java]
+
+        themeViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+    }
+
+    companion object {
+        const val THEME_SETTINGS = "theme_settings"
+    }
 }
