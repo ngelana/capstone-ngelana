@@ -196,5 +196,16 @@
     <string name="plan_creation_failed">Gagal membuat rencana</string>
 
     <string name="sign_out_confirmation_message">Apakah Anda yakin ingin keluar?</string>
+    <string name="tv_similiar_place">Anda mungkin juga menyukai tempat-tempat ini</string>
+    <string name="set_my_name">Atur nama saya</string>
+    <string name="set_my_date_of_birth">Atur tanggal lahir saya</string>
+    <string name="set_my_gender">Atur jenis kelamin saya</string>
+    <string name="set_my_phone_number">Atur nomor telepon saya</string>
+    <string name="set_my_email">Atur email saya</string>
+    <string name="delete_my_account">Hapus akun saya</string>
+    <string name="user_updated_successfully">Pengguna berhasil diperbarui!</string>
+    <string name="failed_to_update_user">Gagal memperbarui pengguna: %1$s</string>
+    <string name="delete_account_confirmation_message">Apakah Anda yakin ingin menghapus akun Anda?</string>
+    <string name="delete_account">Hapus Akun</string>
 
 </resources>
