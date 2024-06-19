@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserPreferences constructor(private val dataStore: DataStore<Preferences>) {
+class UserPreferences(private val dataStore: DataStore<Preferences>) {
 
     suspend fun prefLogin() {
         dataStore.edit {
@@ -30,20 +30,32 @@ class UserPreferences constructor(private val dataStore: DataStore<Preferences>)
         }
     }
 
+
+    fun getUserId(): Flow<String?> = dataStore.data.map {
+        it[USER_ID_KEY]
+    }
+
     suspend fun saveUserId(userId: String) {
         dataStore.edit {
             it[USER_ID_KEY] = userId
         }
     }
 
-    fun getUserId(): Flow<String?> = dataStore.data.map {
-        it[USER_ID_KEY]
+    fun getUserPreferenceId(): Flow<String?> = dataStore.data.map {
+        it[USER_PREFERENCE_ID_KEY]
+    }
+
+    suspend fun saveUserPreferenceId(userPreferenceId: String) {
+        dataStore.edit {
+            it[USER_PREFERENCE_ID_KEY] = userPreferenceId
+        }
     }
 
     suspend fun logout() = dataStore.edit {
         it[TOKEN_KEY] = ""
-        it[STATE_KEY] = false
         it[USER_ID_KEY] = ""
+        it[USER_PREFERENCE_ID_KEY] = ""
+        it[STATE_KEY] = false
     }
 
     companion object {
@@ -53,6 +65,7 @@ class UserPreferences constructor(private val dataStore: DataStore<Preferences>)
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
         private val USER_ID_KEY = stringPreferencesKey("user_id")
+        private val USER_PREFERENCE_ID_KEY = stringPreferencesKey("user_preference_id")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreferences {
             return INSTANCE ?: synchronized(this) {

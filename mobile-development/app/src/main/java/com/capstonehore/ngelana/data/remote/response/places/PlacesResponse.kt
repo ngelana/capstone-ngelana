@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 data class PlacesResponse(
 
 	@field:SerializedName("data")
-	val data: List<PlaceItem?>? = null
+	val data: List<PlaceItem>? = null
 )

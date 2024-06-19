@@ -8,9 +8,12 @@ import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.di.Injection
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.home.HomeViewModel
+import com.capstonehore.ngelana.view.home.plan.PlanViewModel
 import com.capstonehore.ngelana.view.login.LoginViewModel
 import com.capstonehore.ngelana.view.profile.ProfileViewModel
-import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
+import com.capstonehore.ngelana.view.profile.favorite.FavoriteViewModel
+import com.capstonehore.ngelana.view.profile.interest.InterestViewModel
+import com.capstonehore.ngelana.view.profile.review.ReviewViewModel
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 
 class ViewModelFactory(
@@ -35,11 +38,20 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(PlaceViewModel::class.java) -> {
                 PlaceViewModel(repository) as T
             }
+            modelClass.isAssignableFrom(PlanViewModel::class.java) -> {
+                PlanViewModel(repository) as T
+            }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(repository, preferences) as T
             }
-            modelClass.isAssignableFrom(MyFavoriteViewModel::class.java) -> {
-                MyFavoriteViewModel(repository) as T
+            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
+                FavoriteViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(InterestViewModel::class.java) -> {
+                InterestViewModel(repository, preferences) as T
+            }
+            modelClass.isAssignableFrom(ReviewViewModel::class.java) -> {
+                ReviewViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

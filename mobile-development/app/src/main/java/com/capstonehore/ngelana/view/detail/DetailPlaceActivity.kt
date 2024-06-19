@@ -22,7 +22,7 @@ import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityDetailPlaceBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
-import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
+import com.capstonehore.ngelana.view.profile.favorite.FavoriteViewModel
 
 class DetailPlaceActivity : AppCompatActivity() {
 
@@ -32,7 +32,7 @@ class DetailPlaceActivity : AppCompatActivity() {
     private var currentLocation: Location? = null
 
     private lateinit var placeViewModel: PlaceViewModel
-    private lateinit var myFavoriteViewModel: MyFavoriteViewModel
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     private var isFavorite = false
 
@@ -83,8 +83,10 @@ class DetailPlaceActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data
-                        setupDetailPlace(response)
+                        val response = it.data.data
+                        response?.let { item ->
+                            setupDetailPlace(item)
+                        }
                         Log.d(TAG, "Successfully Show Detail of Place: $response")
                     }
                     is Result.Error -> {
@@ -219,10 +221,11 @@ class DetailPlaceActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data
-                        val randomPlacesWithFiltering = getRandomPlaces(response)
-
-                        similarPlaceAdapter.submitList(randomPlacesWithFiltering)
+                        val response = it.data.data
+                        response?.let { item ->
+                            val randomPlacesWithFiltering = getRandomPlaces(item)
+                            similarPlaceAdapter.submitList(randomPlacesWithFiltering)
+                        }
                         Log.d(TAG, "Successfully Show Similar Place: $response")
                     }
                     is Result.Error -> {
@@ -238,10 +241,10 @@ class DetailPlaceActivity : AppCompatActivity() {
     }
 
     private fun setupFavorite(placeItem: PlaceItem?) {
-        myFavoriteViewModel = ViewModelProvider(
+        favoriteViewModel = ViewModelProvider(
             this,
             ViewModelFactory.getInstance(this@DetailPlaceActivity, UserPreferences.getInstance(sessionDataStore))
-        )[MyFavoriteViewModel::class.java]
+        )[FavoriteViewModel::class.java]
 
         placeItem?.let { item ->
             val randomIndex = item.urlPlaceholder?.indices?.random()
@@ -262,7 +265,7 @@ class DetailPlaceActivity : AppCompatActivity() {
                     placeType.joinToString(", ")
                 )
 
-                myFavoriteViewModel.getFavoriteByPlaceId(placeId).observe(this) {
+                favoriteViewModel.getFavoriteByPlaceId(placeId).observe(this) {
                     isFavorite = it != null
                     setIcon()
                 }
@@ -270,11 +273,11 @@ class DetailPlaceActivity : AppCompatActivity() {
                 binding.favoriteButton.setOnClickListener {
                     when {
                         !isFavorite -> {
-                            myFavoriteViewModel.insertFavoritePlace(favorite)
+                            favoriteViewModel.insertFavoritePlace(favorite)
                             showToast("Successfully added $placeName to Favorite!")
                         }
                         else -> {
-                            myFavoriteViewModel.deleteFavoritePlace(favorite)
+                            favoriteViewModel.deleteFavoritePlace(favorite)
                             showToast("Successfully deleted $placeName from favorite users.")
                         }
                     }

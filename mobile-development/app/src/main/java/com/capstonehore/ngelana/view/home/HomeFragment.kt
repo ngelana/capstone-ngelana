@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,6 @@ import com.capstonehore.ngelana.databinding.FragmentHomeBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
-
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -148,16 +148,21 @@ class HomeFragment : Fragment() {
                         is Result.Success -> {
                             showLoading(false)
 
-                            val response = it.data
-                            val randomPlacesWithFiltering = getRandomPlaces(response)
-                            val randomPlacesWithoutFiltering = response.shuffled().take(8)
+                            val response = it.data.data
+                            response?.let { item ->
+                                val randomPlacesWithFiltering = getRandomPlaces(response)
+                                val randomPlacesWithoutFiltering = response.shuffled().take(8)
 
-                            popularAdapter.submitList(randomPlacesWithFiltering)
-                            placeAdapter.submitList(randomPlacesWithoutFiltering)
+                                popularAdapter.submitList(randomPlacesWithFiltering)
+                                placeAdapter.submitList(randomPlacesWithoutFiltering)
+                            }
+                            Log.d(TAG, "Successfully Show All Places: $response")
                         }
                         is Result.Error -> {
                             showLoading(false)
+
                             showToast(it.error)
+                            Log.d(TAG, "Failed to Show All Places: ${it.error}")
                         }
                         is Result.Loading -> showLoading(true)
                     }

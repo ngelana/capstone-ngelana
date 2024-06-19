@@ -6,7 +6,7 @@ import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.repository.GeneralRepository
 import kotlinx.coroutines.launch
 
-class MyFavoriteViewModel(private val repository: GeneralRepository): ViewModel() {
+class FavoriteViewModel(private val repository: GeneralRepository): ViewModel() {
 
     fun getAllFavorites() = repository.getAllFavorites()
 

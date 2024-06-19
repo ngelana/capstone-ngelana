@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class UserPreferenceResponse(
 
 	@field:SerializedName("data")
-	val data: List<UserDataPreferencesItem?>? = null,
+	val data: List<UserDataPreferencesItem>? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null

@@ -81,7 +81,7 @@ class TouristAttractionsActivity : AppCompatActivity() {
                         is Result.Success -> {
                             showLoading(false)
 
-                            val response = it.data
+                            val response = it.data.data
                             placeAdapter.submitList(response)
                         }
                         is Result.Error -> {
@@ -101,7 +101,7 @@ class TouristAttractionsActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data
+                        val response = it.data.data
                         placeAdapter.submitList(response)
                         Log.d(TAG, "Successfully Show Places: $response")
                     }

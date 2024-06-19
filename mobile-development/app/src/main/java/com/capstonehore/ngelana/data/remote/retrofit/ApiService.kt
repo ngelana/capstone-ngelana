@@ -1,10 +1,13 @@
 package com.capstonehore.ngelana.data.remote.retrofit
 
+import com.capstonehore.ngelana.data.remote.response.PlanUserItem
 import com.capstonehore.ngelana.data.remote.response.ReviewItem
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.data.remote.response.places.PlaceResponseById
 import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
+import com.capstonehore.ngelana.data.remote.response.plan.PlaceRecommendedResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
+import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponseByUserId
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
@@ -79,6 +82,18 @@ interface ApiService {
 
 
     // Plan
+    @POST("plan/recommend")
+    suspend fun getRecommendedPlace(
+        @Field("userId") userId: String,
+        @Field("date") date: String,
+        @Field("preferenceId") preferenceId: String
+    ): PlaceRecommendedResponse
+
+    @POST("plan/finalize")
+    suspend fun setPlanResult(
+        @Body planUserItem: PlanUserItem
+    ): PlanResultResponse
+
     @GET("plan")
     suspend fun getPlanByUserId(
         @Field("userId") userId: String

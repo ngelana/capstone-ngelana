@@ -26,7 +26,7 @@ import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentDetailPlaceBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
-import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteViewModel
+import com.capstonehore.ngelana.view.profile.favorite.FavoriteViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class DetailPlaceFragment : BottomSheetDialogFragment() {
@@ -39,7 +39,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     private var currentLocation: Location? = null
 
     private lateinit var placeViewModel: PlaceViewModel
-    private lateinit var myFavoriteViewModel: MyFavoriteViewModel
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     private var isFavorite = false
 
@@ -84,8 +84,10 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data
-                        setupDetailPlace(response)
+                        val response = it.data.data
+                        response?.let { item ->
+                            setupDetailPlace(item)
+                        }
                         Log.d(TAG, "Successfully Show Detail of Place: $response")
                     }
                     is Result.Error -> {
@@ -223,10 +225,11 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data
-                        val randomPlacesWithFiltering = getRandomPlaces(response)
-
-                        similarPlaceAdapter.submitList(randomPlacesWithFiltering)
+                        val response = it.data.data
+                        response?.let { item ->
+                            val randomPlacesWithFiltering = getRandomPlaces(item)
+                            similarPlaceAdapter.submitList(randomPlacesWithFiltering)
+                        }
                         Log.d(TAG, "Successfully Show Similar Place: $response")
                     }
                     is Result.Error -> {
@@ -242,10 +245,10 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupFavorite(placeItem: PlaceItem?) {
-        myFavoriteViewModel = ViewModelProvider(
+        favoriteViewModel = ViewModelProvider(
             this,
             ViewModelFactory.getInstance(requireActivity(), UserPreferences.getInstance(requireActivity().sessionDataStore))
-        )[MyFavoriteViewModel::class.java]
+        )[FavoriteViewModel::class.java]
 
         placeItem?.let { item ->
             val randomIndex = item.urlPlaceholder?.indices?.random()
@@ -266,7 +269,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                     placeType.joinToString(", ") // Join the list into a comma-separated string
                 )
 
-                myFavoriteViewModel.getFavoriteByPlaceId(placeId).observe(viewLifecycleOwner) {
+                favoriteViewModel.getFavoriteByPlaceId(placeId).observe(viewLifecycleOwner) {
                     isFavorite = it != null
                     setIcon()
                 }
@@ -274,11 +277,11 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                 binding.favoriteButton.setOnClickListener {
                     when {
                         !isFavorite -> {
-                            myFavoriteViewModel.insertFavoritePlace(favorite)
+                            favoriteViewModel.insertFavoritePlace(favorite)
                             showToast("Successfully added $placeName to Favorite!")
                         }
                         else -> {
-                            myFavoriteViewModel.deleteFavoritePlace(favorite)
+                            favoriteViewModel.deleteFavoritePlace(favorite)
                             showToast("Successfully deleted $placeName from favorite users.")
                         }
                     }

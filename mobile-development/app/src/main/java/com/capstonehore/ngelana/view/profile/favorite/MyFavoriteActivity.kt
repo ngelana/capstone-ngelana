@@ -25,7 +25,7 @@ class MyFavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyFavoriteBinding
 
     private lateinit var placeViewModel: PlaceViewModel
-    private lateinit var myFavoriteViewModel: MyFavoriteViewModel
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     private lateinit var placeAdapter: PlaceAdapter
 
@@ -36,7 +36,7 @@ class MyFavoriteActivity : AppCompatActivity() {
         binding = ActivityMyFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        myFavoriteViewModel = obtainViewModel(this@MyFavoriteActivity)
+        favoriteViewModel = obtainViewModel(this@MyFavoriteActivity)
 
         setupAction()
         setupToolbar()
@@ -80,7 +80,7 @@ class MyFavoriteActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        myFavoriteViewModel.getAllFavorites().observe(this@MyFavoriteActivity) {
+        favoriteViewModel.getAllFavorites().observe(this@MyFavoriteActivity) {
             when (it) {
                 is Result.Success -> {
                     showLoading(false)
@@ -115,12 +115,12 @@ class MyFavoriteActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: AppCompatActivity): MyFavoriteViewModel {
+    private fun obtainViewModel(activity: AppCompatActivity): FavoriteViewModel {
         val factory = ViewModelFactory.getInstance(
             activity.application,
             UserPreferences.getInstance(sessionDataStore)
         )
-        return ViewModelProvider(activity, factory)[MyFavoriteViewModel::class.java]
+        return ViewModelProvider(activity, factory)[FavoriteViewModel::class.java]
     }
 
     companion object {
