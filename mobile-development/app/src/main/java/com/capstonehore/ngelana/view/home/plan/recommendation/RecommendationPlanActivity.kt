@@ -1,7 +1,6 @@
 package com.capstonehore.ngelana.view.home.plan.recommendation
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,6 +11,7 @@ import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
+import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
 
 class RecommendationPlanActivity : AppCompatActivity() {
@@ -23,6 +23,8 @@ class RecommendationPlanActivity : AppCompatActivity() {
     private var selectedDate: String? = null
 
     private lateinit var recommendationPlaceAdapter: RecommendationPlaceAdapter
+
+    private lateinit var placeViewModel: PlaceViewModel
 
     @SuppressLint("NotifyDataSetChanged")
     val addPlaceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -81,7 +83,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
     private fun setupView() {
         placeList.addAll(getListPlace())
 
-        recommendationPlaceAdapter = RecommendationPlaceAdapter(placeList)
+        recommendationPlaceAdapter = RecommendationPlaceAdapter(placeViewModel)
 
         binding.rvPlaces.apply {
             setHasFixedSize(true)
@@ -96,28 +98,28 @@ class RecommendationPlanActivity : AppCompatActivity() {
 //            }
 //        })
 
-        recommendationPlaceAdapter.setOnClearButtonClickCallback(object : RecommendationPlaceAdapter.OnClearButtonClickCallback {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onClearButtonClicked(item: Place) {
-                placeList.remove(item)
-                recommendationPlaceAdapter.notifyDataSetChanged()
-            }
-        })
-
-        recommendationPlaceAdapter.setOnAddButtonClickCallback(object : RecommendationPlaceAdapter.OnAddButtonClickCallback {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onAddButtonClicked(item: Place) {
-                val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
-                    putExtra(CustomizePlanActivity.EXTRA_PLACE, item)
-                    putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
-                }
-                addPlaceLauncher.launch(intent)
-
-                if (placeList.remove(item)) {
-                    recommendationPlaceAdapter.notifyDataSetChanged()
-                }
-            }
-        })
+//        recommendationPlaceAdapter.setOnClearButtonClickCallback(object : RecommendationPlaceAdapter.OnClearButtonClickCallback {
+//            @SuppressLint("NotifyDataSetChanged")
+//            override fun onClearButtonClicked(item: Place) {
+//                placeList.remove(item)
+//                recommendationPlaceAdapter.notifyDataSetChanged()
+//            }
+//        })
+//
+//        recommendationPlaceAdapter.setOnAddButtonClickCallback(object : RecommendationPlaceAdapter.OnAddButtonClickCallback {
+//            @SuppressLint("NotifyDataSetChanged")
+//            override fun onAddButtonClicked(item: Place) {
+//                val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
+//                    putExtra(CustomizePlanActivity.EXTRA_PLACE, item)
+//                    putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
+//                }
+//                addPlaceLauncher.launch(intent)
+//
+//                if (placeList.remove(item)) {
+//                    recommendationPlaceAdapter.notifyDataSetChanged()
+//                }
+//            }
+//        })
     }
 
 //    private fun showToast(message: String) {

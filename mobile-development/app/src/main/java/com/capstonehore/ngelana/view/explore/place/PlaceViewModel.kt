@@ -16,6 +16,8 @@ class PlaceViewModel(
     private val repository: GeneralRepository
 ) : ViewModel() {
 
+    fun getAllPlaces() = repository.getAllPlaces()
+
     fun getPlaceById(id: String) = repository.getPlaceById(id)
 
     fun searchPlaceByQuery(query: String) = repository.searchPlaceByQuery(query)
@@ -35,7 +37,7 @@ class PlaceViewModel(
                     _locationResult.value = it
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "getLocationDetails: ${e.message}", e)
+                Log.e(TAG, "fetchLocationDetails: ${e.message}", e)
                 _locationResult.value = Result.Error(e.message ?: "Unknown error")
             }
         }

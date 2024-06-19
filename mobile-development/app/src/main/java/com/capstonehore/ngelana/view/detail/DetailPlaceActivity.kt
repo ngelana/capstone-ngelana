@@ -103,10 +103,11 @@ class DetailPlaceActivity : AppCompatActivity() {
         binding.apply {
             val placeImage = item.urlPlaceholder ?: emptyList()
             setupImageAdapter(placeImage)
-            setupLocationObserver()
+            setupLocation()
             clearCircleViews()
             addCircleViews(item)
             setupSimilarAdapter()
+            setupSimilarPlace()
 
             placeName.text = item.name
             placePrimaryType.text = item.primaryTypes
@@ -130,7 +131,9 @@ class DetailPlaceActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupLocationObserver() {
+    private fun setupLocation(): String {
+        var placeCity = getString(R.string.unknown)
+
         currentLocation?.let { location ->
             placeViewModel.getLocationDetails(this, location)
 
@@ -139,7 +142,8 @@ class DetailPlaceActivity : AppCompatActivity() {
                     when (it) {
                         is Result.Success -> {
                             val response = it.data
-                            binding.placeCity.text = response.locality ?: getString(R.string.unknown)
+                            placeCity = response.locality ?: getString(R.string.unknown)
+                            binding.placeCity.text = placeCity
                         }
                         is Result.Error -> {
                             binding.placeCity.text = getString(R.string.unknown)
@@ -150,6 +154,8 @@ class DetailPlaceActivity : AppCompatActivity() {
                 }
             }
         }
+
+        return placeCity
     }
 
     private fun clearCircleViews() {
@@ -206,10 +212,35 @@ class DetailPlaceActivity : AppCompatActivity() {
         })
     }
 
+    private fun setupSimilarPlace() {
+        placeViewModel.getAllPlaces().observe(this@DetailPlaceActivity) {
+            if (it != null) {
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
+
+                        val response = it.data
+                        val randomPlacesWithFiltering = getRandomPlaces(response)
+
+                        similarPlaceAdapter.submitList(randomPlacesWithFiltering)
+                        Log.d(TAG, "Successfully Show Similar Place: $response")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+
+                        showToast(it.error)
+                        Log.d(TAG, "Failed to Show Similar Place: ${it.error}")
+                    }
+                    is Result.Loading -> showLoading(true)
+                }
+            }
+        }
+    }
+
     private fun setupFavorite(placeItem: PlaceItem?) {
         myFavoriteViewModel = ViewModelProvider(
             this,
-            ViewModelFactory.getInstance(this, UserPreferences.getInstance(sessionDataStore))
+            ViewModelFactory.getInstance(this@DetailPlaceActivity, UserPreferences.getInstance(sessionDataStore))
         )[MyFavoriteViewModel::class.java]
 
         placeItem?.let { item ->
@@ -218,11 +249,17 @@ class DetailPlaceActivity : AppCompatActivity() {
             item.id?.let { placeId ->
                 val placeName = item.name
                 val placeImage = item.urlPlaceholder?.get(randomIndex ?: 0)
+                val placeCity = setupLocation()
+                val placeRating = item.rating.toString()
+                val placeType = item.types ?: emptyList()
 
                 val favorite = Favorite(
                     placeId,
                     placeName,
-                    placeImage
+                    placeImage,
+                    placeCity,
+                    placeRating,
+                    placeType.joinToString(", ")
                 )
 
                 myFavoriteViewModel.getFavoriteByPlaceId(placeId).observe(this) {
@@ -252,6 +289,18 @@ class DetailPlaceActivity : AppCompatActivity() {
         binding.favoriteButton.setImageResource(
             if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
         )
+    }
+
+    private fun filterHighRatingPlaces(response: List<PlaceItem>): List<PlaceItem> {
+        return response.filter { item ->
+            (item.rating ?: 0.0) > 5.0
+        }
+    }
+
+    private fun getRandomPlaces(response: List<PlaceItem>): List<PlaceItem> {
+        val highRatingPlaces = filterHighRatingPlaces(response)
+
+        return if (highRatingPlaces.size > 8) highRatingPlaces.shuffled().take(8) else highRatingPlaces
     }
 
     fun updateView(placeItem: PlaceItem?) {

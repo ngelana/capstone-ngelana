@@ -59,9 +59,8 @@ interface ApiService {
 
 
     // Places
-
-//    @GET("place")
-//    suspend fun getAllPlaces(): PlacesResponse
+    @GET("place")
+    suspend fun getAllPlaces(): PlacesResponse
 
     @GET("place/{id}")
     suspend fun getPlaceById(

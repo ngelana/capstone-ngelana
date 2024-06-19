@@ -30,10 +30,7 @@ import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import java.util.Locale
@@ -173,6 +170,22 @@ class GeneralRepository(
 
 
     // Places
+    fun getAllPlaces(): LiveData<Result<List<PlaceItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val token = getToken()
+            apiService = ApiConfig.getApiService(token.toString())
+
+            val response = apiService.getAllPlaces()
+            val places = response.data?.filterNotNull() ?: emptyList()
+
+            emit(Result.Success(places))
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching places", e)
+            emit(Result.Error("Error fetching places: ${e.message}"))
+        }
+    }
+
     fun getPlaceById(id: String): LiveData<Result<PlaceItem>> = liveData {
         emit(Result.Loading)
         try {
@@ -393,16 +406,11 @@ class GeneralRepository(
         emit(Result.Loading)
         try {
             val data = ngelanaRoomDatabase.favoriteDao().getFavoriteByPlaceId(placeId)
-
-            val job = CoroutineScope(Dispatchers.IO).launch {
-                data.value?.let { favorite ->
-                    val listFavorite = listOf(favorite)
-                    emit(Result.Success(listFavorite))
-                }
-            }
-            job.join()
+            emitSource(data.map { favorite ->
+                Result.Success(listOf(favorite))
+            })
         } catch (e: Exception) {
-            Log.d(TAG, "getFavoriteByPlaceName: ${e.message}")
+            Log.d(TAG, "getFavoriteByPlaceId: ${e.message}")
             emit(Result.Error("Error fetching data: ${e.message}"))
         }
     }
@@ -438,12 +446,10 @@ class GeneralRepository(
 
                 @Suppress("DEPRECATION")
                 val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                if (addresses != null) {
-                    if (addresses.isNotEmpty()) {
-                        emit(Result.Success(addresses[0]))
-                    } else {
-                        emit(Result.Error("No address found"))
-                    }
+                if (!addresses.isNullOrEmpty()) {
+                    emit(Result.Success(addresses[0]))
+                } else {
+                    emit(Result.Error("No address found"))
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "getLocationDetails: ${e.message}", e)

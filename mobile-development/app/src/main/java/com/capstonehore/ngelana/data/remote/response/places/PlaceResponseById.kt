@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class PlaceResponseById(
 
-	@field:SerializedName("data")
+    @field:SerializedName("data")
 	val data: PlaceItem? = null,
 
-	@field:SerializedName("message")
+    @field:SerializedName("message")
 	val message: String? = null
 )

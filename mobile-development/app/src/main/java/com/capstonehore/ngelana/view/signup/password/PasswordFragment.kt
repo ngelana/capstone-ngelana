@@ -51,13 +51,14 @@ class PasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPasswordBinding.inflate(inflater, container, false)
-        signUpViewModel = obtainViewModel(requireActivity())
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        signUpViewModel = obtainViewModel(requireActivity())
 
         setupAction()
         setupImage()

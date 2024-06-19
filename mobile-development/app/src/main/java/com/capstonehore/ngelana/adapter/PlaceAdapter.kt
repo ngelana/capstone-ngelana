@@ -62,28 +62,26 @@ class PlaceAdapter(
                     .into(placeImage)
             }
 
-            setupLocationObserver()
+            setupLocation()
             bindCircleView()
             setupListeners(item)
         }
 
-        private fun setupLocationObserver() {
+        private fun setupLocation() {
             currentLocation?.let { location ->
                 placeViewModel.getLocationDetails(itemView.context, location)
 
-                placeViewModel.locationResult.observe(itemView.context as LifecycleOwner) {
-                    if (it != null) {
-                        when (it) {
-                            is Result.Success -> {
-                                val response = it.data
-                                binding.placeCity.text = response.locality ?: itemView.context.getString(R.string.unknown)
-                            }
-                            is Result.Error -> {
-                                binding.placeCity.text = itemView.context.getString(R.string.unknown)
-                                Log.e(TAG, "Failed to get location details: ${it.error}")
-                            }
-                            is Result.Loading -> {}
+                placeViewModel.locationResult.observe(itemView.context as LifecycleOwner) { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            val response = result.data
+                            binding.placeCity.text = response.locality ?: itemView.context.getString(R.string.unknown)
                         }
+                        is Result.Error -> {
+                            binding.placeCity.text = itemView.context.getString(R.string.unknown)
+                            Log.e(TAG, "Failed to get location details: ${result.error}")
+                        }
+                        is Result.Loading -> {}
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.home
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -10,13 +11,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.adapter.FavoriteAdapter
-import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.adapter.PlaceAdapter
+import com.capstonehore.ngelana.adapter.PopularAdapter
+import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
+import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
+import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 
 class HomeFragment : Fragment() {
 
@@ -24,9 +34,15 @@ class HomeFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    private lateinit var placeAdapter: PlaceAdapter
+    private lateinit var popularAdapter: PopularAdapter
+
 //    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var placeViewModel: PlaceViewModel
 
     private val navController by lazy { findNavController() }
+
+    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,16 +56,18 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 //        homeViewModel = obtainViewModel(requireActivity())
+        placeViewModel = obtainViewModel(requireActivity())
 
         setupAction()
         setupAnimation()
         setupTitle()
+        setupAdapter()
         setupView()
 //        getDetailLocation()
     }
 
     private fun setupAction() {
-        binding.seeMoreFavorite.setOnClickListener {
+        binding.seeMorePopular.setOnClickListener {
             navController.navigate(R.id.action_navigation_home_to_navigation_explore)
         }
 
@@ -88,51 +106,75 @@ class HomeFragment : Fragment() {
         binding.tvTitle.text = spannable
     }
 
-    private fun getListPlace(): ArrayList<Place> {
-        val dataName = resources.getStringArray(R.array.data_name)
-        val dataDescription = resources.getStringArray(R.array.data_description)
-        val dataImage = resources.getStringArray(R.array.data_image)
-        val listPlace= ArrayList<Place>()
+    private fun setupAdapter() {
+        popularAdapter = PopularAdapter()
+        placeAdapter = PlaceAdapter(placeViewModel)
 
-        for (i in dataName.indices) {
-            val place = Place(dataName[i], dataDescription[i], dataImage[i])
-            listPlace.add(place)
+        binding.rvPopularPlace.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = popularAdapter
         }
-        return listPlace
+
+        binding.rvRecommendationPlace.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireActivity())
+            adapter = placeAdapter
+        }
+
+        popularAdapter.setOnItemClickCallback(object : PopularAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: PlaceItem?) {
+                data?.let {
+                    val dialogFragment = DetailPlaceFragment.newInstance(it)
+                    dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+                }
+            }
+        })
+
+        placeAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: PlaceItem?) {
+                data?.let {
+                    val dialogFragment = DetailPlaceFragment.newInstance(it)
+                    dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+                }
+            }
+        })
     }
 
     private fun setupView() {
-        val favoritePlaceList = getListPlace()
-//        val recommendationPlaceList = getListPlace()
+        placeViewModel.getAllPlaces().observe(requireActivity()) {
+                if (it != null) {
+                    when (it) {
+                        is Result.Success -> {
+                            showLoading(false)
 
-        val favoritePlaceAdapter = FavoriteAdapter(favoritePlaceList)
-//        val recommendationPlaceAdapter = PlaceAdapter(recommendationPlaceList)
+                            val response = it.data
+                            val randomPlacesWithFiltering = getRandomPlaces(response)
+                            val randomPlacesWithoutFiltering = response.shuffled().take(8)
 
-        binding.rvFavoritePlace.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = favoritePlaceAdapter
+                            popularAdapter.submitList(randomPlacesWithFiltering)
+                            placeAdapter.submitList(randomPlacesWithoutFiltering)
+                        }
+                        is Result.Error -> {
+                            showLoading(false)
+                            showToast(it.error)
+                        }
+                        is Result.Loading -> showLoading(true)
+                    }
+                }
+            }
+    }
+
+    private fun filterHighRatingPlaces(response: List<PlaceItem>): List<PlaceItem> {
+        return response.filter { item ->
+            (item.rating ?: 0.0) > 5.0
         }
+    }
 
-//        binding.rvRecommendationPlace.apply {
-//            setHasFixedSize(true)
-//            layoutManager = LinearLayoutManager(requireActivity())
-//            adapter = recommendationPlaceAdapter
-//        }
+    private fun getRandomPlaces(response: List<PlaceItem>): List<PlaceItem> {
+        val highRatingPlaces = filterHighRatingPlaces(response)
 
-//        favoritePlaceAdapter.setOnItemClickCallback(object : FavoriteAdapter.OnItemClickCallback {
-//            override fun onItemClicked(items: Place) {
-//                val dialogFragment = DetailPlaceFragment.newInstance(items)
-//                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
-//            }
-//        })
-
-//        recommendationPlaceAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
-//            override fun onItemClicked(items: Place) {
-//                val dialogFragment = DetailPlaceFragment.newInstance(items)
-//                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
-//            }
-//        })
+        return if (highRatingPlaces.size > 8) highRatingPlaces.shuffled().take(8) else highRatingPlaces
     }
 
 //    private fun updateLocationUI(location: Location) {
@@ -173,16 +215,21 @@ class HomeFragment : Fragment() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-//    private fun obtainViewModel(activity: FragmentActivity): HomeViewModel {
-//        val factory = ViewModelFactory.getInstance(
-//            requireContext(),
-//            UserPreferences.getInstance(requireContext().dataStore)
-//        )
-//        return ViewModelProvider(activity, factory)[HomeViewModel::class.java]
-//    }
+    private fun obtainViewModel(activity: FragmentActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(
+            requireContext(),
+            UserPreferences.getInstance(requireContext().sessionDataStore)
+        )
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val TAG = "HomeFragment"
+        const val USER_SESSION = "user_session"
     }
 }

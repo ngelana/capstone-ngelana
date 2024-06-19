@@ -17,5 +17,14 @@ data class Favorite(
     var placeName: String? = null,
 
     @field:ColumnInfo(name = "place_image")
-    var placeImage: String? = null
+    var placeImage: String? = null,
+
+    @field:ColumnInfo(name = "place_city")
+    var placeCity: String? = null,
+
+    @field:ColumnInfo(name = "place_rating")
+    var placeRating: String? = null,
+
+    @field:ColumnInfo(name = "place_type")
+    var placeType: String? = null
 ) : Parcelable
