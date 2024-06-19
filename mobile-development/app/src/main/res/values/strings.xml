@@ -57,6 +57,7 @@
     <string name="favorite_place">Find your favorite place</string>
     <string name="recommended_place_for_you">Recommended place for you</string>
     <string name="popular_places_in_bali">Popular places in Bali</string>
+    <string name="tv_similar_place">You might also like these places</string>
     <string name="see_all">See all</string>
 
     <string name="choose_the_date">Choose the date for your trip!</string>
@@ -98,6 +99,16 @@
     <string name="male">MALE</string>
     <string name="phone_number">Phone Number</string>
     <string name="joined_at">Joined At</string>
+
+    <string name="set_my_name">Set my name</string>
+    <string name="set_my_date_of_birth">Set my date of birth</string>
+    <string name="set_my_gender">Set my gender</string>
+    <string name="set_my_phone_number">Set my phone number</string>
+    <string name="set_my_email">Set my email</string>
+
+    <string name="delete_my_account">Delete my account</string>
+    <string name="user_updated_successfully">User updated successfully!</string>
+    <string name="failed_to_update_user">Failed to update user: %1$s</string>
 
     <string name="add_interest">Add Interest</string>
     <string name="add_favorite">Add to Favorite</string>
@@ -196,16 +207,9 @@
     <string name="plan_creation_failed">Failed to Create Plan</string>
 
     <string name="sign_out_confirmation_message">Are you sure you want to sign out?</string>
-    <string name="tv_similiar_place">You might also like these places</string>
-    <string name="set_my_name">Set my name</string>
-    <string name="set_my_date_of_birth">Set my date of birth</string>
-    <string name="set_my_gender">Set my gender</string>
-    <string name="set_my_phone_number">Set my phone number</string>
-    <string name="set_my_email">Set my email</string>
-    <string name="delete_my_account">Delete my account</string>
-    <string name="user_updated_successfully">User updated successfully!</string>
-    <string name="failed_to_update_user">Failed to update user: %1$s</string>
+
     <string name="delete_account_confirmation_message">Are you sure you want to delete your account?</string>
     <string name="delete_account">Delete Account</string>
+    <string name="unknown">Unknown</string>
 
 </resources>

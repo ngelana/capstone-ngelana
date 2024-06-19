@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -16,11 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ngelana"
         tools:targetApi="31">
-
-<!--         <meta-data-->
-<!--             android:name="com.google.android.geo.API_KEY"-->
-<!--             android:value="${MAPS_API_KEY}" />-->
-
+        <activity
+            android:name=".view.detail.DetailPlaceActivity"
+            android:exported="false" />
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.geo.API_KEY" -->
+        <!-- android:value="${MAPS_API_KEY}" /> -->
         <!-- Profile -->
         <activity
             android:name=".view.profile.personalinformation.PersonalInformationActivity"
@@ -48,9 +49,7 @@
             android:exported="false" />
         <activity
             android:name=".view.profile.about.AboutUsActivity"
-            android:exported="false" />
-
-        <!-- My Trip -->
+            android:exported="false" /> <!-- My Trip -->
         <activity
             android:name=".view.mytrip.detail.UpcomingTripDetailActivity"
             android:exported="false" />
@@ -59,9 +58,7 @@
             android:exported="false" />
         <activity
             android:name=".view.mytrip.detail.CanceledTripDetailActivity"
-            android:exported="false" />
-
-        <!-- Explore -->
+            android:exported="false" /> <!-- Explore -->
         <activity
             android:name=".view.explore.place.tourist.TouristAttractionsActivity"
             android:exported="false" />
@@ -70,9 +67,7 @@
             android:exported="false" />
         <activity
             android:name=".view.explore.place.lodging.LodgingActivity"
-            android:exported="false" />
-
-        <!-- Home -->
+            android:exported="false" /> <!-- Home -->
         <activity
             android:name=".view.home.plan.date.DatePlanActivity"
             android:exported="false" />
@@ -85,7 +80,6 @@
         <activity
             android:name=".view.home.plan.result.ResultPlanActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.splashscreen.SplashScreenActivity"
             android:exported="true">

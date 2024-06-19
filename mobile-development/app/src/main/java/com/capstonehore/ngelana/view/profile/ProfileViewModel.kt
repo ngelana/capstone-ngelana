@@ -12,12 +12,12 @@ class ProfileViewModel(
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
-    fun getUserById() = repository.getUser()
+    fun getUserById() = repository.getUserById()
 
     fun updateUserById(userInformationItem: UserInformationItem) =
-        repository.updateUser(userInformationItem)
+        repository.updateUserById(userInformationItem)
 
-    fun deleteUserById() = repository.deleteUser()
+    fun deleteUserById() = repository.deleteUserById()
 
     fun logout() {
         viewModelScope.launch {

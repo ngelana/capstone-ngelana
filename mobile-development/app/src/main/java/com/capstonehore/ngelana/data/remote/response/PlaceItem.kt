@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class PlaceItem(
 
     @field:SerializedName("types")
-    val types: String? = null,
+    val types: List<String>? = null,
 
     @field:SerializedName("address")
     val address: String? = null,
@@ -41,5 +41,8 @@ data class PlaceItem(
     val longitude: Double? = null,
 
     @field:SerializedName("status")
-    val status: String? = null
+    val status: String? = null,
+
+    @field:SerializedName("urlPlaceholder")
+    val urlPlaceholder: List<String>? = null
 ) : Parcelable

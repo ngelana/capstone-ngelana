@@ -3,7 +3,7 @@ package com.capstonehore.ngelana.data.remote.response.preferences
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.google.gson.annotations.SerializedName
 
-data class PreferencesResponseById(
+data class PreferencesResponseByUserId(
 
 	@field:SerializedName("message")
 	val message: String? = null,

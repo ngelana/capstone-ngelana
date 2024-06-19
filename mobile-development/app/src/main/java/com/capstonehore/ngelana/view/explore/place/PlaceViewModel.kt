@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.home
+package com.capstonehore.ngelana.view.explore.place
 
 import android.content.Context
 import android.location.Address
@@ -12,7 +12,15 @@ import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.repository.GeneralRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val repository: GeneralRepository): ViewModel() {
+class PlaceViewModel(
+    private val repository: GeneralRepository
+) : ViewModel() {
+
+    fun getPlaceById(id: String) = repository.getPlaceById(id)
+
+    fun searchPlaceByQuery(query: String) = repository.searchPlaceByQuery(query)
+
+    fun getPrimaryTypePlace(type: String) = repository.getPrimaryTypePlace(type)
 
     private val _locationResult = MutableLiveData<Result<Address>>()
     val locationResult: LiveData<Result<Address>>
@@ -34,7 +42,7 @@ class HomeViewModel(private val repository: GeneralRepository): ViewModel() {
     }
 
     companion object {
-        private const val TAG = "HomeViewModel"
+        private const val TAG = "PlaceViewModel"
     }
 
 }

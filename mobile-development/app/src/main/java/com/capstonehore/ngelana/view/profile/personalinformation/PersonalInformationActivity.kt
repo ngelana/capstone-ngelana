@@ -90,12 +90,10 @@ class PersonalInformationActivity : AppCompatActivity() {
                             userEmail.text = email
                         }
                     }
-
                     is Result.Error -> {
                         showLoading(false)
                         showToast(it.error)
                     }
-
                     is Result.Loading -> showLoading(true)
 
                 }
