@@ -10,7 +10,7 @@ router.get("/", accessValidation, async (req, res) => {
   const { userId } = req.body;
 
   try {
-    if (!isValidUserId(userId)) {
+    if (!(await isValidUserId(userId))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -49,7 +49,7 @@ router.post("/", accessValidation, async (req, res) => {
   const { userId, review, star, date, placeId } = req.body;
   const formattedDate = parseDate(date);
   try {
-    if (!isValidUserId(userId)) {
+    if (!(await isValidUserId(userId))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -102,7 +102,7 @@ router.get("/:id", accessValidation, async (req, res) => {
   const { userId } = req.body;
 
   try {
-    if (!isValidUserId(userId)) {
+    if (!(await isValidUserId(userId))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -142,7 +142,7 @@ router.patch("/:id", accessValidation, async (req, res) => {
   const { userId, review, star, date, placeId } = req.body;
   const formattedDate = parseDate(date);
   try {
-    if (!isValidUserId(userId)) {
+    if (!(await isValidUserId(userId))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -195,7 +195,7 @@ router.delete("/:id", accessValidation, async (req, res) => {
         id,
       },
     });
-    if (!review) {
+    if (!review || review.length == 0) {
       return res.status(404).json({
         message: "Review not found",
       });

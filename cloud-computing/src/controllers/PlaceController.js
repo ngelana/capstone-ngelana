@@ -8,6 +8,7 @@ const {
   getPlaceWithUrlPlaceholderbyId,
   getPlacesWithUrlPlaceholderByQuery,
   getPlacesWithUrlPlaceholderByType,
+  getPlacesWithPrimaryType,
 } = require("../services/DbServices");
 
 // Get places list
@@ -95,6 +96,30 @@ router.post("/:type", accessValidation, async (req, res) => {
 
   try {
     const result = await getPlacesWithUrlPlaceholderByType(type);
+
+    if (!result || result.length === 0) {
+      return res.status(404).json({
+        message: "Invalid query input or no places found!",
+      });
+    }
+    return res.status(200).json({
+      data: result,
+      message: `Places with type name ${type} Listed!`,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      message: `Error retrieving places!`,
+    });
+  }
+});
+
+// Get places by filter primaryType
+router.post("/primary-type/:type", accessValidation, async (req, res) => {
+  const { type } = req.params;
+
+  try {
+    const result = await getPlacesWithPrimaryType(type);
 
     if (!result || result.length === 0) {
       return res.status(404).json({

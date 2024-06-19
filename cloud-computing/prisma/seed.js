@@ -6,7 +6,7 @@ const csv = require("csv-parser");
 const seedPlaces = async () => {
   const places = [];
   return new Promise((resolve, reject) => {
-    fs.createReadStream("tes.csv")
+    fs.createReadStream("places.csv")
       .pipe(csv())
       .on("data", (row) => {
         places.push({
@@ -48,7 +48,7 @@ const seedPreferences = async () => {
   //json url placeholder test (Success!)
   const preferences = [];
   return new Promise((resolve, reject) => {
-    fs.createReadStream("prefJson.csv")
+    fs.createReadStream("preferences.csv")
       .pipe(csv())
       .on("data", (row) => {
         const urlPlaceholder = JSON.parse(row.urlPlaceholder);

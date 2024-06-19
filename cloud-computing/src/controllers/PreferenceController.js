@@ -29,7 +29,7 @@ router.post("/", accessValidation, async (req, res) => {
       return res.status(400).json({ message: "Invalid input data" });
     }
     // Check if the user exists
-    if (!isValidUserId(userId)) {
+    if (!(await isValidUserId(userId))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -93,7 +93,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    if (!isValidUserId(id)) {
+    if (!(await isValidUserId(id))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -134,7 +134,7 @@ router.patch("/:id", async (req, res) => {
   }
 
   try {
-    if (!isValidUserId(id)) {
+    if (!(await isValidUserId(id))) {
       return res.status(404).json({
         message: `User not found!`,
       });

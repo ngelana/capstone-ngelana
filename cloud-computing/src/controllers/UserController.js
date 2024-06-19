@@ -138,6 +138,11 @@ router.get("/", accessValidation, async (req, res) => {
 router.get("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
   try {
+    if (!(await isValidUserId(userId))) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
     const result = await prisma.user.findUnique({
       where: { id },
       select: {
@@ -150,11 +155,6 @@ router.get("/:id", accessValidation, async (req, res) => {
       },
     });
 
-    if (!isValidUserId(id)) {
-      return res.status(404).json({
-        message: `User not found!`,
-      });
-    }
     return res.status(200).json({
       data: result,
       message: `Details of UserID: ${id} Listed!`,
@@ -173,7 +173,7 @@ router.patch("/:id", accessValidation, async (req, res) => {
   const { name, email, password, phone, birthdate, gender } = req.body;
   const hashedPassword = createHashedPass(password);
   try {
-    if (!isValidUserId(id)) {
+    if (!(await isValidUserId(userId))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -220,6 +220,11 @@ router.delete("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
 
   try {
+    if (!(await isValidUserId(id))) {
+      return res.status(404).json({
+        message: `User not found!`,
+      });
+    }
     const user = await prisma.user.findUnique({
       where: {
         id: id,
