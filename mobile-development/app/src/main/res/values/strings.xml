@@ -187,6 +187,7 @@
     <string name="enable_location_first">Please enable location first to proceed</string>
     <string name="location_not_found">Location is not found. Try Again</string>
     <string name="no_data_available">No data available.</string>
+    <string name="unknown">Unknown</string>
 
     <!-- Alert Dialog  -->
     <string name="continue_to_the_next_page">Continue</string>
@@ -210,6 +211,5 @@
 
     <string name="delete_account_confirmation_message">Are you sure you want to delete your account?</string>
     <string name="delete_account">Delete Account</string>
-    <string name="unknown">Unknown</string>
 
 </resources>

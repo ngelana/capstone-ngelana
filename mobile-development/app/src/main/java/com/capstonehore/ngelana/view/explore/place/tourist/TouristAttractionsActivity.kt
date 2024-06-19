@@ -20,8 +20,6 @@ import com.capstonehore.ngelana.databinding.ActivityTouristAttractionsBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
-import com.capstonehore.ngelana.view.login.LoginActivity
-import com.capstonehore.ngelana.view.login.LoginActivity.Companion
 
 class TouristAttractionsActivity : AppCompatActivity() {
 

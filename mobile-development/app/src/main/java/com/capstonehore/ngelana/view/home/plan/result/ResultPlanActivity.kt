@@ -3,10 +3,8 @@ package com.capstonehore.ngelana.view.home.plan.result
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +16,6 @@ import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityResultPlanBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.withDateFormat
-import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.main.MainActivity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -85,13 +82,13 @@ class ResultPlanActivity : AppCompatActivity() {
             adapter = planResultAdapter
         }
 
-        planResultAdapter.setOnItemClickCallback(object :
-            PlanResultAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Place) {
-                val dialogFragment = DetailPlaceFragment.newInstance(items)
-                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
-            }
-        })
+//        planResultAdapter.setOnItemClickCallback(object :
+//            PlanResultAdapter.OnItemClickCallback {
+//            override fun onItemClicked(items: Place) {
+//                val dialogFragment = DetailPlaceFragment.newInstance(items)
+//                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+//            }
+//        })
     }
 
     private fun generateNewName(): String {

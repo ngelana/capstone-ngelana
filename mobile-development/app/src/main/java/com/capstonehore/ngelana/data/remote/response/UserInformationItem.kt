@@ -1,7 +1,6 @@
 package com.capstonehore.ngelana.data.remote.response
 
 import android.os.Parcelable
-import com.bumptech.glide.annotation.Excludes
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

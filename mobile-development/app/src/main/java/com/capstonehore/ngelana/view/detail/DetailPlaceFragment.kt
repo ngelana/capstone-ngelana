@@ -97,6 +97,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
             setupLocationObserver()
             clearCircleViews()
             addCircleViews(item)
+            setupAdapter()
 
             placeName.text = item.name
             placePrimaryType.text = item.primaryTypes
