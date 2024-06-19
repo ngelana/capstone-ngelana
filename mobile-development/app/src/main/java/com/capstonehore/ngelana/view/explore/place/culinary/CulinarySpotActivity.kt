@@ -40,7 +40,7 @@ class CulinarySpotActivity : AppCompatActivity() {
 
         setupToolbar()
         setupAdapter()
-        setupView("culinary_spot")
+        setupView("restaurant")
         setupSearchView()
     }
 
@@ -130,7 +130,7 @@ class CulinarySpotActivity : AppCompatActivity() {
                     if (query.isNotEmpty()) {
                         searchPlace(query)
                     } else {
-                        setupView("culinary_spot")
+                        setupView("restaurant")
                     }
                 }
             })

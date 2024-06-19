@@ -30,7 +30,10 @@ import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import java.util.Locale
@@ -382,6 +385,24 @@ class GeneralRepository(
             emitSource(data.map { Result.Success(it) })
         } catch (e: Exception) {
             Log.d(TAG, "getAllFavorites: ${e.message}")
+            emit(Result.Error("Error fetching data: ${e.message}"))
+        }
+    }
+
+    fun getFavoriteByPlaceId(placeId: String): LiveData<Result<List<Favorite>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val data = ngelanaRoomDatabase.favoriteDao().getFavoriteByPlaceId(placeId)
+
+            val job = CoroutineScope(Dispatchers.IO).launch {
+                data.value?.let { favorite ->
+                    val listFavorite = listOf(favorite)
+                    emit(Result.Success(listFavorite))
+                }
+            }
+            job.join()
+        } catch (e: Exception) {
+            Log.d(TAG, "getFavoriteByPlaceName: ${e.message}")
             emit(Result.Error("Error fetching data: ${e.message}"))
         }
     }

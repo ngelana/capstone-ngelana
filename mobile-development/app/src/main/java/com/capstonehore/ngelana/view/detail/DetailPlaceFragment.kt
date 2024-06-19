@@ -1,6 +1,7 @@
 package com.capstonehore.ngelana.view.detail
 
 import android.content.Context
+import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -34,13 +35,12 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
     private val binding get() = _binding!!
 
-    private var currentLocation: Location? = null
     private lateinit var similarPlaceAdapter: SimilarPlaceAdapter
+    private var currentLocation: Location? = null
 
     private lateinit var placeViewModel: PlaceViewModel
-
     private lateinit var myFavoriteViewModel: MyFavoriteViewModel
-    private lateinit var favorite: Favorite
+
     private var isFavorite = false
 
     private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
@@ -60,11 +60,20 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
         @Suppress("DEPRECATION")
         val placeItem = arguments?.getParcelable<PlaceItem>(ARG_PLACE)
-        placeItem?.id?.let { placeId ->
-            setupPlace(placeId)
-        } ?: run {
-            showToast(getString(R.string.not_available))
-            dismiss()
+        placeItem?.let { item ->
+            setupView(item)
+            setupFavorite(item)
+        }
+    }
+
+    private fun setupView(placeItem: PlaceItem?) {
+        placeItem?.let { item ->
+            item.id?.let { placeId ->
+                setupPlace(placeId)
+            } ?: run {
+                showToast(getString(R.string.not_available))
+                dismiss()
+            }
         }
     }
 
@@ -77,11 +86,13 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
                         val response = it.data
                         setupDetailPlace(response)
+                        Log.d(TAG, "Successfully Show Detail of Place: $response")
                     }
                     is Result.Error -> {
                         showLoading(false)
 
                         showToast(it.error)
+                        Log.d(TAG, "Failed to Show Detail of Place: ${it.error}")
                         dismiss()
                     }
                     is Result.Loading -> showLoading(true)
@@ -93,11 +104,11 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     private fun setupDetailPlace(item: PlaceItem) {
         binding.apply {
             val placeImage = item.urlPlaceholder ?: emptyList()
-            setupPhoto(placeImage)
+            setupImageAdapter(placeImage)
             setupLocationObserver()
             clearCircleViews()
             addCircleViews(item)
-            setupAdapter()
+            setupSimilarAdapter()
 
             placeName.text = item.name
             placePrimaryType.text = item.primaryTypes
@@ -110,16 +121,10 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setIcon() {
-        binding.favoriteButton.setImageResource(
-            if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
-        )
-    }
-
-    private fun setupPhoto(item: List<String>) {
+    private fun setupImageAdapter(item: List<String>) {
         val photoAdapter = PhotoAdapter(item)
 
-        binding.rvPhoto.apply {
+        binding.rvPlaceImage.apply {
             setHasFixedSize(true)
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
@@ -184,7 +189,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setupAdapter() {
+    private fun setupSimilarAdapter() {
         similarPlaceAdapter = SimilarPlaceAdapter()
 
         binding.rvSimilarPlace.apply {
@@ -195,12 +200,64 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
         similarPlaceAdapter.setOnItemClickCallback(object : SimilarPlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(data: PlaceItem?) {
-//                data?.let {
-//                    val dialogFragment = DetailPlaceFragment.newInstance(it)
-//                    dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
-//                }
+                data?.let {
+                    val intent = Intent(requireActivity(), DetailPlaceActivity::class.java).apply {
+                        putExtra(DetailPlaceActivity.EXTRA_PLACES, data)
+                    }
+                    startActivity(intent)
+                }
             }
         })
+    }
+
+    private fun setupFavorite(placeItem: PlaceItem?) {
+        myFavoriteViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory.getInstance(requireActivity(), UserPreferences.getInstance(requireActivity().sessionDataStore))
+        )[MyFavoriteViewModel::class.java]
+
+        placeItem?.let { item ->
+            val randomIndex = item.urlPlaceholder?.indices?.random()
+
+            item.id?.let { placeId ->
+                val placeName = item.name
+                val placeImage = item.urlPlaceholder?.get(randomIndex ?: 0)
+
+                val favorite = Favorite(
+                    placeId,
+                    placeName,
+                    placeImage
+                )
+
+                myFavoriteViewModel.getFavoriteByPlaceId(placeId).observe(viewLifecycleOwner) {
+                    isFavorite = it != null
+                    setIcon()
+                }
+
+                binding.favoriteButton.setOnClickListener {
+                    binding.favoriteButton.setOnClickListener {
+                        when {
+                            !isFavorite -> {
+                                myFavoriteViewModel.insertFavoritePlace(favorite)
+                                showToast("Successfully added $placeName to Favorite!")
+                            }
+                            else -> {
+                                myFavoriteViewModel.deleteFavoritePlace(favorite)
+                                showToast("Successfully deleted $placeName from favorite users.")
+                            }
+                        }
+                        isFavorite = !isFavorite
+                        setIcon()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setIcon() {
+        binding.favoriteButton.setImageResource(
+            if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+        )
     }
 
     private fun showToast(message: String) {

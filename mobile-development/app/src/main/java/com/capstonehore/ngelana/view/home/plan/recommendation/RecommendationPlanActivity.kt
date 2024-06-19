@@ -12,7 +12,6 @@ import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
-import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
 
 class RecommendationPlanActivity : AppCompatActivity() {
@@ -90,12 +89,12 @@ class RecommendationPlanActivity : AppCompatActivity() {
             adapter = recommendationPlaceAdapter
         }
 
-        recommendationPlaceAdapter.setOnItemClickCallback(object : RecommendationPlaceAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Place) {
-                val dialogFragment = DetailPlaceFragment.newInstance(items)
-                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
-            }
-        })
+//        recommendationPlaceAdapter.setOnItemClickCallback(object : RecommendationPlaceAdapter.OnItemClickCallback {
+//            override fun onItemClicked(items: Place) {
+//                val dialogFragment = DetailPlaceFragment.newInstance(items)
+//                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+//            }
+//        })
 
         recommendationPlaceAdapter.setOnClearButtonClickCallback(object : RecommendationPlaceAdapter.OnClearButtonClickCallback {
             @SuppressLint("NotifyDataSetChanged")

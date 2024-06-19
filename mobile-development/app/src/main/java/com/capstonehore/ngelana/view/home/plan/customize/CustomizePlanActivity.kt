@@ -13,7 +13,6 @@ import com.capstonehore.ngelana.adapter.PlanAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
-import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 import com.capstonehore.ngelana.view.home.plan.result.ResultPlanActivity
 
@@ -39,6 +38,7 @@ class CustomizePlanActivity : AppCompatActivity() {
 
         planList = customizePlanViewModel.loadPlanList()
 
+        @Suppress("DEPRECATION")
         newPlace = intent.getParcelableExtra(EXTRA_PLACE)
 
         setupAction()
@@ -100,13 +100,13 @@ class CustomizePlanActivity : AppCompatActivity() {
             adapter = planAdapter
         }
 
-        planAdapter.setOnItemClickCallback(object :
-            PlanAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Place) {
-                val dialogFragment = DetailPlaceFragment.newInstance(items)
-                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
-            }
-        })
+//        planAdapter.setOnItemClickCallback(object :
+//            PlanAdapter.OnItemClickCallback {
+//            override fun onItemClicked(items: Place) {
+//                val dialogFragment = DetailPlaceFragment.newInstance(items)
+//                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+//            }
+//        })
 
         planAdapter.setOnClearButtonClickCallback(object : PlanAdapter.OnClearButtonClickCallback {
             @SuppressLint("NotifyDataSetChanged")

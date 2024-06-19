@@ -15,10 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.FavoriteAdapter
-import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Place
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
-import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 
 class HomeFragment : Fragment() {
 
@@ -105,10 +103,10 @@ class HomeFragment : Fragment() {
 
     private fun setupView() {
         val favoritePlaceList = getListPlace()
-        val recommendationPlaceList = getListPlace()
+//        val recommendationPlaceList = getListPlace()
 
         val favoritePlaceAdapter = FavoriteAdapter(favoritePlaceList)
-        val recommendationPlaceAdapter = PlaceAdapter(recommendationPlaceList)
+//        val recommendationPlaceAdapter = PlaceAdapter(recommendationPlaceList)
 
         binding.rvFavoritePlace.apply {
             setHasFixedSize(true)
@@ -116,25 +114,25 @@ class HomeFragment : Fragment() {
             adapter = favoritePlaceAdapter
         }
 
-        binding.rvRecommendationPlace.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireActivity())
-            adapter = recommendationPlaceAdapter
-        }
+//        binding.rvRecommendationPlace.apply {
+//            setHasFixedSize(true)
+//            layoutManager = LinearLayoutManager(requireActivity())
+//            adapter = recommendationPlaceAdapter
+//        }
 
-        favoritePlaceAdapter.setOnItemClickCallback(object : FavoriteAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Place) {
-                val dialogFragment = DetailPlaceFragment.newInstance(items)
-                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
-            }
-        })
+//        favoritePlaceAdapter.setOnItemClickCallback(object : FavoriteAdapter.OnItemClickCallback {
+//            override fun onItemClicked(items: Place) {
+//                val dialogFragment = DetailPlaceFragment.newInstance(items)
+//                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+//            }
+//        })
 
-        recommendationPlaceAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Place) {
-                val dialogFragment = DetailPlaceFragment.newInstance(items)
-                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
-            }
-        })
+//        recommendationPlaceAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
+//            override fun onItemClicked(items: Place) {
+//                val dialogFragment = DetailPlaceFragment.newInstance(items)
+//                dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+//            }
+//        })
     }
 
 //    private fun updateLocationUI(location: Location) {

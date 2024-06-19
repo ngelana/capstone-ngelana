@@ -73,7 +73,7 @@ interface ApiService {
         @Query("query") query: String,
     ): PlacesResponse
 
-    @POST("place/{type}")
+    @POST("place/primary-type/{type}")
     suspend fun getPrimaryTypePlace(
         @Path("type") type: String,
     ): PlacesResponse
