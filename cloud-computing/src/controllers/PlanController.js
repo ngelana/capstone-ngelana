@@ -20,6 +20,7 @@ const generatePlaceIds = async () => {
 };
 
 // Get list of plans for a user
+
 router.get("/", accessValidation, async (req, res) => {
   const { userId } = req.body;
 
@@ -45,14 +46,38 @@ router.get("/", accessValidation, async (req, res) => {
       },
     });
 
-    if (!plans) {
+    if (!plans || plans.length === 0) {
       return res.status(400).json({
-        message: `No plans made from user : ${userId}`,
+        message: `No plans made from user: ${userId}`,
       });
     }
 
+    // Fetch all preferences
+    const preferences = await prisma.preference.findMany();
+
+    // Map over plans to include urlPlaceholder in places
+    const plansWithUrlPlaceholders = plans.map((plan) => ({
+      ...plan,
+      places: plan.places.map((placeItem) => {
+        const place = placeItem.place;
+        const matchedPreference = preferences.find(
+          (pref) => pref.name === place.primaryTypes
+        );
+
+        return {
+          ...placeItem,
+          place: {
+            ...place,
+            urlPlaceholder: matchedPreference
+              ? matchedPreference.urlPlaceholder
+              : null,
+          },
+        };
+      }),
+    }));
+
     return res.status(200).json({
-      data: plans,
+      data: plansWithUrlPlaceholders,
       message: "Plans listed successfully!",
     });
   } catch (error) {
