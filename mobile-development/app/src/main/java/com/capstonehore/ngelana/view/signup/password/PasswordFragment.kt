@@ -34,7 +34,6 @@ import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.email.EmailFragment
-import com.capstonehore.ngelana.view.signup.interest.InterestFragment
 
 class PasswordFragment : Fragment() {
 
@@ -230,7 +229,7 @@ class PasswordFragment : Fragment() {
                 alertMessage.text = getString(R.string.registration_completed_message)
 
                 submitButton.setOnClickListener {
-                    moveToInterest()
+                    moveToLogin()
                     dialog.dismiss()
                 }
             }
@@ -271,10 +270,9 @@ class PasswordFragment : Fragment() {
             .commit()
     }
 
-    private fun moveToInterest() {
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.main, InterestFragment())
-            .commit()
+    private fun moveToLogin() {
+        startActivity(Intent(requireActivity(), LoginActivity::class.java))
+        requireActivity().finish()
     }
 
     private fun moveToOnboarding() {

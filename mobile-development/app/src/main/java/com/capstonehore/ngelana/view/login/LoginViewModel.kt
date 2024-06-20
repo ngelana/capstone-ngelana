@@ -9,8 +9,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
         private val repository: GeneralRepository,
         private val preferences: UserPreferences,
-): ViewModel()
-{
+): ViewModel() {
 
     fun doLogin(
         email: String,
@@ -30,5 +29,7 @@ class LoginViewModel(
             preferences.prefLogin()
         }
     }
+
+    suspend fun hasUserPreference(): Boolean = preferences.hasUserPreferences()
 
 }

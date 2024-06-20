@@ -99,6 +99,9 @@
             android:name=".view.login.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".view.login.interest.InterestActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.signup.SignUpActivity"
             android:exported="false" />
         <activity

@@ -153,6 +153,7 @@
     <string name="interest_description">Silakan pilih minat Anda di bawah ini. Kami akan menggunakan informasi ini untuk mempersonalisasi rekomendasi yang paling cocok dengan preferensi dan kebutuhan Anda.</string>
     <string name="skip">Lewati</string>
     <string name="next">Selanjutnya</string>
+    <string name="successfully_saved_preferences">Successfully saved preferences.</string>
 
     <!-- Tab Pager -->
     <string name="tab_text_1">Mendatang</string>

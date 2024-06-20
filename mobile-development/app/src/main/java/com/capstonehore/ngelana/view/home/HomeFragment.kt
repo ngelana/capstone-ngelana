@@ -142,14 +142,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupView() {
-        placeViewModel.getAllPlaces().observe(requireActivity()) {
+        placeViewModel.getAllPlaces().observe(viewLifecycleOwner) {
                 if (it != null) {
                     when (it) {
                         is Result.Success -> {
                             showLoading(false)
 
                             val response = it.data.data
-                            response?.let { item ->
+                            response?.let {
                                 val randomPlacesWithFiltering = getRandomPlaces(response)
                                 val randomPlacesWithoutFiltering = response.shuffled().take(8)
 

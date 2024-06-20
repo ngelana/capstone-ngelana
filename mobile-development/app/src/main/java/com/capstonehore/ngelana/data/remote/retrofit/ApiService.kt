@@ -1,6 +1,7 @@
 package com.capstonehore.ngelana.data.remote.retrofit
 
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
+import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.data.remote.response.ReviewItem
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.data.remote.response.places.PlaceResponseById
@@ -105,14 +106,20 @@ interface ApiService {
     suspend fun getAllPreferences(): PreferencesResponse
 
     @POST("preference")
-    suspend fun createPreference(
-        @Body userDataPreferencesItem: UserDataPreferencesItem
+    suspend fun createUserPreference(
+        @Body userDataPreferencesItem: List<UserDataPreferencesItem>
     ): UserPreferenceResponse
 
     @GET("preference/{id}")
     suspend fun getPreferenceByUserId(
         @Path("id") id: String
     ): PreferencesResponseByUserId
+
+    @PATCH("preference/{id}")
+    suspend fun updateUserPreference(
+        @Path("id") id: String,
+        @Body preferenceItem: List<PreferenceItem>
+    ): UserPreferenceResponse
 
 
     // Review

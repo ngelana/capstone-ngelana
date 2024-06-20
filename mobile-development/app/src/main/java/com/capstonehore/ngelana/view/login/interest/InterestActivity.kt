@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.profile.interest.edit
+package com.capstonehore.ngelana.view.login.interest
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -18,14 +18,15 @@ import com.capstonehore.ngelana.adapter.InterestAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
-import com.capstonehore.ngelana.databinding.ActivityEditMyInterestBinding
+import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
+import com.capstonehore.ngelana.databinding.ActivityInterestBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.profile.interest.InterestViewModel
-import com.capstonehore.ngelana.view.profile.interest.MyInterestActivity
 
-class EditMyInterestActivity : AppCompatActivity() {
+class InterestActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityEditMyInterestBinding
+    private lateinit var binding: ActivityInterestBinding
 
     private lateinit var interestAdapter: InterestAdapter
 
@@ -36,13 +37,12 @@ class EditMyInterestActivity : AppCompatActivity() {
 
     private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditMyInterestBinding.inflate(layoutInflater)
+        binding = ActivityInterestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        interestViewModel = obtainViewModel(this@EditMyInterestActivity)
+        interestViewModel = obtainViewModel(this@InterestActivity)
 
         setupAction()
         setupAnimation()
@@ -51,7 +51,11 @@ class EditMyInterestActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.submitButton.setOnClickListener {
+        binding.skipButton.setOnClickListener {
+            startActivity(Intent(this@InterestActivity, MainActivity::class.java))
+            finish()
+        }
+        binding.nextButton.setOnClickListener {
             setupInterest()
         }
     }
@@ -61,13 +65,14 @@ class EditMyInterestActivity : AppCompatActivity() {
         val tvDescription =
             ObjectAnimator.ofFloat(binding.tvDescription, View.ALPHA, 1f).setDuration(300)
         val rvInterest = ObjectAnimator.ofFloat(binding.rvInterest, View.ALPHA, 1f).setDuration(300)
-        val submitButton =
-            ObjectAnimator.ofFloat(binding.submitButton, View.ALPHA, 1f).setDuration(300)
+        val nextButton =
+            ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).setDuration(300)
         val tvInterestCount =
             ObjectAnimator.ofFloat(binding.tvInterestCount, View.ALPHA, 1f).setDuration(300)
+        val skipButton = ObjectAnimator.ofFloat(binding.skipButton, View.ALPHA, 1f).setDuration(300)
 
         val together = AnimatorSet().apply {
-            playTogether(submitButton, tvInterestCount)
+            playTogether(nextButton, tvInterestCount, skipButton)
         }
 
         AnimatorSet().apply {
@@ -100,7 +105,7 @@ class EditMyInterestActivity : AppCompatActivity() {
 
         binding.rvInterest.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(this@EditMyInterestActivity, 2)
+            layoutManager = GridLayoutManager(this@InterestActivity, 2)
             adapter = interestAdapter
         }
     }
@@ -118,14 +123,12 @@ class EditMyInterestActivity : AppCompatActivity() {
                         }
                         Log.d(TAG, "Successfully Show All Preferences: $response")
                     }
-
                     is Result.Error -> {
                         showLoading(false)
 
                         showToast(it.error)
                         Log.d(TAG, "Failed to Show All Preferences: ${it.error}")
                     }
-
                     is Result.Loading -> showLoading(true)
                 }
             }
@@ -133,17 +136,14 @@ class EditMyInterestActivity : AppCompatActivity() {
     }
 
     private fun setupInterest() {
+        val userId = interestViewModel.getUserId().toString()
         val selectedPreferences = interestAdapter.currentList.filterIndexed { index, _ ->
             selectedItems[index]
         }.map { preferenceItem ->
-            PreferenceItem(
-                id = preferenceItem.id,
-                name = preferenceItem.name,
-                urlPlaceholder = preferenceItem.urlPlaceholder
-            )
+            UserDataPreferencesItem(userId = userId, preference = preferenceItem)
         }
 
-        interestViewModel.updateUserPreference(selectedPreferences).observe(this) {
+        interestViewModel.createUserPreference(selectedPreferences).observe(this) {
             when (it) {
                 is Result.Success -> {
                     showLoading(false)
@@ -151,17 +151,14 @@ class EditMyInterestActivity : AppCompatActivity() {
                     val response = it.data
 
                     showToast(getString(R.string.successfully_saved_preferences))
-                    moveToMyInterest()
-                    Log.d(TAG, "Successfully updated preferences: $response")
+                    Log.d(TAG, "Successfully created preferences: $response")
                 }
-
                 is Result.Error -> {
                     showLoading(false)
 
                     showToast(it.error)
-                    Log.d(TAG, "Failed to updated preferences: ${it.error}")
+                    Log.d(TAG, "Failed to create preferences: ${it.error}")
                 }
-
                 is Result.Loading -> showLoading(true)
             }
         }
@@ -174,11 +171,6 @@ class EditMyInterestActivity : AppCompatActivity() {
         if (binding.tvInterestCount.alpha == 0f) {
             binding.tvInterestCount.alpha = 1f
         }
-    }
-
-    private fun moveToMyInterest() {
-        startActivity(Intent(this@EditMyInterestActivity, MyInterestActivity::class.java))
-        finish()
     }
 
     private fun showToast(message: String) {
@@ -198,7 +190,7 @@ class EditMyInterestActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "EditMyInterestActivity"
+        private const val TAG = "InterestActivity"
         const val USER_SESSION = "user_session"
     }
 

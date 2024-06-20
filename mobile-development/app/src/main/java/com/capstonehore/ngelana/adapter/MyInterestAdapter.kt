@@ -2,12 +2,16 @@ package com.capstonehore.ngelana.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.capstonehore.ngelana.data.Interest
-import com.capstonehore.ngelana.databinding.ItemProfileBinding
+import com.bumptech.glide.Glide
+import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.remote.response.PreferenceItem
+import com.capstonehore.ngelana.databinding.ItemInterestBinding
 
-class MyInterestAdapter(private val listInterest: ArrayList<Interest>) :
-    RecyclerView.Adapter<MyInterestAdapter.MyInterestViewHolder>() {
+class MyInterestAdapter :
+    ListAdapter<PreferenceItem, MyInterestAdapter.InterestViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -15,35 +19,55 @@ class MyInterestAdapter(private val listInterest: ArrayList<Interest>) :
         this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyInterestViewHolder {
-        val binding = ItemProfileBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterestViewHolder {
+        val binding = ItemInterestBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return MyInterestViewHolder(binding)
+        return InterestViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = listInterest.size
-
-    override fun onBindViewHolder(holder: MyInterestViewHolder, position: Int) {
-        val (name, icon) = listInterest[position]
-        with(holder.binding) {
-            tvName.text = name
-            ivIconLeft.setImageResource(icon)
-        }
-
-        holder.itemView.setOnClickListener {
-            @Suppress("DEPRECATION")
-            onItemClickCallback.onItemClicked(listInterest[holder.adapterPosition])
-        }
+    override fun onBindViewHolder(holder: InterestViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    class MyInterestViewHolder(var binding: ItemProfileBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class InterestViewHolder(private val binding: ItemInterestBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: PreferenceItem?) {
+            binding.apply {
+                item?.let {
+                    tvInterest.text = it.name
+                    Glide.with(itemView.context)
+                        .load(it.urlPlaceholder)
+                        .placeholder(R.drawable.ic_image)
+                        .error(R.drawable.ic_image)
+                        .into(icInterest)
+
+                    itemView.setOnClickListener {
+                        onItemClickCallback.onItemClicked(item)
+                    }
+                }
+            }
+        }
+    }
 
     interface OnItemClickCallback {
-        fun onItemClicked(items: Interest)
+        fun onItemClicked(data: PreferenceItem)
+    }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PreferenceItem>() {
+            override fun areItemsTheSame(oldItem: PreferenceItem, newItem: PreferenceItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: PreferenceItem, newItem: PreferenceItem): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 
 }

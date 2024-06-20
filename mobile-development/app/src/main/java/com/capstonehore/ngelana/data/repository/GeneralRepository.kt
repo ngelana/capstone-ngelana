@@ -13,6 +13,7 @@ import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
+import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.data.remote.response.ReviewItem
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.data.remote.response.places.PlaceResponseById
@@ -327,14 +328,16 @@ class GeneralRepository(
 
 
     // Preferences
-    fun getAllPreferences(): LiveData<Result<PreferencesResponse>> = liveData {
+    fun getAllPreferences(): LiveData<Result<List<PreferenceItem>>> = liveData {
         emit(Result.Loading)
         try {
             val token = getToken()
             apiService = ApiConfig.getApiService(token.toString())
 
             val response = apiService.getAllPreferences()
-            emit(Result.Success(response))
+            val preferenceItem = response.data ?: emptyList()
+
+            emit(Result.Success(preferenceItem))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, PreferencesResponse::class.java)
@@ -346,41 +349,41 @@ class GeneralRepository(
         }
     }
 
-    fun createPreference(userDataPreferencesItem: UserDataPreferencesItem):
-        LiveData<Result<UserPreferenceResponse>> = liveData {
+    fun createUserPreference(userDataPreferencesItems: List<UserDataPreferencesItem>):
+        LiveData<Result<List<UserDataPreferencesItem>>> = liveData {
             emit(Result.Loading)
             try {
                 val token = getToken()
-                val userId = getUserId()
+                val apiService = ApiConfig.getApiService(token.toString())
 
-                apiService = ApiConfig.getApiService(token.toString())
-                if (userId != null) {
-                    val response = apiService.createPreference(userDataPreferencesItem)
-                    emit(Result.Success(response))
-                } else {
-                    emit(Result.Error("User ID not found"))
-                }
+                val response = apiService.createUserPreference(userDataPreferencesItems)
+                val userDataPreferences = response.data ?: emptyList()
+
+                emit(Result.Success(userDataPreferences))
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
                 val errorResponse = Gson().fromJson(errorBody, UserPreferenceResponse::class.java)
 
                 emit(Result.Error(errorResponse.toString()))
             } catch (e: Exception) {
-                Log.d(TAG, "createPreference: ${e.message}")
+                Log.d(TAG, "createUserPreference: ${e.message}")
                 emit(Result.Error(e.message.toString()))
             }
         }
 
-    fun getPreferenceByUserId(): LiveData<Result<PreferencesResponseByUserId>> = liveData {
+    fun getPreferenceByUserId(): LiveData<Result<List<PreferenceItem>>> = liveData {
         emit(Result.Loading)
         try {
             val token = getToken()
             val userId = getUserId()
 
-            apiService = ApiConfig.getApiService(token.toString())
+            val apiService = ApiConfig.getApiService(token.toString())
             if (userId != null) {
                 val response = apiService.getPreferenceByUserId(userId)
-                emit(Result.Success(response))
+                val userPreference = response.user
+                val userPreferenceItem = userPreference?.userPreferences ?: emptyList()
+
+                emit(Result.Success(userPreferenceItem.map { it.preference ?: PreferenceItem() }))
             } else {
                 emit(Result.Error("User ID not found"))
             }
@@ -391,6 +394,32 @@ class GeneralRepository(
             emit(Result.Error(errorResponse.toString()))
         } catch (e: Exception) {
             Log.d(TAG, "getPreferenceById: ${e.message}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun updateUserPreference(preferenceItem: List<PreferenceItem>): LiveData<Result<List<PreferenceItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val token = getToken()
+            val userId = getUserId()
+
+            val apiService = ApiConfig.getApiService(token.toString())
+            if (userId != null) {
+                val response = apiService.updateUserPreference(userId, preferenceItem)
+                val updatedPreferences = response.data ?: emptyList()
+
+                emit(Result.Success(updatedPreferences.map { it.preference ?: PreferenceItem() }))
+            } else {
+                emit(Result.Error("User ID not found"))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UserPreferenceResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "updateUserPreference: ${e.message}")
             emit(Result.Error(e.message.toString()))
         }
     }

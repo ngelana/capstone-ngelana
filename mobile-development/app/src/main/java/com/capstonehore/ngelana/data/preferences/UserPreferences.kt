@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class UserPreferences(private val dataStore: DataStore<Preferences>) {
@@ -30,7 +31,6 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-
     fun getUserId(): Flow<String?> = dataStore.data.map {
         it[USER_ID_KEY]
     }
@@ -45,10 +45,9 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
         it[USER_PREFERENCE_ID_KEY]
     }
 
-    suspend fun saveUserPreferenceId(userPreferenceId: String) {
-        dataStore.edit {
-            it[USER_PREFERENCE_ID_KEY] = userPreferenceId
-        }
+    suspend fun hasUserPreferences(): Boolean {
+        val userPreferenceId = getUserPreferenceId().first()
+        return !userPreferenceId.isNullOrEmpty()
     }
 
     suspend fun logout() = dataStore.edit {

@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
@@ -31,10 +32,12 @@ import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.LanguagePreference
 import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.login.interest.InterestActivity
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.signup.SignUpActivity
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
@@ -235,8 +238,13 @@ class LoginActivity : AppCompatActivity() {
                 alertMessage.text = getString(R.string.login_success_message)
 
                 submitButton.setOnClickListener {
-                    moveToMain()
-                    dialog.dismiss()
+                    lifecycleScope.launch {
+                        when (loginViewModel.hasUserPreference()) {
+                            true -> moveToMain()
+                            false -> moveToInterest()
+                        }
+                        dialog.dismiss()
+                    }
                 }
             }
         } else {
@@ -288,6 +296,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun moveToMain() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
+    }
+
+    private fun moveToInterest() {
+        startActivity(Intent(this@LoginActivity, InterestActivity::class.java))
         finish()
     }
 

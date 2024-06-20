@@ -164,6 +164,7 @@
     <string name="interest_description">Please select your interests below. We will use this information to personalize recommendations that best match your preferences and needs.</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
+    <string name="successfully_saved_preferences">Successfully saved preferences.</string>
 
     <!-- Tab Pager -->
     <string name="tab_text_1">Upcoming</string>
