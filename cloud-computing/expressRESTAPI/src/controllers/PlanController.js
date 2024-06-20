@@ -230,11 +230,22 @@ router.post("/recommend", accessValidation, async (req, res) => {
     const preferenceNames = userPreferences.map((up) => up.preference.name);
     console.log(preferenceNames);
     // Convert preferences array to a comma-separated string
-    const userPreferencesString = JSON.stringify(preferenceNames);
-    const inputPreferencesString = JSON.stringify(inputPreferencesNames);
+    // const userPreferencesString = JSON.stringify(preferenceNames);
+    // const inputPreferencesString = JSON.stringify(inputPreferencesNames);
+    // console.log(typeof userPreferencesString);
+    // console.log(typeof inputPreferencesString);
+    // return res.json({
+    //   userPreferences: userPreferencesString,
+    //   inputPreferences: inputPreferencesString,
+    // });
 
-    console.log(userPreferencesString);
-    console.log(inputPreferencesString);
+    // json object to send
+    // console.log(typeof preferenceNames);
+    // console.log(typeof inputPreferencesNames);
+    // return res.json({
+    //   userPreferences: preferenceNames,
+    //   inputPreferences: inputPreferencesNames,
+    // });
 
     // Send request to the FastAPI app with the formatted body
     // const response = await axios.post('https://YOUR_FASTAPI_APP_URL/recommend/', {
@@ -248,10 +259,10 @@ router.post("/recommend", accessValidation, async (req, res) => {
     const placeIds = await generatePlaceIds();
     console.log(placeIds);
     const places = await getPlacesWithUrlPlaceholdersByPlaceID(placeIds);
-    return res.status(200).json({
-      places,
-      message: "Successfully generated recommendations",
-    });
+    // return res.status(200).json({
+    //   places,
+    //   message: "Successfully generated recommendations",
+    // });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({
