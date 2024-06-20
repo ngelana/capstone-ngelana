@@ -61,28 +61,32 @@ class ExploreFragment : Fragment() {
         }
 
         categoryAdapter.setOnItemClickCallback(object : CategoryAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Category) {
-                val context = requireContext()
-                val intent = when (items.code) {
-                    "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
-                    "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
-                    "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
-                    else -> null
+            override fun onItemClicked(item: Category?) {
+                item?.let {
+                    val context = requireContext()
+                    val intent = when (item.code) {
+                        "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
+                        "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
+                        "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
+                        else -> null
+                    }
+                    intent?.let { startActivity(it) }
                 }
-                intent?.let { startActivity(it) }
             }
         })
 
         categoryAdapter.setOnButtonClickCallback(object : CategoryAdapter.OnButtonClickCallback {
-            override fun onButtonClicked(item: Category) {
-                val context = requireContext()
-                val intent = when (item.code) {
-                    "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
-                    "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
-                    "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
-                    else -> null
+            override fun onButtonClicked(item: Category?) {
+                item?.let {
+                    val context = requireContext()
+                    val intent = when (item.code) {
+                        "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
+                        "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
+                        "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
+                        else -> null
+                    }
+                    intent?.let { startActivity(it) }
                 }
-                intent?.let { startActivity(it) }
             }
         })
     }

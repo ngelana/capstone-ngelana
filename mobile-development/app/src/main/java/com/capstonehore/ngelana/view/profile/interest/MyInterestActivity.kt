@@ -62,7 +62,7 @@ class MyInterestActivity : AppCompatActivity() {
         }
 
         myInterestAdapter.setOnItemClickCallback(object : MyInterestAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: PreferenceItem) {
+            override fun onItemClicked(data: PreferenceItem?) {
                 startActivity(Intent(this@MyInterestActivity, EditMyInterestActivity::class.java))
             }
         })

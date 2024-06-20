@@ -40,8 +40,8 @@ class InterestAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PreferenceItem?, isSelected: Boolean) {
-            binding.apply {
-                item?.let {
+            item?.let {
+                binding.apply {
                     tvName.text = it.name
                     ivIconLeft.setImageResource(R.drawable.ic_keyboard_arrow_right)
                     Glide.with(itemView.context)
@@ -53,17 +53,17 @@ class InterestAdapter(
                     root.setBackgroundResource(
                         if (isSelected) R.drawable.selected_item_background else R.drawable.rounded_corners_white
                     )
-
-                    itemView.setOnClickListener {
-                        onItemClickCallback.onItemClicked(item)
-                    }
                 }
+            }
+
+            itemView.setOnClickListener {
+                onItemClickCallback.onItemClicked(item)
             }
         }
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: PreferenceItem)
+        fun onItemClicked(data: PreferenceItem?)
     }
 
     companion object {

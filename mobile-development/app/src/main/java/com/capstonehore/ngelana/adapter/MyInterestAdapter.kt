@@ -37,25 +37,25 @@ class MyInterestAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PreferenceItem?) {
-            binding.apply {
-                item?.let {
+            item?.let {
+                binding.apply {
                     tvInterest.text = it.name
                     Glide.with(itemView.context)
                         .load(it.urlPlaceholder)
                         .placeholder(R.drawable.ic_image)
                         .error(R.drawable.ic_image)
                         .into(icInterest)
-
-                    itemView.setOnClickListener {
-                        onItemClickCallback.onItemClicked(item)
-                    }
                 }
+            }
+
+            itemView.setOnClickListener {
+                onItemClickCallback.onItemClicked(item)
             }
         }
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: PreferenceItem)
+        fun onItemClicked(data: PreferenceItem?)
     }
 
     companion object {

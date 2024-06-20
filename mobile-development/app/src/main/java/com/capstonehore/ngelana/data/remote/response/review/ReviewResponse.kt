@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class ReviewResponse(
 
 	@field:SerializedName("data")
-	val data: ReviewItem? = null,
+	val data: List<ReviewItem>? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null

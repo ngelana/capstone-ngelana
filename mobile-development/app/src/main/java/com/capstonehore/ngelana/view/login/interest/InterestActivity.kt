@@ -83,7 +83,7 @@ class InterestActivity : AppCompatActivity() {
     private fun setupAdapter() {
         interestAdapter = InterestAdapter(selectedItems).apply {
             setOnItemClickCallback(object : InterestAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: PreferenceItem) {
+                override fun onItemClicked(data: PreferenceItem?) {
                     val position = interestAdapter.currentList.indexOf(data)
                     if (position != -1) {
                         when (selectedItems[position]) {

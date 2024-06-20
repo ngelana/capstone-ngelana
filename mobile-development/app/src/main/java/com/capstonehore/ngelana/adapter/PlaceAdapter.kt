@@ -44,22 +44,24 @@ class PlaceAdapter(
         private var currentLocation: Location? = null
 
         fun bind(item: PlaceItem?) {
-            val randomIndex = item?.urlPlaceholder?.indices?.random()
-            val imageUrl = item?.urlPlaceholder?.get(randomIndex ?: 0)
+            item?.let {
+                val randomIndex = item.urlPlaceholder?.indices?.random()
+                val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
 
-            currentLocation = Location("")
-            currentLocation?.latitude = item?.latitude ?: 0.0
-            currentLocation?.longitude = item?.longitude ?: 0.0
+                currentLocation = Location("")
+                currentLocation?.latitude = item.latitude ?: 0.0
+                currentLocation?.longitude = item.longitude ?: 0.0
 
-            binding.apply {
-                placeName.text = item?.name
-                placeRating.text = item?.rating.toString()
-                placeType.text = item?.types?.joinToString(", ") { it }
-                Glide.with(itemView.context)
-                    .load(imageUrl)
-                    .placeholder(R.drawable.ic_image)
-                    .error(R.drawable.ic_image)
-                    .into(placeImage)
+                binding.apply {
+                    placeName.text = item.name
+                    placeRating.text = item.rating.toString()
+                    placeType.text = item.types?.joinToString(", ") { it }
+                    Glide.with(itemView.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.ic_image)
+                        .error(R.drawable.ic_image)
+                        .into(placeImage)
+                }
             }
 
             setupLocation()

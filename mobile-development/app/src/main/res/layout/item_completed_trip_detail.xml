@@ -99,7 +99,7 @@
                 app:layout_constraintTop_toBottomOf="@id/placeImage" />
 
             <RatingBar
-                android:id="@+id/ratingBar"
+                android:id="@+id/ratingStar"
                 android:layout_width="240dp"
                 android:layout_height="48dp"
                 android:scaleX="0.5"
@@ -126,7 +126,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/bgReview"
                 app:layout_constraintEnd_toEndOf="@+id/bgReview"
                 app:layout_constraintStart_toStartOf="@id/bgReview"
-                app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+                app:layout_constraintTop_toBottomOf="@+id/ratingStar" />
 
             <Button
                 android:id="@+id/submitButton"
@@ -137,9 +137,9 @@
                 android:text="@string/save"
                 android:textColor="?attr/colorSecondaryVariant"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingStar"
                 app:layout_constraintEnd_toEndOf="@id/bgReview"
-                app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+                app:layout_constraintTop_toTopOf="@+id/ratingStar" />
 
             <TextView
                 android:id="@+id/tvReviewDone"

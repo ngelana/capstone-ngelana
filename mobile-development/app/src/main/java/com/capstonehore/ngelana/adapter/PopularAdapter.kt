@@ -35,17 +35,19 @@ class PopularAdapter : ListAdapter<PlaceItem, PopularAdapter.PlaceViewHolder>(DI
     inner class PlaceViewHolder(private var binding: ItemPopularBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: PlaceItem?) {
-            val randomIndex = item?.urlPlaceholder?.indices?.random()
-            val imageUrl = item?.urlPlaceholder?.get(randomIndex ?: 0)
+            item?.let {
+                val randomIndex = item.urlPlaceholder?.indices?.random()
+                val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
 
-            binding.apply {
-                placeName.text = item?.name
-                placeRating.text = item?.rating.toString()
-                Glide.with(itemView.context)
-                    .load(imageUrl)
-                    .placeholder(R.drawable.ic_image)
-                    .error(R.drawable.ic_image)
-                    .into(placeImage)
+                binding.apply {
+                    placeName.text = item.name
+                    placeRating.text = item.rating.toString()
+                    Glide.with(itemView.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.ic_image)
+                        .error(R.drawable.ic_image)
+                        .into(placeImage)
+                }
             }
 
             itemView.setOnClickListener {

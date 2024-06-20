@@ -1,63 +1,87 @@
 package com.capstonehore.ngelana.adapter
 
-class ReviewAdapter
-// : ListAdapter<StoryItem, ReviewAdapter.ListViewHolder>(DIFF_CALLBACK)
- {
-//
-//    private lateinit var onItemClickCallback: OnItemClickCallback
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-//        val binding = ItemReviewBinding.inflate(
-//            LayoutInflater.from(parent.context),
-//            parent,
-//            false
-//        )
-//
-//        return ListViewHolder(binding)
-//    }
-//
-//    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-//        val storyItem = getItem(position)
-//        if (storyItem != null) {
-//            holder.bind(storyItem)
-//        }
-//    }
-//
-////    inner class ListViewHolder(private var binding: ItemStoryBinding)
-////        : RecyclerView.ViewHolder(binding.root) {
-////        fun bind(item: StoryItem?) {
-////            binding.apply {
-////                storyName.text = item?.name
-////                storyDescription.text = item?.description
-////                storyDate.text = item?.createdAt?.withDateFormat()
-////                Glide.with(itemView.context)
-////                    .load(item?.photoUrl)
-////                    .into(storyImage)
-////
-////                itemView.setOnClickListener {
-////                    onItemClickCallback.onItemClicked(item)
-////                }
-////            }
-////        }
-////    }
-//
-////    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-////        this.onItemClickCallback = onItemClickCallback
-////    }
-//
-////    interface OnItemClickCallback {
-////        fun onItemClicked(items: StoryItem?)
-////    }
-//
-////    companion object {
-////        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StoryItem>() {
-////            override fun areItemsTheSame(oldItem: StoryItem, newItem: StoryItem): Boolean {
-////                return oldItem.id == newItem.id
-////            }
-////
-////            override fun areContentsTheSame(oldItem: StoryItem, newItem: StoryItem): Boolean {
-////                return oldItem == newItem
-////            }
-////        }
-////    }
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
+import com.capstonehore.ngelana.data.remote.response.ReviewItem
+import com.capstonehore.ngelana.data.remote.retrofit.ApiService
+import com.capstonehore.ngelana.databinding.ItemReviewBinding
+import com.capstonehore.ngelana.utils.dateFormat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class ReviewAdapter(private val apiService: ApiService) :
+    ListAdapter<ReviewItem, ReviewAdapter.ReviewViewHolder>(DIFF_CALLBACK) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
+        val binding = ItemReviewBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ReviewViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
+        val reviewItem = getItem(position)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiService.getPlaceById(reviewItem.placeId ?: "")
+                val placeItem = response.data
+
+                withContext(Dispatchers.Main) {
+                    holder.bind(reviewItem, placeItem)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching place", e)
+            }
+        }
+    }
+
+    inner class ReviewViewHolder(private val binding: ItemReviewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(reviewItem: ReviewItem, place: PlaceItem?) {
+            place?.let {
+                val randomIndex = place.urlPlaceholder?.indices?.random()
+                val imageUrl = place.urlPlaceholder?.get(randomIndex ?: 0)
+
+                binding.apply {
+                    placeName.text = place.name ?: "Unknown Place"
+
+                    reviewRating.text = reviewItem.star.toString()
+                    reviewDate.text = reviewItem.date?.dateFormat() ?: "Unknown Date"
+                    reviewDescription.text = reviewItem.review
+
+                    Glide.with(itemView.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.ic_image)
+                        .error(R.drawable.ic_image)
+                        .into(placeImage)
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val TAG = "ReviewAdapter"
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ReviewItem>() {
+            override fun areItemsTheSame(oldItem: ReviewItem, newItem: ReviewItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: ReviewItem, newItem: ReviewItem): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }

@@ -29,7 +29,7 @@ class ReviewRepository (
     private suspend fun getUserId(): String? =
         userId ?: userPreferences.getUserId().first().also { userId = it }
 
-    fun getAllReviewByUserId(): LiveData<Result<ReviewItem>> = liveData {
+    fun getAllReviewByUserId(): LiveData<Result<List<ReviewItem>>> = liveData {
         emit(Result.Loading)
         try {
             val token = getToken()
@@ -56,7 +56,7 @@ class ReviewRepository (
         }
     }
 
-    fun createReview(reviewItem: ReviewItem): LiveData<Result<ReviewItem>> = liveData {
+    fun createReview(reviewItem: ReviewItem): LiveData<Result<List<ReviewItem>>> = liveData {
         emit(Result.Loading)
         try {
             val token = getToken()
