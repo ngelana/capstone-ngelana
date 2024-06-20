@@ -3,7 +3,6 @@ package com.capstonehore.ngelana.view.signup.password
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -19,17 +18,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.databinding.FragmentPasswordBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
@@ -43,8 +38,6 @@ class PasswordFragment : Fragment() {
 
     private lateinit var signUpViewModel: SignUpViewModel
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +50,7 @@ class PasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        signUpViewModel = obtainViewModel(requireActivity())
+        signUpViewModel = obtainViewModel(SignUpViewModel::class.java) as SignUpViewModel
 
         setupAction()
         setupImage()
@@ -288,16 +281,7 @@ class PasswordFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
-        val factory = ViewModelFactory.getInstance(
-            requireContext(),
-            UserPreferences.getInstance(activity.sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
-    }
-
     companion object {
         private const val TAG = "PasswordFragment"
-        const val USER_SESSION = "user_session"
     }
 }

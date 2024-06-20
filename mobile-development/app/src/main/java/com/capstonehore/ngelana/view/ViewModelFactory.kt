@@ -3,11 +3,16 @@ package com.capstonehore.ngelana.view
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstonehore.ngelana.data.repository.GeneralRepository
 import com.capstonehore.ngelana.data.preferences.UserPreferences
+import com.capstonehore.ngelana.data.repository.FavoriteRepository
+import com.capstonehore.ngelana.data.repository.PlaceRepository
+import com.capstonehore.ngelana.data.repository.PlanRepository
+import com.capstonehore.ngelana.data.repository.PreferenceRepository
+import com.capstonehore.ngelana.data.repository.ReviewRepository
+import com.capstonehore.ngelana.data.repository.UserRepository
 import com.capstonehore.ngelana.di.Injection
+import com.capstonehore.ngelana.di.Injection.dataStore
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
-import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.capstonehore.ngelana.view.home.plan.PlanViewModel
 import com.capstonehore.ngelana.view.login.LoginViewModel
 import com.capstonehore.ngelana.view.profile.ProfileViewModel
@@ -17,8 +22,13 @@ import com.capstonehore.ngelana.view.profile.review.ReviewViewModel
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 
 class ViewModelFactory(
-    private val repository: GeneralRepository,
-    private val preferences: UserPreferences,
+    private val userRepository: UserRepository,
+    private val placeRepository: PlaceRepository,
+    private val planRepository: PlanRepository,
+    private val preferenceRepository: PreferenceRepository,
+    private val reviewRepository: ReviewRepository,
+    private val favoriteRepository: FavoriteRepository,
+    private val userPreferences: UserPreferences,
 ) :
     ViewModelProvider.NewInstanceFactory() {
 
@@ -27,31 +37,28 @@ class ViewModelFactory(
         return when {
 
             modelClass.isAssignableFrom(SignUpViewModel::class.java) -> {
-                SignUpViewModel(repository) as T
+                SignUpViewModel(userRepository) as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
-                LoginViewModel(repository, preferences) as T
-            }
-            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel(repository) as T
+                LoginViewModel(userRepository, userPreferences) as T
             }
             modelClass.isAssignableFrom(PlaceViewModel::class.java) -> {
-                PlaceViewModel(repository) as T
+                PlaceViewModel(placeRepository) as T
             }
             modelClass.isAssignableFrom(PlanViewModel::class.java) -> {
-                PlanViewModel(repository) as T
+                PlanViewModel(planRepository) as T
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
-                ProfileViewModel(repository, preferences) as T
+                ProfileViewModel(userRepository, userPreferences) as T
             }
             modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
-                FavoriteViewModel(repository) as T
+                FavoriteViewModel(favoriteRepository) as T
             }
             modelClass.isAssignableFrom(InterestViewModel::class.java) -> {
-                InterestViewModel(repository, preferences) as T
+                InterestViewModel(preferenceRepository, userPreferences) as T
             }
             modelClass.isAssignableFrom(ReviewViewModel::class.java) -> {
-                ReviewViewModel(repository) as T
+                ReviewViewModel(reviewRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
@@ -61,9 +68,17 @@ class ViewModelFactory(
     companion object {
         @Volatile
         private var instance: ViewModelFactory? = null
-        fun getInstance(context: Context, preferences: UserPreferences): ViewModelFactory =
+        fun getInstance(context: Context): ViewModelFactory =
             instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideRepository(context), preferences)
+                instance ?: ViewModelFactory(
+                    Injection.provideUserRepository(context),
+                    Injection.providePlaceRepository(context),
+                    Injection.providePlanRepository(context),
+                    Injection.providePreferenceRepository(context),
+                    Injection.provideReviewRepository(context),
+                    Injection.provideFavoriteRepository(context),
+                    UserPreferences.getInstance(context.dataStore)
+                )
             }.also { instance = it }
     }
 }

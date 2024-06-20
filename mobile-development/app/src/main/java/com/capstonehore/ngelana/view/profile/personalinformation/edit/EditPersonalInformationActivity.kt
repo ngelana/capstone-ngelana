@@ -2,7 +2,6 @@ package com.capstonehore.ngelana.view.profile.personalinformation.edit
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,15 +10,13 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.databinding.ActivityEditPersonalInformationBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.dateFormat
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.profile.ProfileViewModel
 import com.capstonehore.ngelana.view.profile.personalinformation.PersonalInformationActivity
 
@@ -30,14 +27,12 @@ class EditPersonalInformationActivity : AppCompatActivity() {
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var userInformationItem: UserInformationItem
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditPersonalInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        profileViewModel = obtainViewModel(this@EditPersonalInformationActivity)
+        profileViewModel = obtainViewModel(ProfileViewModel::class.java) as ProfileViewModel
 
         @Suppress("DEPRECATION")
         intent.getParcelableExtra<UserInformationItem>(EXTRA_RESULT_INFORMATION)?.let { data ->
@@ -83,29 +78,38 @@ class EditPersonalInformationActivity : AppCompatActivity() {
             val phone = edPhone.text.toString().trim()
             val email = edEmail.text.toString().trim()
 
-            val userInformationItem = UserInformationItem(name, birth, gender, phone,email)
+            val userInformationItem = UserInformationItem(
+                name,
+                birth.dateFormat(),
+                gender,
+                phone,
+                email
+            )
 
-            profileViewModel.updateUserById(userInformationItem).observe(this@EditPersonalInformationActivity) {
-                if (it != null) {
-                    when (it) {
-                        is Result.Success -> {
-                            showLoading(false)
+            profileViewModel.updateUserById(userInformationItem)
+                .observe(this@EditPersonalInformationActivity) {
+                    if (it != null) {
+                        when (it) {
+                            is Result.Success -> {
+                                showLoading(false)
 
-                            val response = it.data
-                            showCustomAlertDialog(true, "")
-                            Log.d(TAG, "Success registering: $response")
+                                val response = it.data
+                                showCustomAlertDialog(true, "")
+                                Log.d(TAG, "Success registering: $response")
+                            }
+
+                            is Result.Error -> {
+                                showLoading(false)
+
+                                val response = it.error
+                                showCustomAlertDialog(false, response)
+                                Log.e(TAG, "Error update data: $response")
+                            }
+
+                            is Result.Loading -> showLoading(true)
                         }
-                        is Result.Error -> {
-                            showLoading(false)
-
-                            val response = it.error
-                            showCustomAlertDialog(false, response)
-                            Log.e(TAG, "Error update data: $response")
-                        }
-                        is Result.Loading -> showLoading(true)
                     }
                 }
-            }
         }
     }
 
@@ -138,8 +142,18 @@ class EditPersonalInformationActivity : AppCompatActivity() {
 
                 submitButton.apply {
                     text = getString(R.string.cancel)
-                    setBackgroundColor(ContextCompat.getColor(this@EditPersonalInformationActivity, R.color.light_grey))
-                    setTextColor(ContextCompat.getColor(this@EditPersonalInformationActivity, R.color.black))
+                    setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@EditPersonalInformationActivity,
+                            R.color.light_grey
+                        )
+                    )
+                    setTextColor(
+                        ContextCompat.getColor(
+                            this@EditPersonalInformationActivity,
+                            R.color.black
+                        )
+                    )
                     setOnClickListener {
                         dialog.dismiss()
                     }
@@ -161,7 +175,12 @@ class EditPersonalInformationActivity : AppCompatActivity() {
     }
 
     private fun moveToPersonalInformation() {
-        startActivity(Intent(this@EditPersonalInformationActivity, PersonalInformationActivity::class.java))
+        startActivity(
+            Intent(
+                this@EditPersonalInformationActivity,
+                PersonalInformationActivity::class.java
+            )
+        )
         finish()
     }
 
@@ -169,17 +188,8 @@ class EditPersonalInformationActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: AppCompatActivity): ProfileViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[ProfileViewModel::class.java]
-    }
-
     companion object {
         private const val TAG = "EditPersonalInformationActivity"
         const val EXTRA_RESULT_INFORMATION = "extra_result_information"
-        const val USER_SESSION = "user_session"
     }
 }

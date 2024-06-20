@@ -2,7 +2,6 @@ package com.capstonehore.ngelana.view.home
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -12,22 +11,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.adapter.PopularAdapter
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -37,12 +33,9 @@ class HomeFragment : Fragment() {
     private lateinit var placeAdapter: PlaceAdapter
     private lateinit var popularAdapter: PopularAdapter
 
-//    private lateinit var homeViewModel: HomeViewModel
     private lateinit var placeViewModel: PlaceViewModel
 
     private val navController by lazy { findNavController() }
-
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,8 +48,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        homeViewModel = obtainViewModel(requireActivity())
-        placeViewModel = obtainViewModel(requireActivity())
+        placeViewModel = obtainViewModel(PlaceViewModel::class.java) as PlaceViewModel
 
         setupAction()
         setupAnimation()
@@ -148,8 +140,8 @@ class HomeFragment : Fragment() {
                         is Result.Success -> {
                             showLoading(false)
 
-                            val response = it.data.data
-                            response?.let {
+                            val response = it.data
+                            response.let {
                                 val randomPlacesWithFiltering = getRandomPlaces(response)
                                 val randomPlacesWithoutFiltering = response.shuffled().take(8)
 
@@ -220,14 +212,6 @@ class HomeFragment : Fragment() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: FragmentActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            requireContext(),
-            UserPreferences.getInstance(requireContext().sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -235,6 +219,5 @@ class HomeFragment : Fragment() {
 
     companion object {
         private const val TAG = "HomeFragment"
-        const val USER_SESSION = "user_session"
     }
 }

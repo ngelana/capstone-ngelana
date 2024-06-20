@@ -1,19 +1,15 @@
 package com.capstonehore.ngelana.view.profile.personalinformation
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.databinding.ActivityPersonalInformationBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.profile.ProfileViewModel
 import com.capstonehore.ngelana.view.profile.personalinformation.edit.EditPersonalInformationActivity
 
@@ -25,14 +21,12 @@ class PersonalInformationActivity : AppCompatActivity() {
 
     private var userInformationItem: UserInformationItem? = null
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        profileViewModel = obtainViewModel(this@PersonalInformationActivity)
+        profileViewModel = obtainViewModel(ProfileViewModel::class.java) as ProfileViewModel
 
         setupAction()
         setupToolbar()
@@ -109,15 +103,4 @@ class PersonalInformationActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: AppCompatActivity): ProfileViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[ProfileViewModel::class.java]
-    }
-
-    companion object {
-        const val USER_SESSION = "user_session"
-    }
 }

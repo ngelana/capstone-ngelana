@@ -1,6 +1,5 @@
 package com.capstonehore.ngelana.view.explore.place.tourist
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,16 +7,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityTouristAttractionsBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 
@@ -29,14 +25,12 @@ class TouristAttractionsActivity : AppCompatActivity() {
 
     private lateinit var placeViewModel: PlaceViewModel
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTouristAttractionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        placeViewModel = obtainViewModel(this@TouristAttractionsActivity)
+        placeViewModel = obtainViewModel(PlaceViewModel::class.java) as PlaceViewModel
 
         setupToolbar()
         setupAdapter()
@@ -81,7 +75,7 @@ class TouristAttractionsActivity : AppCompatActivity() {
                         is Result.Success -> {
                             showLoading(false)
 
-                            val response = it.data.data
+                            val response = it.data
                             placeAdapter.submitList(response)
                         }
                         is Result.Error -> {
@@ -101,7 +95,7 @@ class TouristAttractionsActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data.data
+                        val response = it.data
                         placeAdapter.submitList(response)
                         Log.d(TAG, "Successfully Show Places: $response")
                     }
@@ -145,17 +139,8 @@ class TouristAttractionsActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
-    }
-
     companion object {
         private const val TAG = "TouristAttractionsActivity"
-        const val USER_SESSION = "user_session"
     }
 
 }

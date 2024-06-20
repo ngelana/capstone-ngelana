@@ -15,7 +15,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,9 +23,8 @@ import com.capstonehore.ngelana.adapter.ProfileAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.entity.Profile
 import com.capstonehore.ngelana.data.preferences.ThemeManager
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.FragmentProfileBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
@@ -55,20 +53,19 @@ class ProfileFragment : Fragment() {
     private lateinit var profileViewModel: ProfileViewModel
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(THEME_SETTINGS)
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        profileViewModel = obtainViewModel(requireActivity())
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        profileViewModel = obtainViewModel(ProfileViewModel::class.java) as ProfileViewModel
 
         setupAction()
         setupData()
@@ -307,14 +304,6 @@ class ProfileFragment : Fragment() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: FragmentActivity): ProfileViewModel {
-        val factory = ViewModelFactory.getInstance(
-            requireContext(),
-            UserPreferences.getInstance(requireContext().sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[ProfileViewModel::class.java]
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -323,7 +312,6 @@ class ProfileFragment : Fragment() {
     companion object {
         private const val TAG = "ProfileFragment"
         private const val THEME_SETTINGS = "theme_settings"
-        const val USER_SESSION = "user_session"
     }
 
 }

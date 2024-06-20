@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.SectionsPagerAdapter
 import com.capstonehore.ngelana.databinding.FragmentMyTripBinding
-import com.capstonehore.ngelana.view.home.HomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MyTripFragment : Fragment() {
@@ -18,7 +16,6 @@ class MyTripFragment : Fragment() {
     private var _binding: FragmentMyTripBinding? = null
 
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,6 +1,5 @@
 package com.capstonehore.ngelana.view.detail
 
-import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
@@ -12,19 +11,15 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PhotoAdapter
 import com.capstonehore.ngelana.adapter.SimilarPlaceAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.entity.Favorite
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentDetailPlaceBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.profile.favorite.FavoriteViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -43,8 +38,6 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
     private var isFavorite = false
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,7 +49,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        placeViewModel = obtainViewModel(requireActivity())
+        placeViewModel = obtainViewModel(PlaceViewModel::class.java) as PlaceViewModel
 
         @Suppress("DEPRECATION")
         val placeItem = arguments?.getParcelable<PlaceItem>(ARG_PLACE)
@@ -84,10 +77,8 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data.data
-                        response?.let { item ->
-                            setupDetailPlace(item)
-                        }
+                        val response = it.data
+                        setupDetailPlace(response)
                         Log.d(TAG, "Successfully Show Detail of Place: $response")
                     }
                     is Result.Error -> {
@@ -225,8 +216,8 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val response = it.data.data
-                        response?.let { item ->
+                        val response = it.data
+                        response.let { item ->
                             val randomPlacesWithFiltering = getRandomPlaces(item)
                             similarPlaceAdapter.submitList(randomPlacesWithFiltering)
                         }
@@ -245,10 +236,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupFavorite(placeItem: PlaceItem?) {
-        favoriteViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory.getInstance(requireActivity(), UserPreferences.getInstance(requireActivity().sessionDataStore))
-        )[FavoriteViewModel::class.java]
+        favoriteViewModel = obtainViewModel(FavoriteViewModel::class.java) as FavoriteViewModel
 
         placeItem?.let { item ->
             val randomIndex = item.urlPlaceholder?.indices?.random()
@@ -318,14 +306,6 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: FragmentActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            requireContext(),
-            UserPreferences.getInstance(activity.sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
-    }
-
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
@@ -342,7 +322,6 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     companion object {
         private const val TAG = "DetailPlaceFragment"
         private const val ARG_PLACE = "arg_place"
-        const val USER_SESSION = "user_session"
 
         fun newInstance(placeItem: PlaceItem): DetailPlaceFragment {
             return DetailPlaceFragment().apply {

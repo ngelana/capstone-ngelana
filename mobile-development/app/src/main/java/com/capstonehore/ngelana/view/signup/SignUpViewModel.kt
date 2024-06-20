@@ -3,10 +3,10 @@ package com.capstonehore.ngelana.view.signup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.capstonehore.ngelana.data.repository.GeneralRepository
+import com.capstonehore.ngelana.data.repository.UserRepository
 
 class SignUpViewModel(
-        private val repository: GeneralRepository,
+        private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _name = MutableLiveData<String>()
@@ -34,5 +34,5 @@ class SignUpViewModel(
             name: String,
             email: String,
             password: String,
-    ) = repository.register(name, email, password)
+    ) = userRepository.register(name, email, password)
 }

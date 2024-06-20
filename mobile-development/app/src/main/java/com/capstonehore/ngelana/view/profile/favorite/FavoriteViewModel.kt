@@ -3,24 +3,24 @@ package com.capstonehore.ngelana.view.profile.favorite
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstonehore.ngelana.data.local.entity.Favorite
-import com.capstonehore.ngelana.data.repository.GeneralRepository
+import com.capstonehore.ngelana.data.repository.FavoriteRepository
 import kotlinx.coroutines.launch
 
-class FavoriteViewModel(private val repository: GeneralRepository): ViewModel() {
+class FavoriteViewModel(private val favoriteRepository: FavoriteRepository): ViewModel() {
 
-    fun getAllFavorites() = repository.getAllFavorites()
+    fun getAllFavorites() = favoriteRepository.getAllFavorites()
 
-    fun getFavoriteByPlaceId(placeId: String) = repository.getFavoriteByPlaceId(placeId)
+    fun getFavoriteByPlaceId(placeId: String) = favoriteRepository.getFavoriteByPlaceId(placeId)
 
     fun insertFavoritePlace(favorite: Favorite) {
         viewModelScope.launch {
-            repository.insertFavoritePlace(favorite)
+            favoriteRepository.insertFavoritePlace(favorite)
         }
     }
 
     fun deleteFavoritePlace(favorite: Favorite) {
         viewModelScope.launch {
-            repository.deleteFavoritePlace(favorite)
+            favoriteRepository.deleteFavoritePlace(favorite)
         }
     }
 

@@ -1,21 +1,17 @@
 package com.capstonehore.ngelana.view.profile.favorite
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityMyFavoriteBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.main.MainActivity
@@ -29,14 +25,12 @@ class MyFavoriteActivity : AppCompatActivity() {
 
     private lateinit var placeAdapter: PlaceAdapter
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        favoriteViewModel = obtainViewModel(this@MyFavoriteActivity)
+        favoriteViewModel = obtainViewModel(FavoriteViewModel::class.java) as FavoriteViewModel
 
         setupAction()
         setupToolbar()
@@ -115,15 +109,4 @@ class MyFavoriteActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: AppCompatActivity): FavoriteViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[FavoriteViewModel::class.java]
-    }
-
-    companion object {
-        const val USER_SESSION = "user_session"
-    }
 }

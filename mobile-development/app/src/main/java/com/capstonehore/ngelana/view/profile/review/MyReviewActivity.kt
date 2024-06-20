@@ -4,15 +4,20 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.ActivityMyReviewBinding
+import com.capstonehore.ngelana.utils.obtainViewModel
 
 class MyReviewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyReviewBinding
 
+    private lateinit var reviewViewModel: ReviewViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        reviewViewModel = obtainViewModel(ReviewViewModel::class.java) as ReviewViewModel
 
         setupToolbar()
         setupView()

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.CategoryAdapter
@@ -15,14 +14,12 @@ import com.capstonehore.ngelana.databinding.FragmentExploreBinding
 import com.capstonehore.ngelana.view.explore.place.culinary.CulinarySpotActivity
 import com.capstonehore.ngelana.view.explore.place.lodging.LodgingActivity
 import com.capstonehore.ngelana.view.explore.place.tourist.TouristAttractionsActivity
-import com.capstonehore.ngelana.view.home.HomeViewModel
 
 class ExploreFragment : Fragment() {
 
     private var _binding: FragmentExploreBinding? = null
 
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

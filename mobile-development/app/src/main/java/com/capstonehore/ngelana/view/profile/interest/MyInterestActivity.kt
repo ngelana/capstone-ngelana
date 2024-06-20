@@ -1,22 +1,18 @@
 package com.capstonehore.ngelana.view.profile.interest
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.MyInterestAdapter
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.databinding.ActivityMyInterestBinding
-import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.utils.obtainViewModel
 import com.capstonehore.ngelana.view.profile.interest.edit.EditMyInterestActivity
 
 class MyInterestActivity : AppCompatActivity() {
@@ -27,14 +23,12 @@ class MyInterestActivity : AppCompatActivity() {
 
     private lateinit var interestViewModel: InterestViewModel
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyInterestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        interestViewModel = obtainViewModel(this@MyInterestActivity)
+        interestViewModel = obtainViewModel(InterestViewModel::class.java) as InterestViewModel
 
         setupAction()
         setupToolbar()
@@ -106,17 +100,8 @@ class MyInterestActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun obtainViewModel(activity: AppCompatActivity): InterestViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity,
-            UserPreferences.getInstance(sessionDataStore)
-        )
-        return ViewModelProvider(activity, factory)[InterestViewModel::class.java]
-    }
-
     companion object {
         private const val TAG = "InterestActivity"
-        const val USER_SESSION = "user_session"
     }
 
 }
