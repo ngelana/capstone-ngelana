@@ -32,17 +32,16 @@ router.get("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
 
   try {
-    // const getResponseSimilarPlacesId = await axios.post(
-    //   `https://YOUR_FASTAPI_APP_URL/${id}`
+    // const getResponseSimilarPlacesId = await axios.get(
+    //   `http://110.136.181.224:4000/similar-places/${id}`
     // );
 
-    // const placeIds = getResponseSimilarPlacesId.data.ids;
-    // const placeIdsArray = placeIds.split(",");
+    // const placeIds = getResponseSimilarPlacesId.data;
 
     // const similarPlaces = await prisma.place.findMany({
     //   where: {
     //     id: {
-    //       in: placeIdsArray,
+    //       in: placeIds,
     //     },
     //   },
     //   select: {
@@ -53,9 +52,10 @@ router.get("/:id", accessValidation, async (req, res) => {
     // });
 
     const result = await getPlaceWithUrlPlaceholderbyId(id);
+    // const resultWithSimilarPlaces = { ...result, similarPlaces };
     return res.status(200).json({
+      // data: resultWithSimilarPlaces,
       data: result,
-      // similarPlaces,
       message: `Place with id ${id} and similar places listed!`,
     });
   } catch (error) {

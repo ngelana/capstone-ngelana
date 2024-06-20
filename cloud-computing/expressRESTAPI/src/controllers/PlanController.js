@@ -7,6 +7,7 @@ const {
 } = require("../services/DbServices");
 const { accessValidation } = require("../services/AuthServices");
 const { parseDate } = require("../services/UtilServices");
+const axios = require("axios");
 
 // Placeholder function to simulate ML model for generating placeIds
 const generatePlaceIds = async () => {
@@ -188,14 +189,13 @@ router.post("/recommend", accessValidation, async (req, res) => {
   const { date, userId, inputPreferences } = req.body;
 
   try {
-    console.log(inputPreferences);
+    // console.log(inputPreferences);
 
     if (!(await isValidUserId(userId))) {
       return res.status(404).json({
         message: `User not found!`,
       });
     }
-    console.log(isValidUserId(userId));
     if (!inputPreferences || inputPreferences.length == 0) {
       return res
         .status(404)
@@ -228,7 +228,8 @@ router.post("/recommend", accessValidation, async (req, res) => {
 
     // Extract preference names
     const preferenceNames = userPreferences.map((up) => up.preference.name);
-    console.log(preferenceNames);
+    // console.log(preferenceNames);
+
     // Convert preferences array to a comma-separated string
     // const userPreferencesString = JSON.stringify(preferenceNames);
     // const inputPreferencesString = JSON.stringify(inputPreferencesNames);
@@ -240,25 +241,29 @@ router.post("/recommend", accessValidation, async (req, res) => {
     // });
 
     // json object to send
-    // console.log(typeof preferenceNames);
-    // console.log(typeof inputPreferencesNames);
+    // console.log(preferenceNames);
+    // console.log(inputPreferencesNames);
     // return res.json({
     //   userPreferences: preferenceNames,
     //   inputPreferences: inputPreferencesNames,
     // });
 
     // Send request to the FastAPI app with the formatted body
-    // const response = await axios.post('https://YOUR_FASTAPI_APP_URL/recommend/', {
-    //     userPreferences: userPreferencesString
-    //     inputPreferences: preferences
-
-    // });
+    // const response = await axios.post(
+    //   "http://110.136.181.224:4000/recommend-places/",
+    //   {
+    //     userPreferences: preferenceNames,
+    //     inputPreferences: inputPreferencesNames,
+    //   }
+    // );
+    // console.log(response);
+    // return res.status(200).json(response.data);
 
     // const idsArray = response.data.ids;
 
-    const placeIds = await generatePlaceIds();
-    console.log(placeIds);
-    const places = await getPlacesWithUrlPlaceholdersByPlaceID(placeIds);
+    // const placeIds = await generatePlaceIds();
+    // console.log(placeIds);
+    // const places = await getPlacesWithUrlPlaceholdersByPlaceID(placeIds);
     // return res.status(200).json({
     //   places,
     //   message: "Successfully generated recommendations",
