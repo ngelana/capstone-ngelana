@@ -6,7 +6,8 @@
   },
   "main": "src/app.js",
   "scripts": {
-    "startDev": "nodemon ."
+    "start": "node src/app.js",
+    "postinstall": "npx prisma generate"
   },
   "keywords": [],
   "author": "",

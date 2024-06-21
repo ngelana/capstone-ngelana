@@ -1,0 +1,4 @@
+runtime: nodejs22
+
+beta_settings:
+  cloud_sql_instances: ngelana-capstone:asia-southeast2:ngelana-sql
