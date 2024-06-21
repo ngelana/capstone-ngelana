@@ -49,10 +49,10 @@ app = FastAPI(lifespan=lifespan)
 @cache(namespace="similar-places", expire=300, coder=CustomCoder)
 async def get_similar_places(place_id: str):
     try:
-        similar_places = content_based(place_id)
+        similar_places = content_based(place_id=place_id)
         return similar_places
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
+        raise HTTPException(status_code=500, detail=f"Layer main: {e}")
 
 
 @app.post("/recommend-places/")

@@ -19,19 +19,19 @@ def load_keras_model():
 @cache
 def load_data():
     try:
-        user_pref_path = 'ml_dataset/user_preferences.csv'
+        user_pref_path = '../ml_dataset/user_preferences.csv'
         user_pref_data = pd.read_csv(user_pref_path)
     except FileNotFoundError:
         raise FileNotFoundError("User reviews data not found.")
 
     try:
-        place_types_path = 'ml_dataset/place_types.csv'
+        place_types_path = '../ml_dataset/place_types.csv'
         place_types_data = pd.read_csv(place_types_path)
     except FileNotFoundError:
         raise FileNotFoundError("Place types data not found.")
 
     try:
-        user_review_path = 'ml_dataset/user_reviews.csv'
+        user_review_path = '../ml_dataset/user_reviews.csv'
         user_review_data = pd.read_csv(user_review_path)
     except FileNotFoundError:
         raise FileNotFoundError("User reviews data not found.")

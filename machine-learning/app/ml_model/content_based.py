@@ -9,10 +9,9 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from functools import cache
 
 
-@cache
 def load_reviews_data():
     try:
-        path = 'ml_dataset/review_dataset.csv'
+        path = '/ml_dataset/review_dataset.csv'
         data = pd.read_csv(path)
 
         encoder = LabelEncoder()
@@ -36,7 +35,7 @@ def load_reviews_data():
         raise Exception(f"An error occurred: {e}")
 
 
-@cache
+
 def content_based(place_id: str, top_n: int = 10):
     try:
         data, x_review, x_types = load_reviews_data()
