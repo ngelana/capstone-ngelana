@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class PlaceItem(
 
     @field:SerializedName("types")
-    val types: List<String>? = null,
+    val types: String? = null,
 
     @field:SerializedName("address")
     val address: String? = null,

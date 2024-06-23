@@ -3,6 +3,7 @@ package com.capstonehore.ngelana.view.signup.password
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -18,13 +19,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.databinding.FragmentPasswordBinding
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
@@ -38,6 +45,8 @@ class PasswordFragment : Fragment() {
 
     private lateinit var signUpViewModel: SignUpViewModel
 
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,7 +59,7 @@ class PasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        signUpViewModel = obtainViewModel(SignUpViewModel::class.java) as SignUpViewModel
+        signUpViewModel = obtainViewModel(requireActivity())
 
         setupAction()
         setupImage()
@@ -162,37 +171,35 @@ class PasswordFragment : Fragment() {
     }
 
     private fun setupRegister() {
-        val name = signUpViewModel.name.value.toString()
-        val email = signUpViewModel.email.value.toString()
+        val name = signUpViewModel.name.value ?: ""
+        val email = signUpViewModel.email.value ?: ""
         val password = binding.edPassword.text.toString()
 
-        if (password.isNotEmpty()) {
-            signUpViewModel.setPassword(password)
-        } else {
-            showToast(getString(R.string.empty_password))
-        }
+        when {
+            password.isEmpty() -> showToast(getString(R.string.empty_password))
+            else -> {
+                signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        when (it) {
+                            is Result.Success -> {
+                                showLoading(false)
 
-        signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner) {
-            if( it != null ){
-                when (it) {
-                    is Result.Success -> {
-                        showLoading(false)
+                                val response = it.data
+                                showCustomAlertDialog(true, "")
+                                Log.d(TAG, "Success registering: $response")
+                            }
+                            is Result.Error -> {
+                                showLoading(false)
 
-                        val response = it.data
-                        showCustomAlertDialog(true, "")
-                        Log.d(TAG, "Success registering: $response")
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-
-                        val response = it.error
-                        showCustomAlertDialog(false, response)
-                        Log.e(TAG, "Error registering: $response")
-                    }
-                    is Result.Loading -> {
-                        showLoading(true)
-
-                        Log.d(TAG, "Loading Register User ....")
+                                val response = it.error
+                                showCustomAlertDialog(false, response)
+                                Log.e(TAG, "Error registering: $response")
+                            }
+                            is Result.Loading -> {
+                                showLoading(true)
+                                Log.d(TAG, "Loading Register User ....")
+                            }
+                        }
                     }
                 }
             }
@@ -281,7 +288,21 @@ class PasswordFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(requireActivity().dataStore)
+        )
+        return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
+        const val SESSION = "session"
         private const val TAG = "PasswordFragment"
     }
 }

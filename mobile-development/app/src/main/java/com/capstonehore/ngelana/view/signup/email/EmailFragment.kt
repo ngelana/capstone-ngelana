@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.signup.email
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -16,11 +17,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.FragmentEmailBinding
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.name.NameFragment
@@ -31,20 +38,24 @@ class EmailFragment : Fragment() {
     private var _binding: FragmentEmailBinding? = null
 
     private val binding get() = _binding!!
+
     private lateinit var signUpViewModel: SignUpViewModel
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailBinding.inflate(inflater, container, false)
-        signUpViewModel = ViewModelProvider(requireActivity())[SignUpViewModel::class.java]
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        signUpViewModel = obtainViewModel(requireActivity())
 
         setupAction()
         setupImage()
@@ -59,7 +70,12 @@ class EmailFragment : Fragment() {
         }
         binding.nextButton.setOnClickListener {
             val email = binding.edEmail.text.toString()
-            moveToPassword(email)
+            if (email.isEmpty()) {
+                showToast(getString(R.string.empty_email))
+            } else {
+                signUpViewModel.setEmail(email)
+                moveToPassword()
+            }
         }
     }
 
@@ -168,20 +184,31 @@ class EmailFragment : Fragment() {
             .commit()
     }
 
-    private fun moveToPassword(email: String) {
-        if (email.isNotEmpty()) {
-            signUpViewModel.setEmail(email)
-
-            parentFragmentManager.beginTransaction()
+    private fun moveToPassword() {
+        parentFragmentManager.beginTransaction()
                 .add(R.id.main, PasswordFragment())
                 .addToBackStack(null)
                 .commit()
-        } else {
-            showToast(getString(R.string.empty_email))
-        }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(requireActivity().dataStore)
+        )
+        return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        const val SESSION = "session"
     }
 }

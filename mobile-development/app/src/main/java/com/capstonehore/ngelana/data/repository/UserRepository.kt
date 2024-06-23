@@ -31,48 +31,49 @@ class UserRepository (
     private suspend fun getUserId(): String? =
         userId ?: userPreferences.getUserId().first().also { userId = it }
 
-    fun register(
-        name: String,
-        email: String,
-        password: String
-    ): LiveData<Result<RegisterResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.register(name, email, password)
-
-            emit(Result.Success(response))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
-
-            emit(Result.Error(errorResponse.message.toString()))
-        } catch (e: Exception) {
-            Log.d(TAG, "register: ${e.message}")
-
-            emit(Result.Error(e.message.toString()))
-        }
-    }
-
-    fun login(
-        email: String,
-        password: String,
-    ): LiveData<Result<LoginResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.login(email, password)
-
-            emit(Result.Success(response))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
-
-            emit(Result.Error(errorResponse.message.toString()))
-        } catch (e: Exception) {
-            Log.d(TAG, "login  : ${e.message}")
-
-            emit(Result.Error(e.message.toString()))
-        }
-    }
+//    fun register(
+//        name: String,
+//        email: String,
+//        password: String
+//    ): LiveData<Result<RegisterResponse>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            val response = apiService.register(name, email, password)
+//
+//            emit(Result.Success(response))
+////        } catch (e: HttpException) {
+////            val errorBody = e.response()?.errorBody()?.string()
+////            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+////
+////            emit(Result.Error(errorResponse.message.toString()))
+////        }
+//        } catch (e: Exception) {
+//            Log.d(TAG, "register: ${e.message}")
+//
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
+//
+//    fun login(
+//        email: String,
+//        password: String,
+//    ): LiveData<Result<LoginResponse>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            val response = apiService.login(email, password)
+//
+//            emit(Result.Success(response))
+//        } catch (e: HttpException) {
+//            val errorBody = e.response()?.errorBody()?.string()
+//            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+//
+//            emit(Result.Error(errorResponse.message.toString()))
+//        } catch (e: Exception) {
+//            Log.d(TAG, "login  : ${e.message}")
+//
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
 
     fun getUserById(): LiveData<Result<UserResponse>> = liveData {
         emit(Result.Loading)

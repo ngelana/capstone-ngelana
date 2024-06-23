@@ -14,7 +14,9 @@ import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResp
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
 import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferenceResponse
 import com.capstonehore.ngelana.data.remote.response.review.ReviewResponse
+import com.capstonehore.ngelana.data.remote.response.users.LoginModel
 import com.capstonehore.ngelana.data.remote.response.users.LoginResponse
+import com.capstonehore.ngelana.data.remote.response.users.RegisterModel
 import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
 import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import retrofit2.http.Body
@@ -30,20 +32,26 @@ import retrofit2.http.Query
 interface ApiService {
 
     // Users
-    @FormUrlEncoded
-    @POST("user/register")
-    suspend fun register(
-        @Field("name") name: String,
-        @Field("email") email: String,
-        @Field("password") password: String
-    ): RegisterResponse
+//    @FormUrlEncoded
+//    @POST("user/register")
+//    suspend fun register(
+//        @Field("name") name: String,
+//        @Field("email") email: String,
+//        @Field("password") password: String
+//    ): RegisterResponse
+//
+//    @FormUrlEncoded
+//    @POST("user/login")
+//    suspend fun login(
+//        @Field("email") email: String,
+//        @Field("password") password: String,
+//    ): LoginResponse
 
-    @FormUrlEncoded
+    @POST("user/register")
+    suspend fun register(@Body request: RegisterModel): RegisterResponse
+
     @POST("user/login")
-    suspend fun login(
-        @Field("email") email: String,
-        @Field("password") password: String,
-    ): LoginResponse
+    suspend fun login(@Body request: LoginModel): LoginResponse
 
     @GET("user/{id}")
     suspend fun getUserById(

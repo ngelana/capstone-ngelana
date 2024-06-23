@@ -1,5 +1,6 @@
 package com.capstonehore.ngelana.view.explore.place.culinary
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,13 +8,18 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityCulinarySpotBinding
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 
@@ -25,12 +31,14 @@ class CulinarySpotActivity : AppCompatActivity() {
 
     private lateinit var placeViewModel: PlaceViewModel
 
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCulinarySpotBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        placeViewModel = obtainViewModel(PlaceViewModel::class.java) as PlaceViewModel
+        placeViewModel = obtainViewModel(this@CulinarySpotActivity)
 
         setupToolbar()
         setupAdapter()
@@ -139,8 +147,17 @@ class CulinarySpotActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
+    }
+
     companion object {
         private const val TAG = "TouristAttractionsActivity"
+        const val SESSION = "session"
     }
 
 }

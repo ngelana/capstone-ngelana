@@ -23,7 +23,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var themeManager: ThemeManager
     private lateinit var themeViewModel: ThemeViewModel
 
-    private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
+    private val Context.themeDataStore by preferencesDataStore(THEME_SETTINGS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun themeSettings() {
-        themeManager = ThemeManager.getInstance(dataStore)
+        themeManager = ThemeManager.getInstance(themeDataStore)
 
         themeViewModel = ViewModelProvider(
             this@SignUpActivity,

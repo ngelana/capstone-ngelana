@@ -10,19 +10,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.repository.PlaceRepository
+import com.capstonehore.ngelana.data.repository.Repository
 import kotlinx.coroutines.launch
 
 class PlaceViewModel(
-    private val placeRepository: PlaceRepository
+//    private val placeRepository: PlaceRepository
+    private val repository: Repository
 ) : ViewModel() {
 
-    fun getAllPlaces() = placeRepository.getAllPlaces()
+    fun getAllPlaces() = repository.getAllPlaces()
 
-    fun getPlaceById(id: String) = placeRepository.getPlaceById(id)
+    fun getPlaceById(id: String) = repository.getPlaceById(id)
 
-    fun searchPlaceByQuery(query: String) = placeRepository.searchPlaceByQuery(query)
+    fun searchPlaceByQuery(query: String) = repository.searchPlaceByQuery(query)
 
-    fun getPrimaryTypePlace(type: String) = placeRepository.getPrimaryTypePlace(type)
+    fun getPrimaryTypePlace(type: String) = repository.getPrimaryTypePlace(type)
 
     private val _locationResult = MutableLiveData<Result<Address>>()
     val locationResult: LiveData<Result<Address>>
@@ -32,7 +34,7 @@ class PlaceViewModel(
         _locationResult.value = Result.Loading
         viewModelScope.launch {
             try {
-                val result = placeRepository.getLocationDetails(context, location)
+                val result = repository.getLocationDetails(context, location)
                 result.observeForever {
                     _locationResult.value = it
                 }

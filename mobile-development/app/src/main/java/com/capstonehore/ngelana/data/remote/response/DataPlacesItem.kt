@@ -6,7 +6,4 @@ data class DataPlacesItem(
 
     @field:SerializedName("place")
     val place: PlaceItem? = null,
-
-    @field:SerializedName("urlPlaceholder")
-    val urlPlaceholder: List<String?>? = null
 )

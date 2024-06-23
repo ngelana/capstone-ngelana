@@ -1,5 +1,6 @@
 package com.capstonehore.ngelana.view.detail
 
+import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +9,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PhotoAdapter
 import com.capstonehore.ngelana.adapter.SimilarPlaceAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.entity.Favorite
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityDetailPlaceBinding
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.profile.favorite.FavoriteViewModel
 
@@ -26,18 +32,19 @@ class DetailPlaceActivity : AppCompatActivity() {
 
     private lateinit var similarPlaceAdapter: SimilarPlaceAdapter
     private var currentLocation: Location? = null
+    private var isFavorite = false
 
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var favoriteViewModel: FavoriteViewModel
 
-    private var isFavorite = false
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        placeViewModel = obtainViewModel(PlaceViewModel::class.java) as PlaceViewModel
+        placeViewModel = obtainViewModel(this@DetailPlaceActivity)
 
         @Suppress("DEPRECATION")
         val placeItem = intent.getParcelableExtra<PlaceItem>(EXTRA_PLACES)
@@ -96,6 +103,8 @@ class DetailPlaceActivity : AppCompatActivity() {
     private fun setupDetailPlace(item: PlaceItem) {
         binding.apply {
             val placeImage = item.urlPlaceholder ?: emptyList()
+            val typesList = item.types?.split(", ") ?: emptyList()
+
             setupImageAdapter(placeImage)
             setupLocation()
             clearCircleViews()
@@ -105,7 +114,7 @@ class DetailPlaceActivity : AppCompatActivity() {
 
             placeName.text = item.name
             placePrimaryType.text = item.primaryTypes
-            placeType.text = item.types?.joinToString(", ") { it }
+            placeType.text = typesList.joinToString(", ")
             placeRating.text = item.rating.toString()
             placeRatingCount.text = item.ratingCount.toString()
             placeStatus.text = item.status
@@ -233,7 +242,14 @@ class DetailPlaceActivity : AppCompatActivity() {
     }
 
     private fun setupFavorite(placeItem: PlaceItem?) {
-        favoriteViewModel = obtainViewModel(FavoriteViewModel::class.java) as FavoriteViewModel
+        val factory = ViewModelFactory.getInstance(
+            this,
+            UserPreferences.getInstance(dataStore)
+        )
+        favoriteViewModel = ViewModelProvider(
+            this,
+            factory
+        )[FavoriteViewModel::class.java]
 
         placeItem?.let { item ->
             val randomIndex = item.urlPlaceholder?.indices?.random()
@@ -243,7 +259,8 @@ class DetailPlaceActivity : AppCompatActivity() {
                 val placeImage = item.urlPlaceholder?.get(randomIndex ?: 0)
                 val placeCity = setupLocation()
                 val placeRating = item.rating.toString()
-                val placeType = item.types ?: emptyList()
+                val typesList = item.types?.split(", ") ?: emptyList()
+                val placeType = typesList.joinToString(", ")
 
                 val favorite = Favorite(
                     placeId,
@@ -251,7 +268,7 @@ class DetailPlaceActivity : AppCompatActivity() {
                     placeImage,
                     placeCity,
                     placeRating,
-                    placeType.joinToString(", ")
+                    placeType
                 )
 
                 favoriteViewModel.getFavoriteByPlaceId(placeId).observe(this) {
@@ -307,8 +324,17 @@ class DetailPlaceActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
+    }
+
     companion object {
         private const val TAG = "DetailPlaceActivity"
         const val EXTRA_PLACES= "extra_places"
+        const val SESSION = "session"
     }
 }

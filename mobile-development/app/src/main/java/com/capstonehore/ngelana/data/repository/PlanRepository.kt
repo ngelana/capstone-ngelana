@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
+import com.capstonehore.ngelana.data.remote.response.DataPlacesItem
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
+import com.capstonehore.ngelana.data.remote.response.ReviewItem
 import com.capstonehore.ngelana.data.remote.response.plan.PlaceRecommendedResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
@@ -91,6 +93,33 @@ class PlanRepository (
             }
         }
 
+    fun setDetailPlanResult(planUserItem: PlanUserItem): LiveData<Result<List<PlaceItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val token = getToken()
+            val userId = getUserId()
+
+            apiService = ApiConfig.getApiService(token.toString())
+            if (userId != null) {
+                val response = apiService.setPlanResult(planUserItem)
+                val dataPlanUser = response.data?.places
+
+                val places = dataPlanUser?.map { item -> item.place ?: PlaceItem() } ?: emptyList()
+                emit(Result.Success(places))
+            } else {
+                emit(Result.Error("User ID not found"))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PlanResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getPlanByUserId: ${e.message}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun getPlanByUserId(): LiveData<Result<List<PlanUserItem>>> = liveData {
         emit(Result.Loading)
         try {
@@ -102,6 +131,36 @@ class PlanRepository (
                 val response = apiService.getPlanByUserId(userId)
                 val planUserItem = response.data ?: emptyList()
                 emit(Result.Success(planUserItem))
+            } else {
+                emit(Result.Error("User ID not found"))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, PlanResponse::class.java)
+
+            emit(Result.Error(errorResponse.toString()))
+        } catch (e: Exception) {
+            Log.d(TAG, "getPlanByUserId: ${e.message}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun getPlanDetailByUserId(): LiveData<Result<List<PlaceItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val token = getToken()
+            val userId = getUserId()
+
+            apiService = ApiConfig.getApiService(token.toString())
+            if (userId != null) {
+                val response = apiService.getPlanByUserId(userId)
+                val planUserItem = response.data ?: emptyList()
+
+                val places = planUserItem.flatMap { item ->
+                    item.places?.map { it.place ?: PlaceItem() } ?: emptyList()
+                }
+
+                emit(Result.Success(places))
             } else {
                 emit(Result.Error("User ID not found"))
             }

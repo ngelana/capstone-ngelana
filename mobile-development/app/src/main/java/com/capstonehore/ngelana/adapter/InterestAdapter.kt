@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
+import com.capstonehore.ngelana.databinding.ItemInterestBinding
 import com.capstonehore.ngelana.databinding.ItemProfileBinding
 
 class InterestAdapter(
@@ -23,7 +24,7 @@ class InterestAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterestViewHolder {
-        val binding = ItemProfileBinding.inflate(
+        val binding = ItemInterestBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -36,19 +37,20 @@ class InterestAdapter(
         holder.bind(getItem(position), selectedItems[position])
     }
 
-    inner class InterestViewHolder(private val binding: ItemProfileBinding) :
+    inner class InterestViewHolder(private val binding: ItemInterestBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PreferenceItem?, isSelected: Boolean) {
             item?.let {
+                val imageUrl = itemView.context.getString(R.string.ic_preference)
+
                 binding.apply {
-                    tvName.text = it.name
-                    ivIconLeft.setImageResource(R.drawable.ic_keyboard_arrow_right)
+                    tvInterest.text = it.name
                     Glide.with(itemView.context)
-                        .load(it.urlPlaceholder)
+                        .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
                         .error(R.drawable.ic_image)
-                        .into(ivIconRight)
+                        .into(icInterest)
 
                     root.setBackgroundResource(
                         if (isSelected) R.drawable.selected_item_background else R.drawable.rounded_corners_white

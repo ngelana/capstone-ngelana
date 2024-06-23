@@ -1,16 +1,23 @@
 package com.capstonehore.ngelana.view.home.plan.recommendation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
 import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
 
@@ -19,12 +26,13 @@ class RecommendationPlanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecommendationPlanBinding
 
     private val placeList = ArrayList<Place>()
-
     private var selectedDate: String? = null
 
     private lateinit var recommendationPlaceAdapter: RecommendationPlaceAdapter
 
     private lateinit var placeViewModel: PlaceViewModel
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     @SuppressLint("NotifyDataSetChanged")
     val addPlaceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -144,8 +152,17 @@ class RecommendationPlanActivity : AppCompatActivity() {
         binding.rvPlaces.adapter?.notifyDataSetChanged()
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
+    }
+
     companion object {
         const val EXTRA_DATE = "extra_date"
         const val EXTRA_RETURN_PLACE = "extra_return_place"
+        const val SESSION = "session"
     }
 }

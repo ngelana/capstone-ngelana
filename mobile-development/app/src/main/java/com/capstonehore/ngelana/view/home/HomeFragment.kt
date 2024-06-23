@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.home
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -11,16 +12,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.adapter.PopularAdapter
 import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 
@@ -37,6 +44,8 @@ class HomeFragment : Fragment() {
 
     private val navController by lazy { findNavController() }
 
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,7 +57,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        placeViewModel = obtainViewModel(PlaceViewModel::class.java) as PlaceViewModel
+        placeViewModel = obtainViewModel(requireActivity())
 
         setupAction()
         setupAnimation()
@@ -135,31 +144,31 @@ class HomeFragment : Fragment() {
 
     private fun setupView() {
         placeViewModel.getAllPlaces().observe(viewLifecycleOwner) {
-                if (it != null) {
-                    when (it) {
-                        is Result.Success -> {
-                            showLoading(false)
+            if (it != null) {
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
 
-                            val response = it.data
-                            response.let {
-                                val randomPlacesWithFiltering = getRandomPlaces(response)
-                                val randomPlacesWithoutFiltering = response.shuffled().take(8)
+                        val response = it.data
+                        response.let {
+                            val randomPlacesWithFiltering = getRandomPlaces(response)
+                            val randomPlacesWithoutFiltering = response.shuffled().take(8)
 
-                                popularAdapter.submitList(randomPlacesWithFiltering)
-                                placeAdapter.submitList(randomPlacesWithoutFiltering)
-                            }
-                            Log.d(TAG, "Successfully Show All Places: $response")
+                            popularAdapter.submitList(randomPlacesWithFiltering)
+                            placeAdapter.submitList(randomPlacesWithoutFiltering)
                         }
-                        is Result.Error -> {
-                            showLoading(false)
-
-                            showToast(it.error)
-                            Log.d(TAG, "Failed to Show All Places: ${it.error}")
-                        }
-                        is Result.Loading -> showLoading(true)
+                        Log.d(TAG, "Successfully Show All Places: $response")
                     }
+                    is Result.Error -> {
+                        showLoading(false)
+
+                        showToast(it.error)
+                        Log.d(TAG, "Failed to Show All Places: ${it.error}")
+                    }
+                    is Result.Loading -> showLoading(true)
                 }
             }
+        }
     }
 
     private fun filterHighRatingPlaces(response: List<PlaceItem>): List<PlaceItem> {
@@ -212,6 +221,14 @@ class HomeFragment : Fragment() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: FragmentActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(requireActivity().dataStore)
+        )
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -219,5 +236,6 @@ class HomeFragment : Fragment() {
 
     companion object {
         private const val TAG = "HomeFragment"
+        const val SESSION = "session"
     }
 }

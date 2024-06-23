@@ -3,6 +3,7 @@ package com.capstonehore.ngelana.view.mytrip.detail
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.remote.response.DataPlacesItem
 import com.capstonehore.ngelana.databinding.ActivityUpcomingTripDetailBinding
 
 class UpcomingTripDetailActivity : AppCompatActivity() {
@@ -32,5 +33,12 @@ class UpcomingTripDetailActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "UpcomingTripDetailActivity"
+        const val EXTRA_PLAN_ITEM = "extra_plan_item"
+        const val EXTRA_PLAN_NAME = "extra_plan_name"
+        const val EXTRA_PLAN_DATE = "extra_plan_date"
     }
 }

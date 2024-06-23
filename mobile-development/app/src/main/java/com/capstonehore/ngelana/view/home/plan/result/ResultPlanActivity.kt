@@ -3,19 +3,25 @@ package com.capstonehore.ngelana.view.home.plan.result
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.adapter.PlanResultAdapter
 import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivityResultPlanBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.withDateFormat
+import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.home.plan.PlanViewModel
 import com.capstonehore.ngelana.view.main.MainActivity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,15 +36,21 @@ class ResultPlanActivity : AppCompatActivity() {
     private var planName: String? = null
     private var selectedDate: String? = null
 
+    private lateinit var planViewModel: PlanViewModel
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultPlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        planViewModel = obtainViewModel(this@ResultPlanActivity)
+
         @Suppress("DEPRECATION")
         planList = intent.getParcelableArrayListExtra(EXTRA_RESULT_PLACE) ?: ArrayList()
         setupAction()
-        setupData(planList)
+//        setupData(planList)
         setupName()
         setupDate()
     }
@@ -68,19 +80,19 @@ class ResultPlanActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupData(data: ArrayList<Place>) {
-        if (data.isNotEmpty()) {
-            setupView()
-        }
-    }
+//    private fun setupData(data: ArrayList<Place>) {
+//        if (data.isNotEmpty()) {
+//            setupView()
+//        }
+//    }
 
-    private fun setupView() {
-        val planResultAdapter = PlanResultAdapter(planList)
-
-        binding.rvPlaces.apply {
-            layoutManager = LinearLayoutManager(this@ResultPlanActivity)
-            adapter = planResultAdapter
-        }
+//    private fun setupView() {
+//        val planResultAdapter = PlanResultAdapter(planList)
+//
+//        binding.rvPlaces.apply {
+//            layoutManager = LinearLayoutManager(this@ResultPlanActivity)
+//            adapter = planResultAdapter
+//        }
 
 //        planResultAdapter.setOnItemClickCallback(object :
 //            PlanResultAdapter.OnItemClickCallback {
@@ -89,7 +101,7 @@ class ResultPlanActivity : AppCompatActivity() {
 //                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
 //            }
 //        })
-    }
+//    }
 
     private fun generateNewName(): String {
         val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
@@ -154,9 +166,18 @@ class ResultPlanActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): PlanViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[PlanViewModel::class.java]
+    }
+
     companion object {
         const val EXTRA_RESULT_PLACE = "extra_result_place"
         const val EXTRA_NAME = "extra_name"
         const val EXTRA_DATE = "extra_date"
+        const val SESSION = "session"
     }
 }

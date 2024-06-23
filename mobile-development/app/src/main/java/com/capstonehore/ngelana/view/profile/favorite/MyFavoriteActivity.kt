@@ -1,17 +1,23 @@
 package com.capstonehore.ngelana.view.profile.favorite
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityMyFavoriteBinding
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.main.MainActivity
@@ -25,12 +31,14 @@ class MyFavoriteActivity : AppCompatActivity() {
 
     private lateinit var placeAdapter: PlaceAdapter
 
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        favoriteViewModel = obtainViewModel(FavoriteViewModel::class.java) as FavoriteViewModel
+        favoriteViewModel = obtainViewModel(this)
 
         setupAction()
         setupToolbar()
@@ -81,13 +89,15 @@ class MyFavoriteActivity : AppCompatActivity() {
 
                     val response = it.data
                     val items = response.map { favorite ->
+                        val typesList = favorite.placeType?.split(", ") ?: emptyList()
+
                         PlaceItem(
                             id = favorite.placeId,
                             name = favorite.placeName,
                             urlPlaceholder = listOf(favorite.placeImage ?: ""),
                             address = favorite.placeCity,
                             rating = favorite.placeRating?.toDoubleOrNull() ?: 0.0,
-                            types = favorite.placeType?.split(", ") ?: emptyList()
+                            types = typesList.joinToString(", ")
                         )
                     }
                     placeAdapter.submitList(items)
@@ -109,4 +119,15 @@ class MyFavoriteActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): FavoriteViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[FavoriteViewModel::class.java]
+    }
+
+    companion object {
+        const val SESSION = "session"
+    }
 }

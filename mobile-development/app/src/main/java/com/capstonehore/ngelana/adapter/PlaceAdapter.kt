@@ -48,6 +48,8 @@ class PlaceAdapter(
                 val randomIndex = item.urlPlaceholder?.indices?.random()
                 val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
 
+                val typesList = item.types?.split(", ") ?: emptyList()
+
                 currentLocation = Location("")
                 currentLocation?.latitude = item.latitude ?: 0.0
                 currentLocation?.longitude = item.longitude ?: 0.0
@@ -55,7 +57,7 @@ class PlaceAdapter(
                 binding.apply {
                     placeName.text = item.name
                     placeRating.text = item.rating.toString()
-                    placeType.text = item.types?.joinToString(", ") { it }
+                    placeType.text = typesList.joinToString(", ") { it }
                     Glide.with(itemView.context)
                         .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
@@ -65,7 +67,7 @@ class PlaceAdapter(
             }
 
             setupLocation()
-            bindCircleView()
+//            bindCircleView()
             setupListeners(item)
         }
 
@@ -89,31 +91,34 @@ class PlaceAdapter(
             }
         }
 
-        private fun bindCircleView() {
-            val circleView = View(itemView.context)
-            circleView.id = View.generateViewId()
-            circleView.background = ContextCompat.getDrawable(itemView.context, R.drawable.circle)
-
-            binding.constraintLayout.addView(circleView)
-
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(binding.constraintLayout)
-
-            constraintSet.connect(
-                circleView.id, ConstraintSet.START,
-                R.id.placeType, ConstraintSet.END, 8
-            )
-            constraintSet.connect(
-                circleView.id, ConstraintSet.TOP,
-                R.id.placeType, ConstraintSet.TOP
-            )
-            constraintSet.connect(
-                circleView.id, ConstraintSet.BOTTOM,
-                R.id.placeType, ConstraintSet.BOTTOM
-            )
-
-            constraintSet.applyTo(binding.constraintLayout)
-        }
+//        private fun bindCircleView() {
+//            val circleView = View(itemView.context).apply {
+//                id = View.generateViewId()
+//                background = ContextCompat.getDrawable(itemView.context, R.drawable.circle)
+//            }
+//
+//            binding.constraintLayout.id = View.generateViewId()
+//
+//            binding.constraintLayout.addView(circleView)
+//
+//            val constraintSet = ConstraintSet()
+//            constraintSet.clone(binding.constraintLayout)
+//
+//            constraintSet.connect(
+//                circleView.id, ConstraintSet.START,
+//                R.id.placeType, ConstraintSet.END, 8
+//            )
+//            constraintSet.connect(
+//                circleView.id, ConstraintSet.TOP,
+//                R.id.placeType, ConstraintSet.TOP
+//            )
+//            constraintSet.connect(
+//                circleView.id, ConstraintSet.BOTTOM,
+//                R.id.placeType, ConstraintSet.BOTTOM
+//            )
+//
+//            constraintSet.applyTo(binding.constraintLayout)
+//        }
 
         private fun setupListeners(item: PlaceItem?) {
             itemView.setOnClickListener {

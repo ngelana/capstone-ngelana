@@ -1,5 +1,6 @@
 package com.capstonehore.ngelana.view.detail
 
+import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
@@ -11,15 +12,21 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PhotoAdapter
 import com.capstonehore.ngelana.adapter.SimilarPlaceAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.entity.Favorite
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentDetailPlaceBinding
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.profile.favorite.FavoriteViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -32,11 +39,12 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
     private lateinit var similarPlaceAdapter: SimilarPlaceAdapter
     private var currentLocation: Location? = null
+    private var isFavorite = false
 
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var favoriteViewModel: FavoriteViewModel
 
-    private var isFavorite = false
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +57,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        placeViewModel = obtainViewModel(PlaceViewModel::class.java) as PlaceViewModel
+        placeViewModel = obtainViewModel(requireActivity())
 
         @Suppress("DEPRECATION")
         val placeItem = arguments?.getParcelable<PlaceItem>(ARG_PLACE)
@@ -81,6 +89,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                         setupDetailPlace(response)
                         Log.d(TAG, "Successfully Show Detail of Place: $response")
                     }
+
                     is Result.Error -> {
                         showLoading(false)
 
@@ -88,6 +97,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                         Log.d(TAG, "Failed to Show Detail of Place: ${it.error}")
                         dismiss()
                     }
+
                     is Result.Loading -> showLoading(true)
                 }
             }
@@ -97,6 +107,8 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     private fun setupDetailPlace(item: PlaceItem) {
         binding.apply {
             val placeImage = item.urlPlaceholder ?: emptyList()
+            val typesList = item.types?.split(", ") ?: emptyList()
+
             setupImageAdapter(placeImage)
             setupLocation()
             clearCircleViews()
@@ -106,7 +118,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
             placeName.text = item.name
             placePrimaryType.text = item.primaryTypes
-            placeType.text = item.types?.joinToString(", ") { it }
+            placeType.text = typesList.joinToString(", ")
             placeRating.text = item.rating.toString()
             placeRatingCount.text = item.ratingCount.toString()
             placeStatus.text = item.status
@@ -140,10 +152,12 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                             placeCity = response.locality ?: getString(R.string.unknown)
                             binding.placeCity.text = placeCity
                         }
+
                         is Result.Error -> {
                             binding.placeCity.text = getString(R.string.unknown)
                             Log.e(TAG, "Failed to get location details: ${it.error}")
                         }
+
                         is Result.Loading -> {}
                     }
                 }
@@ -193,11 +207,13 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
         binding.rvSimilarPlace.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = similarPlaceAdapter
         }
 
-        similarPlaceAdapter.setOnItemClickCallback(object : SimilarPlaceAdapter.OnItemClickCallback {
+        similarPlaceAdapter.setOnItemClickCallback(object :
+            SimilarPlaceAdapter.OnItemClickCallback {
             override fun onItemClicked(data: PlaceItem?) {
                 data?.let {
                     val intent = Intent(requireActivity(), DetailPlaceActivity::class.java).apply {
@@ -223,12 +239,14 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                         }
                         Log.d(TAG, "Successfully Show Similar Place: $response")
                     }
+
                     is Result.Error -> {
                         showLoading(false)
 
                         showToast(it.error)
                         Log.d(TAG, "Failed to Show Similar Place: ${it.error}")
                     }
+
                     is Result.Loading -> showLoading(true)
                 }
             }
@@ -236,7 +254,14 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupFavorite(placeItem: PlaceItem?) {
-        favoriteViewModel = obtainViewModel(FavoriteViewModel::class.java) as FavoriteViewModel
+        val factory = ViewModelFactory.getInstance(
+            requireActivity(),
+            UserPreferences.getInstance(requireActivity().dataStore)
+        )
+        favoriteViewModel = ViewModelProvider(
+            requireActivity(),
+            factory
+        )[FavoriteViewModel::class.java]
 
         placeItem?.let { item ->
             val randomIndex = item.urlPlaceholder?.indices?.random()
@@ -246,7 +271,8 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                 val placeImage = item.urlPlaceholder?.get(randomIndex ?: 0)
                 val placeCity = setupLocation()
                 val placeRating = item.rating.toString()
-                val placeType = item.types ?: emptyList()
+                val typesList = item.types?.split(", ") ?: emptyList()
+                val placeType = typesList.joinToString(", ")
 
                 val favorite = Favorite(
                     placeId,
@@ -254,7 +280,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                     placeImage,
                     placeCity,
                     placeRating,
-                    placeType.joinToString(", ") // Join the list into a comma-separated string
+                    placeType
                 )
 
                 favoriteViewModel.getFavoriteByPlaceId(placeId).observe(viewLifecycleOwner) {
@@ -268,6 +294,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                             favoriteViewModel.insertFavoritePlace(favorite)
                             showToast("Successfully added $placeName to Favorite!")
                         }
+
                         else -> {
                             favoriteViewModel.deleteFavoritePlace(favorite)
                             showToast("Successfully deleted $placeName from favorite users.")
@@ -295,15 +322,24 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     private fun getRandomPlaces(response: List<PlaceItem>): List<PlaceItem> {
         val highRatingPlaces = filterHighRatingPlaces(response)
 
-        return if (highRatingPlaces.size > 8) highRatingPlaces.shuffled().take(8) else highRatingPlaces
+        return if (highRatingPlaces.size > 8) highRatingPlaces.shuffled()
+            .take(8) else highRatingPlaces
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showLoading(isLoading:Boolean){
+    private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun obtainViewModel(activity: FragmentActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(requireActivity().dataStore)
+        )
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
     }
 
     override fun onStart() {
@@ -322,6 +358,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     companion object {
         private const val TAG = "DetailPlaceFragment"
         private const val ARG_PLACE = "arg_place"
+        const val SESSION = "session"
 
         fun newInstance(placeItem: PlaceItem): DetailPlaceFragment {
             return DetailPlaceFragment().apply {

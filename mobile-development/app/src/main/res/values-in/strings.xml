@@ -210,4 +210,7 @@
     <string name="delete_account_confirmation_message">Apakah Anda yakin ingin menghapus akun Anda?</string>
     <string name="delete_account">Hapus Akun</string>
 
+    <string name="ic_preference">https://storage.googleapis.com/ngelana-bucket/ngelana-assets/icon_ngelana_black.svg</string>
+    <string name="logo_ngelana">https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png</string>
+
 </resources>

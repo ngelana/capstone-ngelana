@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.login.interest
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,14 +10,19 @@ import android.util.SparseBooleanArray
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.InterestAdapter
 import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
 import com.capstonehore.ngelana.databinding.ActivityInterestBinding
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.profile.interest.InterestViewModel
 
@@ -31,12 +37,14 @@ class InterestActivity : AppCompatActivity() {
 
     private lateinit var interestViewModel: InterestViewModel
 
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInterestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        interestViewModel = obtainViewModel(InterestViewModel::class.java) as InterestViewModel
+        interestViewModel = obtainViewModel(this@InterestActivity)
 
         setupAction()
         setupAnimation()
@@ -175,7 +183,16 @@ class InterestActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): InterestViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[InterestViewModel::class.java]
+    }
+
     companion object {
+        const val SESSION = "session"
         private const val TAG = "InterestActivity"
     }
 

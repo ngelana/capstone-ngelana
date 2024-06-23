@@ -213,4 +213,7 @@
     <string name="delete_account_confirmation_message">Are you sure you want to delete your account?</string>
     <string name="delete_account">Delete Account</string>
 
+    <string name="ic_preference">https://storage.googleapis.com/ngelana-bucket/ngelana-assets/icon_ngelana_black.svg</string>
+    <string name="logo_ngelana">https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png</string>
+
 </resources>

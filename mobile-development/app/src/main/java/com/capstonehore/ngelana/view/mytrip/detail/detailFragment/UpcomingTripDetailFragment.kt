@@ -1,4 +1,4 @@
-package com.capstonehore.ngelana.view.mytrip.tabs
+package com.capstonehore.ngelana.view.mytrip.detail.detailFragment
 
 import android.content.Context
 import android.os.Bundle
@@ -14,21 +14,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.capstonehore.ngelana.adapter.TripAdapter
+import com.capstonehore.ngelana.adapter.PlanResultAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
-import com.capstonehore.ngelana.data.remote.response.PlanUserItem
-import com.capstonehore.ngelana.databinding.FragmentCompletedTripBinding
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
+import com.capstonehore.ngelana.databinding.FragmentUpcomingTripDetailBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.PlanViewModel
 
-class CompletedTripFragment : Fragment() {
+class UpcomingTripDetailFragment : Fragment() {
 
-    private var _binding: FragmentCompletedTripBinding? = null
+    private var _binding: FragmentUpcomingTripDetailBinding? = null
 
     private val binding get() = _binding!!
 
-    private lateinit var tripAdapter: TripAdapter
+    private lateinit var planResultAdapter: PlanResultAdapter
 
     private lateinit var planViewModel: PlanViewModel
 
@@ -38,7 +39,7 @@ class CompletedTripFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCompletedTripBinding.inflate(inflater, container, false)
+        _binding = FragmentUpcomingTripDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,29 +51,28 @@ class CompletedTripFragment : Fragment() {
         setupAdapter()
         setupView()
     }
+
     private fun setupAdapter() {
-        tripAdapter = TripAdapter()
+        planResultAdapter = PlanResultAdapter()
 
         binding.rvPlan.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
-            adapter = tripAdapter
+            adapter = planResultAdapter
         }
 
-        tripAdapter.setOnItemClickCallback(object : TripAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: PlanUserItem?) {
-//                data?.let {
-//                    val intent = Intent(requireActivity(), DetailPlaceActivity::class.java).apply {
-//                        putExtra(DetailPlaceActivity.EXTRA_PLACES, data)
-//                    }
-//                    startActivity(intent)
-//                }
+        planResultAdapter.setOnItemClickCallback(object : PlanResultAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: PlaceItem?) {
+                data?.let {
+                    val dialogFragment = DetailPlaceFragment.newInstance(data)
+                    dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+                }
             }
         })
     }
 
     private fun setupView() {
-        planViewModel.getPlanByUserId().observe(viewLifecycleOwner) {
+        planViewModel.getPlanDetailByUserId().observe(viewLifecycleOwner) {
             if (it != null) {
                 when (it) {
                     is Result.Success -> {
@@ -80,7 +80,7 @@ class CompletedTripFragment : Fragment() {
 
                         val response = it.data
                         response.let { item ->
-                            tripAdapter.submitList(item)
+                            planResultAdapter.submitList(item)
                         }
                         Log.d(TAG, "Successfully Show Upcoming Trip Plan: $response")
                     }
@@ -118,7 +118,7 @@ class CompletedTripFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "CompletedTripFragment"
+        private const val TAG = "UpcomingTripDetailFragment"
         const val SESSION = "session"
     }
 }

@@ -2,6 +2,7 @@ package com.capstonehore.ngelana.view.profile.personalinformation.edit
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +11,18 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.databinding.ActivityEditPersonalInformationBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.dateFormat
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.profile.ProfileViewModel
 import com.capstonehore.ngelana.view.profile.personalinformation.PersonalInformationActivity
 
@@ -25,14 +31,17 @@ class EditPersonalInformationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditPersonalInformationBinding
 
     private lateinit var profileViewModel: ProfileViewModel
+
     private lateinit var userInformationItem: UserInformationItem
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditPersonalInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        profileViewModel = obtainViewModel(ProfileViewModel::class.java) as ProfileViewModel
+        profileViewModel = obtainViewModel(this@EditPersonalInformationActivity)
 
         @Suppress("DEPRECATION")
         intent.getParcelableExtra<UserInformationItem>(EXTRA_RESULT_INFORMATION)?.let { data ->
@@ -188,8 +197,17 @@ class EditPersonalInformationActivity : AppCompatActivity() {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): ProfileViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[ProfileViewModel::class.java]
+    }
+
     companion object {
         private const val TAG = "EditPersonalInformationActivity"
         const val EXTRA_RESULT_INFORMATION = "extra_result_information"
+        const val SESSION = "session"
     }
 }

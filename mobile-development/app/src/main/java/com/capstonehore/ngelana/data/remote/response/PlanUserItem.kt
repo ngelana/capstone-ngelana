@@ -8,7 +8,7 @@ data class PlanUserItem(
     val date: String? = null,
 
     @field:SerializedName("places")
-    val places: List<DataPlacesItem?>? = null,
+    val places: List<DataPlacesItem>? = null,
 
     @field:SerializedName("name")
     val name: String? = null,

@@ -20,6 +20,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -27,10 +29,11 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.ThemeManager
+import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.LanguagePreference
-import com.capstonehore.ngelana.utils.obtainViewModel
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.interest.InterestActivity
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
@@ -48,7 +51,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
 
-    private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
+    private val Context.themeDataStore by preferencesDataStore(THEME_SETTINGS)
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loginViewModel = obtainViewModel(LoginViewModel::class.java) as LoginViewModel
+        loginViewModel = obtainViewModel(this@LoginActivity)
 
         setupAction()
         setupImage()
@@ -274,7 +278,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun themeSettings() {
-        themeManager = ThemeManager.getInstance(dataStore)
+        themeManager = ThemeManager.getInstance(themeDataStore)
 
         themeViewModel = ViewModelProvider(
             this@LoginActivity,
@@ -304,9 +308,18 @@ class LoginActivity : AppCompatActivity() {
        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): LoginViewModel {
+        val factory = ViewModelFactory.getInstance(
+            activity.application,
+            UserPreferences.getInstance(dataStore)
+        )
+        return ViewModelProvider(activity, factory)[LoginViewModel::class.java]
+    }
+
     companion object {
         private const val TAG = "LoginActivity"
         const val THEME_SETTINGS = "theme_settings"
+        const val SESSION = "session"
 
         fun setLocale(context: Context) {
             val languageCode = LanguagePreference.getLanguage(context)

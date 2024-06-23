@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.databinding.ItemInterestBinding
+import com.capstonehore.ngelana.databinding.ItemProfileBinding
 
 class MyInterestAdapter :
     ListAdapter<PreferenceItem, MyInterestAdapter.InterestViewHolder>(DIFF_CALLBACK) {
@@ -20,7 +21,7 @@ class MyInterestAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterestViewHolder {
-        val binding = ItemInterestBinding.inflate(
+        val binding = ItemProfileBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -33,18 +34,20 @@ class MyInterestAdapter :
         holder.bind(getItem(position))
     }
 
-    inner class InterestViewHolder(private val binding: ItemInterestBinding) :
+    inner class InterestViewHolder(private val binding: ItemProfileBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PreferenceItem?) {
             item?.let {
+                val imageUrl = itemView.context.getString(R.string.ic_preference)
+
                 binding.apply {
-                    tvInterest.text = it.name
+                    tvName.text = it.name
                     Glide.with(itemView.context)
-                        .load(it.urlPlaceholder)
+                        .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
                         .error(R.drawable.ic_image)
-                        .into(icInterest)
+                        .into(ivIconLeft)
                 }
             }
 
