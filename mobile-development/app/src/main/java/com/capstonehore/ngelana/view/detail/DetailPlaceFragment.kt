@@ -26,6 +26,7 @@ import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentDetailPlaceBinding
+import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.profile.favorite.FavoriteViewModel
@@ -39,7 +40,6 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
     private lateinit var similarPlaceAdapter: SimilarPlaceAdapter
     private var currentLocation: Location? = null
-    private var isFavorite = false
 
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var favoriteViewModel: FavoriteViewModel
@@ -63,6 +63,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
         val placeItem = arguments?.getParcelable<PlaceItem>(ARG_PLACE)
         placeItem?.let { item ->
             setupView(item)
+            setupDetailPlace(item)
             setupFavorite(item)
         }
     }
@@ -86,7 +87,6 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                         showLoading(false)
 
                         val response = it.data
-                        setupDetailPlace(response)
                         Log.d(TAG, "Successfully Show Detail of Place: $response")
                     }
 
@@ -104,26 +104,29 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setupDetailPlace(item: PlaceItem) {
-        binding.apply {
-            val placeImage = item.urlPlaceholder ?: emptyList()
-            val typesList = item.types?.split(", ") ?: emptyList()
+    private fun setupDetailPlace(items: PlaceItem?) {
+        items?.let { item ->
+            binding.apply {
+                val placeImage = item.urlPlaceholder ?: emptyList()
+                val primaryType = item.primaryTypes?.splitAndReplaceCommas()
+                val typesList = item.types?.splitAndReplaceCommas()
 
-            setupImageAdapter(placeImage)
-            setupLocation()
-            clearCircleViews()
-            addCircleViews(item)
-            setupSimilarAdapter()
-            setupSimilarPlace()
+                setupImageAdapter(placeImage)
+                setupLocation()
+//                clearCircleViews()
+//                addCircleViews(item)
+                setupSimilarAdapter()
+                setupSimilarPlace()
 
-            placeName.text = item.name
-            placePrimaryType.text = item.primaryTypes
-            placeType.text = typesList.joinToString(", ")
-            placeRating.text = item.rating.toString()
-            placeRatingCount.text = item.ratingCount.toString()
-            placeStatus.text = item.status
-            placeAddress.text = item.address
-            placePhone.text = item.phone
+                placeName.text = item.name
+                placePrimaryType.text = primaryType?.joinToString(", ")
+                placeType.text = typesList?.joinToString(", ")
+                placeRating.text = item.rating.toString()
+                placeRatingCount.text = item.ratingCount.toString()
+                placeStatus.text = item.status
+                placeAddress.text = item.address
+                placePhone.text = item.phone
+            }
         }
     }
 
@@ -167,40 +170,40 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
         return placeCity
     }
 
-    private fun clearCircleViews() {
-        binding.constraintLayout.removeViews(
-            binding.constraintLayout.indexOfChild(binding.placeType) + 1,
-            binding.constraintLayout.childCount - 1
-        )
-    }
+//    private fun clearCircleViews() {
+//        binding.constraintLayout.removeViews(
+//            binding.constraintLayout.indexOfChild(binding.placeType) + 1,
+//            binding.constraintLayout.childCount - 1
+//        )
+//    }
 
-    private fun addCircleViews(place: PlaceItem) {
-        place.types?.forEachIndexed { _, _ ->
-            val circleView = View(requireContext())
-            circleView.id = View.generateViewId()
-            circleView.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle)
-
-            binding.constraintLayout.addView(circleView)
-
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(binding.constraintLayout)
-
-            constraintSet.connect(
-                circleView.id, ConstraintSet.START,
-                R.id.placeType, ConstraintSet.END, 8
-            )
-            constraintSet.connect(
-                circleView.id, ConstraintSet.TOP,
-                R.id.placeType, ConstraintSet.TOP, 8
-            )
-            constraintSet.connect(
-                circleView.id, ConstraintSet.BOTTOM,
-                R.id.placeType, ConstraintSet.BOTTOM, 8
-            )
-
-            constraintSet.applyTo(binding.constraintLayout)
-        }
-    }
+//    private fun addCircleViews(place: PlaceItem) {
+//        place.types?.forEachIndexed { _, _ ->
+//            val circleView = View(requireContext())
+//            circleView.id = View.generateViewId()
+//            circleView.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle)
+//
+//            binding.constraintLayout.addView(circleView)
+//
+//            val constraintSet = ConstraintSet()
+//            constraintSet.clone(binding.constraintLayout)
+//
+//            constraintSet.connect(
+//                circleView.id, ConstraintSet.START,
+//                R.id.placeType, ConstraintSet.END, 8
+//            )
+//            constraintSet.connect(
+//                circleView.id, ConstraintSet.TOP,
+//                R.id.placeType, ConstraintSet.TOP, 8
+//            )
+//            constraintSet.connect(
+//                circleView.id, ConstraintSet.BOTTOM,
+//                R.id.placeType, ConstraintSet.BOTTOM, 8
+//            )
+//
+//            constraintSet.applyTo(binding.constraintLayout)
+//        }
+//    }
 
     private fun setupSimilarAdapter() {
         similarPlaceAdapter = SimilarPlaceAdapter()
@@ -283,31 +286,29 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                     placeType
                 )
 
+                var isFavorite = false
+
                 favoriteViewModel.getFavoriteByPlaceId(placeId).observe(viewLifecycleOwner) {
-                    isFavorite = it != null
-                    setIcon()
+                    isFavorite = it is Result.Success && it.data.isNotEmpty()
+                    setIcon(isFavorite)
                 }
 
                 binding.favoriteButton.setOnClickListener {
-                    when {
-                        !isFavorite -> {
-                            favoriteViewModel.insertFavoritePlace(favorite)
-                            showToast("Successfully added $placeName to Favorite!")
-                        }
-
-                        else -> {
-                            favoriteViewModel.deleteFavoritePlace(favorite)
-                            showToast("Successfully deleted $placeName from favorite users.")
-                        }
+                    if (!isFavorite) {
+                        favoriteViewModel.insertFavoritePlace(favorite)
+                        showToast("Successfully added $placeName to Favorite!")
+                    } else {
+                        favoriteViewModel.deleteFavoritePlace(favorite)
+                        showToast("Successfully deleted $placeName from favorite users.")
                     }
                     isFavorite = !isFavorite
-                    setIcon()
+                    setIcon(isFavorite)
                 }
             }
         }
     }
 
-    private fun setIcon() {
+    private fun setIcon(isFavorite: Boolean) {
         binding.favoriteButton.setImageResource(
             if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
         )

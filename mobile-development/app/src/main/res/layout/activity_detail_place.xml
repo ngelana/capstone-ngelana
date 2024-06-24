@@ -102,6 +102,7 @@
                 android:src="@drawable/ic_favorite_border"
                 app:layout_constraintBottom_toBottomOf="@+id/rvPlaceImage"
                 app:layout_constraintEnd_toEndOf="@id/rvPlaceImage"
+                app:tint="?attr/colorOnPrimary"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -110,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/app_name"
-                android:textColor="@color/light_grey"
+                android:textColor="?attr/colorOnSecondary"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rvPlaceImage" />
@@ -125,16 +126,6 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/placePrimaryType" />
-
-            <View
-                android:id="@+id/circle_view_1"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/circle"
-                app:layout_constraintBottom_toBottomOf="@+id/placeType"
-                app:layout_constraintStart_toEndOf="@+id/placeType"
-                app:layout_constraintTop_toTopOf="@+id/placeType" />
 
             <View
                 android:id="@+id/ratingView"
@@ -162,7 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_5_0"
-                android:textColor="@color/yellow"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/ratingView"
@@ -215,27 +206,28 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ratingView" />
 
-            <View
-                android:id="@+id/circle_view_3"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/circle"
-                app:layout_constraintBottom_toBottomOf="@id/placeAddress"
-                app:layout_constraintStart_toEndOf="@+id/placeAddress"
-                app:layout_constraintTop_toTopOf="@+id/placeAddress" />
+            <TextView
+                android:id="@+id/tvPlacePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/phone_number"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/placeAddress" />
 
             <TextView
                 android:id="@+id/placePhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:text="@string/app_name"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/circle_view_3"
-                app:layout_constraintStart_toEndOf="@+id/circle_view_3"
-                app:layout_constraintTop_toTopOf="@+id/circle_view_3" />
+                app:layout_constraintBottom_toBottomOf="@+id/tvPlacePhone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvPlacePhone" />
 
             <TextView
                 android:id="@+id/tvSimiliarPlace"
@@ -248,7 +240,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/placeAddress" />
+                app:layout_constraintTop_toBottomOf="@id/tvPlacePhone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSimilarPlace"

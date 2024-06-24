@@ -80,16 +80,6 @@
                 app:layout_constraintStart_toEndOf="@+id/placeImage" />
 
             <View
-                android:id="@+id/circle_view_1"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/circle"
-                app:layout_constraintBottom_toBottomOf="@+id/placeType"
-                app:layout_constraintStart_toEndOf="@+id/placeType"
-                app:layout_constraintTop_toTopOf="@+id/placeType" />
-
-            <View
                 android:id="@+id/ratingView"
                 android:layout_width="48dp"
                 android:layout_height="24dp"
@@ -116,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_5_0"
-                android:textColor="@color/yellow"
+                android:textColor="?attr/colorSecondaryVariant"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/ratingView"

@@ -16,11 +16,10 @@ import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ItemPlaceBinding
+import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 
-class PlaceAdapter(
-    private val placeViewModel: PlaceViewModel
-) : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_CALLBACK) {
+class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -35,29 +34,32 @@ class PlaceAdapter(
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        Log.d(TAG, "Binding item at position $position: $item")
+        holder.bind(item)
     }
 
     inner class PlaceViewHolder(private var binding: ItemPlaceBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        private var currentLocation: Location? = null
+//        private var currentLocation: Location? = null
 
-        fun bind(item: PlaceItem?) {
-            item?.let {
+        fun bind(items: PlaceItem?) {
+            items?.let { item ->
                 val randomIndex = item.urlPlaceholder?.indices?.random()
                 val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
 
-                val typesList = item.types?.split(", ") ?: emptyList()
+                val typesList = item.types?.splitAndReplaceCommas()
 
-                currentLocation = Location("")
-                currentLocation?.latitude = item.latitude ?: 0.0
-                currentLocation?.longitude = item.longitude ?: 0.0
+//                currentLocation = Location("")
+//                currentLocation?.latitude = item.latitude ?: 0.0
+//                currentLocation?.longitude = item.longitude ?: 0.0
 
                 binding.apply {
                     placeName.text = item.name
+//                    placeCity.text = currentLocation
                     placeRating.text = item.rating.toString()
-                    placeType.text = typesList.joinToString(", ") { it }
+                    placeType.text = typesList?.joinToString(", ") { it }
                     Glide.with(itemView.context)
                         .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
@@ -66,30 +68,30 @@ class PlaceAdapter(
                 }
             }
 
-            setupLocation()
+//            setupLocation()
 //            bindCircleView()
-            setupListeners(item)
+            setupListeners(items)
         }
 
-        private fun setupLocation() {
-            currentLocation?.let { location ->
-                placeViewModel.getLocationDetails(itemView.context, location)
-
-                placeViewModel.locationResult.observe(itemView.context as LifecycleOwner) { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            val response = result.data
-                            binding.placeCity.text = response.locality ?: itemView.context.getString(R.string.unknown)
-                        }
-                        is Result.Error -> {
-                            binding.placeCity.text = itemView.context.getString(R.string.unknown)
-                            Log.e(TAG, "Failed to get location details: ${result.error}")
-                        }
-                        is Result.Loading -> {}
-                    }
-                }
-            }
-        }
+//        private fun setupLocation() {
+//            currentLocation?.let { location ->
+//                placeViewModel.getLocationDetails(itemView.context, location)
+//
+//                placeViewModel.locationResult.observe(itemView.context as LifecycleOwner) { result ->
+//                    when (result) {
+//                        is Result.Success -> {
+//                            val response = result.data
+//                            binding.placeCity.text = response.locality ?: itemView.context.getString(R.string.unknown)
+//                        }
+//                        is Result.Error -> {
+//                            binding.placeCity.text = itemView.context.getString(R.string.unknown)
+//                            Log.e(TAG, "Failed to get location details: ${result.error}")
+//                        }
+//                        is Result.Loading -> {}
+//                    }
+//                }
+//            }
+//        }
 
 //        private fun bindCircleView() {
 //            val circleView = View(itemView.context).apply {

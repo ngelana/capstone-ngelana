@@ -19,3 +19,7 @@ fun String.dateFormat(): String {
     val date = inputFormat.parse(this) as Date
     return outputFormat.format(date)
 }
+
+fun String?.splitAndReplaceCommas(): List<String> {
+    return this?.split(", ")?.map { it.replace("_", " ") } ?: emptyList()
+}

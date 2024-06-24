@@ -22,7 +22,6 @@ import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -30,22 +29,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-
-    // Users
-//    @FormUrlEncoded
-//    @POST("user/register")
-//    suspend fun register(
-//        @Field("name") name: String,
-//        @Field("email") email: String,
-//        @Field("password") password: String
-//    ): RegisterResponse
-//
-//    @FormUrlEncoded
-//    @POST("user/login")
-//    suspend fun login(
-//        @Field("email") email: String,
-//        @Field("password") password: String,
-//    ): LoginResponse
 
     @POST("user/register")
     suspend fun register(@Body request: RegisterModel): RegisterResponse

@@ -109,7 +109,7 @@ class HomeFragment : Fragment() {
 
     private fun setupAdapter() {
         popularAdapter = PopularAdapter()
-        placeAdapter = PlaceAdapter(placeViewModel)
+        placeAdapter = PlaceAdapter()
 
         binding.rvPopularPlace.apply {
             setHasFixedSize(true)
@@ -151,8 +151,12 @@ class HomeFragment : Fragment() {
 
                         val response = it.data
                         response.let {
+
                             val randomPlacesWithFiltering = getRandomPlaces(response)
                             val randomPlacesWithoutFiltering = response.shuffled().take(8)
+
+                            Log.d(TAG, "Filtered Places: $randomPlacesWithFiltering")
+                            Log.d(TAG, "Shuffled Places: $randomPlacesWithoutFiltering")
 
                             popularAdapter.submitList(randomPlacesWithFiltering)
                             placeAdapter.submitList(randomPlacesWithoutFiltering)
@@ -171,9 +175,9 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun filterHighRatingPlaces(response: List<PlaceItem>): List<PlaceItem> {
-        return response.filter { item ->
-            (item.rating ?: 0.0) > 5.0
+    private fun filterHighRatingPlaces(items: List<PlaceItem>): List<PlaceItem> {
+        return items.filter { item ->
+            (item.rating ?: 0.0) == 5.0
         }
     }
 

@@ -63,7 +63,7 @@ class MyFavoriteActivity : AppCompatActivity() {
     }
 
     private fun setupAdapter() {
-        placeAdapter = PlaceAdapter(placeViewModel)
+        placeAdapter = PlaceAdapter()
 
         binding.rvFavorite.apply {
             setHasFixedSize(true)

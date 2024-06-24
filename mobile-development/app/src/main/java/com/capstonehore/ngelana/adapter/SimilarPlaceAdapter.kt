@@ -31,8 +31,8 @@ class SimilarPlaceAdapter : ListAdapter<PlaceItem, SimilarPlaceAdapter.PlaceView
     inner class PlaceViewHolder(private var binding: ItemSimilarPlaceBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: PlaceItem?) {
-            item?.let {
+        fun bind(items: PlaceItem?) {
+            items?.let { item ->
                 val randomIndex = item.urlPlaceholder?.indices?.random()
                 val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
 
@@ -48,7 +48,7 @@ class SimilarPlaceAdapter : ListAdapter<PlaceItem, SimilarPlaceAdapter.PlaceView
             }
 
             itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+                onItemClickCallback.onItemClicked(items)
             }
         }
     }

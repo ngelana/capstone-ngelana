@@ -50,9 +50,13 @@ class Repository (
     private var userId: String? = null
     private var userPreferenceId: String? = null
 
-    private suspend fun getToken(): String? = token ?: runBlocking {
-        userPreferences.getToken().first()
-    }.also { token = it }
+    private suspend fun getToken(): String {
+        if (token.isNullOrEmpty()) {
+            token = userPreferences.getToken().first() ?: ""
+            apiService = ApiConfig.getApiService(token.toString())
+        }
+        return token ?: ""
+    }
 
     private suspend fun getUserId(): String? =
         userId ?: userPreferences.getUserId().first().also { userId = it }
@@ -162,7 +166,7 @@ class Repository (
         emit(Result.Loading)
         try {
             val token = getToken()
-            apiService = ApiConfig.getApiService(token.toString())
+            apiService = ApiConfig.getApiService(token)
 
             val response = apiService.getAllPlaces()
             val placeItem = response.data ?: emptyList()
@@ -178,7 +182,7 @@ class Repository (
         emit(Result.Loading)
         try {
             val token = getToken()
-            val apiService = ApiConfig.getApiService(token.toString())
+            val apiService = ApiConfig.getApiService(token)
 
             val response = apiService.getPlaceById(id)
             val placeItem = response.data
@@ -199,6 +203,7 @@ class Repository (
 
             val response = apiService.searchPlaceByQuery(query)
             val placeItem = response.data ?: emptyList()
+
             emit(Result.Success(placeItem))
         } catch (e: Exception) {
             Log.d(TAG, "searchPlaceByQuery: ${e.message}")
@@ -214,6 +219,7 @@ class Repository (
 
             val response = apiService.getPrimaryTypePlace(type)
             val placeItem = response.data ?: emptyList()
+
             emit(Result.Success(placeItem))
         } catch (e: Exception) {
             Log.d(TAG, "getPrimaryTypePlace: ${e.message}")
@@ -482,8 +488,14 @@ class Repository (
     fun getAllFavorites(): LiveData<Result<List<Favorite>>> = liveData {
         emit(Result.Loading)
         try {
-            val data = ngelanaRoomDatabase.favoriteDao().getAllFavorites()
-            emitSource(data.map { Result.Success(it) })
+            val response = ngelanaRoomDatabase.favoriteDao().getAllFavorites()
+            val data = response.value ?: emptyList()
+
+            if (data.isNotEmpty()) {
+                emit(Result.Success(data.filterNotNull()))
+            } else {
+                emit(Result.Error("Favorites not found or empty"))
+            }
         } catch (e: Exception) {
             Log.d(TAG, "getAllFavorites: ${e.message}")
             emit(Result.Error("Error fetching data: ${e.message}"))
@@ -493,10 +505,14 @@ class Repository (
     fun getFavoriteByPlaceId(placeId: String): LiveData<Result<List<Favorite>>> = liveData {
         emit(Result.Loading)
         try {
-            val data = ngelanaRoomDatabase.favoriteDao().getFavoriteByPlaceId(placeId)
-            emitSource(data.map { favorite ->
-                Result.Success(listOf(favorite))
-            })
+            val response = ngelanaRoomDatabase.favoriteDao().getFavoriteByPlaceId(placeId)
+            val data = response.value
+
+            if (data != null) {
+                emit(Result.Success(listOf(data)))
+            } else {
+                emit(Result.Error("Favorite not found"))
+            }
         } catch (e: Exception) {
             Log.d(TAG, "getFavoriteByPlaceId: ${e.message}")
             emit(Result.Error("Error fetching data: ${e.message}"))

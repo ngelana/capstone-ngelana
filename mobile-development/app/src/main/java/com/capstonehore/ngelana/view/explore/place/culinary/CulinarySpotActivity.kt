@@ -57,7 +57,7 @@ class CulinarySpotActivity : AppCompatActivity() {
     }
 
     private fun setupAdapter() {
-        placeAdapter = PlaceAdapter(placeViewModel)
+        placeAdapter = PlaceAdapter()
 
         binding.rvPlaces.apply {
             setHasFixedSize(true)

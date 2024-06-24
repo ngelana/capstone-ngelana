@@ -104,7 +104,7 @@ class EditPersonalInformationActivity : AppCompatActivity() {
 
                                 val response = it.data
                                 showCustomAlertDialog(true, "")
-                                Log.d(TAG, "Success registering: $response")
+                                Log.d(TAG, "Success updating data: $response")
                             }
 
                             is Result.Error -> {
@@ -112,7 +112,7 @@ class EditPersonalInformationActivity : AppCompatActivity() {
 
                                 val response = it.error
                                 showCustomAlertDialog(false, response)
-                                Log.e(TAG, "Error update data: $response")
+                                Log.e(TAG, "Error updating data: $response")
                             }
 
                             is Result.Loading -> showLoading(true)
