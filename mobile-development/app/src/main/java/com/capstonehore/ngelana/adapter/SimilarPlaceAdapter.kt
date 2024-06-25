@@ -14,6 +14,10 @@ class SimilarPlaceAdapter : ListAdapter<PlaceItem, SimilarPlaceAdapter.PlaceView
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val binding = ItemSimilarPlaceBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -31,14 +35,14 @@ class SimilarPlaceAdapter : ListAdapter<PlaceItem, SimilarPlaceAdapter.PlaceView
     inner class PlaceViewHolder(private var binding: ItemSimilarPlaceBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(items: PlaceItem?) {
-            items?.let { item ->
-                val randomIndex = item.urlPlaceholder?.indices?.random()
-                val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
+        fun bind(item: PlaceItem?) {
+            item?.let {
+                val randomIndex = it.urlPlaceholder?.indices?.random()
+                val imageUrl = it.urlPlaceholder?.get(randomIndex ?: 0)
 
                 binding.apply {
-                    placeName.text = item.name
-                    placeRating.text = item.rating.toString()
+                    placeName.text = it.name
+                    placeRating.text = it.rating.toString()
                     Glide.with(itemView.context)
                         .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
@@ -48,13 +52,9 @@ class SimilarPlaceAdapter : ListAdapter<PlaceItem, SimilarPlaceAdapter.PlaceView
             }
 
             itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(items)
+                onItemClickCallback.onItemClicked(item)
             }
         }
-    }
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
     }
 
     interface OnItemClickCallback {

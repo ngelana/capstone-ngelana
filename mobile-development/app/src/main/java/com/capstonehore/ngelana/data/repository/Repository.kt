@@ -7,7 +7,6 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
@@ -17,16 +16,7 @@ import com.capstonehore.ngelana.data.remote.response.PlanUserItem
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.data.remote.response.ReviewItem
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
-import com.capstonehore.ngelana.data.remote.response.places.PlaceResponseById
-import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
-import com.capstonehore.ngelana.data.remote.response.plan.PlaceRecommendedResponse
-import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
-import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
-import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponse
-import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponseByUserId
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
-import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferenceResponse
-import com.capstonehore.ngelana.data.remote.response.review.ReviewResponse
 import com.capstonehore.ngelana.data.remote.response.users.LoginModel
 import com.capstonehore.ngelana.data.remote.response.users.LoginResponse
 import com.capstonehore.ngelana.data.remote.response.users.RegisterModel
@@ -34,10 +24,7 @@ import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
 import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import retrofit2.HttpException
 import java.util.Locale
 
 class Repository (
@@ -52,18 +39,29 @@ class Repository (
 
     private suspend fun getToken(): String {
         if (token.isNullOrEmpty()) {
-            token = userPreferences.getToken().first() ?: ""
-            apiService = ApiConfig.getApiService(token.toString())
+            token = userPreferences.getToken().first()
         }
         return token ?: ""
     }
 
-    private suspend fun getUserId(): String? =
-        userId ?: userPreferences.getUserId().first().also { userId = it }
+    private suspend fun getUserId(): String {
+        if (userId.isNullOrEmpty()) {
+            userId = userPreferences.getUserId().first()
+        }
+        return userId ?: ""
+    }
 
-    private suspend fun getUserPreferenceId(): String? =
-        userPreferenceId ?: userPreferences.getUserPreferenceId().first()
-            .also { userPreferenceId = it }
+//    private suspend fun getUserPreferenceId(): String {
+//        if (userPreferenceId.isNullOrEmpty()) {
+//            userPreferenceId = userPreferences.getUserPreferenceId().first()
+//        }
+//        return userPreferenceId ?: ""
+//    }
+
+    private suspend fun initializeApiService() {
+        val token = getToken()
+        apiService = ApiConfig.getApiService(token)
+    }
 
 
     // Users
@@ -105,16 +103,12 @@ class Repository (
     fun getUserById(): LiveData<Result<UserResponse>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            val userId = getUserId()
+            initializeApiService()
 
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.getUserById(userId)
-                emit(Result.Success(response))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
+            val userId = getUserId()
+            val response = apiService.getUserById(userId)
+
+            emit(Result.Success(response))
         } catch (e: Exception) {
             Log.d(TAG, "getUserById: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -125,16 +119,12 @@ class Repository (
         liveData {
             emit(Result.Loading)
             try {
-                val token = getToken()
-                val userId = getUserId()
+                initializeApiService()
 
-                apiService = ApiConfig.getApiService(token.toString())
-                if (userId != null) {
-                    val response = apiService.updateUserById(userId, userInformationItem)
-                    emit(Result.Success(response))
-                } else {
-                    emit(Result.Error("User ID not found"))
-                }
+                val userId = getUserId()
+                val response = apiService.updateUserById(userId, userInformationItem)
+
+                emit(Result.Success(response))
             } catch (e: Exception) {
                 Log.d(TAG, "updateUserById: ${e.message}")
                 emit(Result.Error(e.message.toString()))
@@ -144,16 +134,12 @@ class Repository (
     fun deleteUserById(): LiveData<Result<UserResponse>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            val userId = getUserId()
+            initializeApiService()
 
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.deleteUserById(userId)
-                emit(Result.Success(response))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
+            val userId = getUserId()
+            val response = apiService.deleteUserById(userId)
+
+            emit(Result.Success(response))
         } catch (e: Exception) {
             Log.d(TAG, "deleteUserById: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -165,8 +151,7 @@ class Repository (
     fun getAllPlaces(): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            apiService = ApiConfig.getApiService(token)
+            initializeApiService()
 
             val response = apiService.getAllPlaces()
             val placeItem = response.data ?: emptyList()
@@ -181,8 +166,7 @@ class Repository (
     fun getPlaceById(id: String): LiveData<Result<PlaceItem>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            val apiService = ApiConfig.getApiService(token)
+            initializeApiService()
 
             val response = apiService.getPlaceById(id)
             val placeItem = response.data
@@ -198,8 +182,7 @@ class Repository (
     fun searchPlaceByQuery(query: String): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            apiService = ApiConfig.getApiService(token.toString())
+            initializeApiService()
 
             val response = apiService.searchPlaceByQuery(query)
             val placeItem = response.data ?: emptyList()
@@ -214,8 +197,7 @@ class Repository (
     fun getPrimaryTypePlace(type: String): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            apiService = ApiConfig.getApiService(token.toString())
+            initializeApiService()
 
             val response = apiService.getPrimaryTypePlace(type)
             val placeItem = response.data ?: emptyList()
@@ -248,44 +230,35 @@ class Repository (
 
 
     // Plan
-    fun getRecommendedPlace(date: String): LiveData<Result<List<PlaceItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val token = getToken()
-            val userId = getUserId()
-            val userPreferenceId = getUserPreferenceId()
-
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null && userPreferenceId != null) {
-                val response = apiService.getRecommendedPlace(userId, date, userPreferenceId)
-                val placeItem = response.places ?: emptyList()
-                emit(Result.Success(placeItem))
-            } else {
-                emit(Result.Error("User ID or User Preference ID not found"))
-            }
-        } catch (e: Exception) {
-            Log.d(TAG, "getRecommendedPlace: ${e.message}")
-            emit(Result.Error(e.message.toString()))
-        }
-    }
+//    fun getRecommendedPlace(date: String): LiveData<Result<List<PlaceItem>>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            initializeApiService()
+//
+//            val userId = getUserId()
+//            val userPreferenceId = getUserPreferenceId()
+//
+//            val response = apiService.getRecommendedPlace(userId, date, userPreferenceId)
+//            val placeItem = response.places ?: emptyList()
+//
+//            emit(Result.Success(placeItem))
+//        } catch (e: Exception) {
+//            Log.d(TAG, "getRecommendedPlace: ${e.message}")
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
 
     fun setPlanResult(planUserItem: PlanUserItem): LiveData<Result<PlanUserItem>> =
         liveData {
             emit(Result.Loading)
             try {
-                val token = getToken()
-                val userId = getUserId()
+                initializeApiService()
 
-                apiService = ApiConfig.getApiService(token.toString())
-                if (userId != null) {
-                    val response = apiService.setPlanResult(planUserItem)
-                    val userPlan = response.data
+                val response = apiService.setPlanResult(planUserItem)
+                val userPlan = response.data
 
-                    if (userPlan != null) emit(Result.Success(userPlan))
-                    else emit(Result.Error("Data is null"))
-                } else {
-                    emit(Result.Error("User ID not found"))
-                }
+                if (userPlan != null) emit(Result.Success(userPlan))
+                else emit(Result.Error("Data is null"))
             } catch (e: Exception) {
                 Log.d(TAG, "setPlanResult: ${e.message}")
                 emit(Result.Error(e.message.toString()))
@@ -295,19 +268,13 @@ class Repository (
     fun setDetailPlanResult(planUserItem: PlanUserItem): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            val userId = getUserId()
+            initializeApiService()
 
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.setPlanResult(planUserItem)
-                val dataPlanUser = response.data?.places
+            val response = apiService.setPlanResult(planUserItem)
+            val dataPlanUser = response.data?.places
+            val places = dataPlanUser?.map { item -> item.place ?: PlaceItem() } ?: emptyList()
 
-                val places = dataPlanUser?.map { item -> item.place ?: PlaceItem() } ?: emptyList()
-                emit(Result.Success(places))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
+            emit(Result.Success(places))
         } catch (e: Exception) {
             Log.d(TAG, "getPlanByUserId: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -317,17 +284,13 @@ class Repository (
     fun getPlanByUserId(): LiveData<Result<List<PlanUserItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            val userId = getUserId()
+            initializeApiService()
 
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.getPlanByUserId(userId)
-                val planUserItem = response.data ?: emptyList()
-                emit(Result.Success(planUserItem))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
+            val userId = getUserId()
+            val response = apiService.getPlanByUserId(userId)
+            val planUserItem = response.data ?: emptyList()
+
+            emit(Result.Success(planUserItem))
         } catch (e: Exception) {
             Log.d(TAG, "getPlanByUserId: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -337,22 +300,17 @@ class Repository (
     fun getPlanDetailByUserId(): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
+            initializeApiService()
+
             val userId = getUserId()
+            val response = apiService.getPlanByUserId(userId)
+            val planUserItem = response.data ?: emptyList()
 
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.getPlanByUserId(userId)
-                val planUserItem = response.data ?: emptyList()
-
-                val places = planUserItem.flatMap { item ->
-                    item.places?.map { it.place ?: PlaceItem() } ?: emptyList()
-                }
-
-                emit(Result.Success(places))
-            } else {
-                emit(Result.Error("User ID not found"))
+            val places = planUserItem.flatMap { item ->
+                item.places?.map { it.place ?: PlaceItem() } ?: emptyList()
             }
+
+            emit(Result.Success(places))
         } catch (e: Exception) {
             Log.d(TAG, "getPlanByUserId: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -364,8 +322,7 @@ class Repository (
     fun getAllPreferences(): LiveData<Result<List<PreferenceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            apiService = ApiConfig.getApiService(token.toString())
+            initializeApiService()
 
             val response = apiService.getAllPreferences()
             val preferenceItem = response.data ?: emptyList()
@@ -377,84 +334,68 @@ class Repository (
         }
     }
 
-    fun createUserPreference(userDataPreferencesItems: List<UserDataPreferencesItem>):
-            LiveData<Result<List<UserDataPreferencesItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val token = getToken()
-            val apiService = ApiConfig.getApiService(token.toString())
+//    fun createUserPreference(userDataPreferencesItems: List<UserDataPreferencesItem>):
+//            LiveData<Result<List<UserDataPreferencesItem>>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            initializeApiService()
+//
+//            val response = apiService.createUserPreference(userDataPreferencesItems)
+//            val userDataPreferences = response.data ?: emptyList()
+//
+//            emit(Result.Success(userDataPreferences))
+//        } catch (e: Exception) {
+//            Log.d(TAG, "createUserPreference: ${e.message}")
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
 
-            val response = apiService.createUserPreference(userDataPreferencesItems)
-            val userDataPreferences = response.data ?: emptyList()
+//    fun getPreferenceByUserId(): LiveData<Result<List<PreferenceItem>>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            initializeApiService()
+//
+//            val userId = getUserId()
+//            val response = apiService.getPreferenceByUserId(userId)
+//            val userPreference = response.user
+//            val userPreferenceItem = userPreference?.userPreferences ?: emptyList()
+//
+//            emit(Result.Success(userPreferenceItem.map { it.preference ?: PreferenceItem() }))
+//        } catch (e: Exception) {
+//            Log.d(TAG, "getPreferenceById: ${e.message}")
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
 
-            emit(Result.Success(userDataPreferences))
-        } catch (e: Exception) {
-            Log.d(TAG, "createUserPreference: ${e.message}")
-            emit(Result.Error(e.message.toString()))
-        }
-    }
-
-    fun getPreferenceByUserId(): LiveData<Result<List<PreferenceItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val token = getToken()
-            val userId = getUserId()
-
-            val apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.getPreferenceByUserId(userId)
-                val userPreference = response.user
-                val userPreferenceItem = userPreference?.userPreferences ?: emptyList()
-
-                emit(Result.Success(userPreferenceItem.map { it.preference ?: PreferenceItem() }))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
-        } catch (e: Exception) {
-            Log.d(TAG, "getPreferenceById: ${e.message}")
-            emit(Result.Error(e.message.toString()))
-        }
-    }
-
-    fun updateUserPreference(preferenceItem: List<PreferenceItem>): LiveData<Result<List<PreferenceItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val token = getToken()
-            val userId = getUserId()
-
-            val apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.updateUserPreference(userId, preferenceItem)
-                val updatedPreferences = response.data ?: emptyList()
-
-                emit(Result.Success(updatedPreferences.map { it.preference ?: PreferenceItem() }))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
-        } catch (e: Exception) {
-            Log.d(TAG, "updateUserPreference: ${e.message}")
-            emit(Result.Error(e.message.toString()))
-        }
-    }
+//    fun updateUserPreference(preferenceItem: List<PreferenceItem>): LiveData<Result<List<PreferenceItem>>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            initializeApiService()
+//
+//            val userId = getUserId()
+//            val response = apiService.updateUserPreference(userId, preferenceItem)
+//            val updatedPreferences = response.data ?: emptyList()
+//
+//            emit(Result.Success(updatedPreferences.map { it.preference ?: PreferenceItem() }))
+//        } catch (e: Exception) {
+//            Log.d(TAG, "updateUserPreference: ${e.message}")
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
 
 
     // Review
     fun getAllReviewByUserId(): LiveData<Result<List<ReviewItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
+            initializeApiService()
+
             val userId = getUserId()
+            val response = apiService.getAllReviewByUserId(userId)
+            val reviewItem = response.data
 
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.getAllReviewByUserId(userId)
-                val reviewItem = response.data
-
-                if (reviewItem != null) emit(Result.Success(reviewItem))
-                else emit(Result.Error("Data is null"))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
+            if (reviewItem != null) emit(Result.Success(reviewItem))
+            else emit(Result.Error("Data is null"))
         } catch (e: Exception) {
             Log.d(TAG, "getReviewById: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -464,19 +405,13 @@ class Repository (
     fun createReview(reviewItem: ReviewItem): LiveData<Result<List<ReviewItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            val userId = getUserId()
+            initializeApiService()
 
-            apiService = ApiConfig.getApiService(token.toString())
-            if (userId != null) {
-                val response = apiService.createReview(reviewItem)
-                val dataReview = response.data
+            val response = apiService.createReview(reviewItem)
+            val dataReview = response.data
 
-                if (dataReview != null) emit(Result.Success(dataReview))
-                else emit(Result.Error("Data is null"))
-            } else {
-                emit(Result.Error("User ID not found"))
-            }
+            if (dataReview != null) emit(Result.Success(dataReview))
+            else emit(Result.Error("Data is null"))
         } catch (e: Exception) {
             Log.d(TAG, "createReview: ${e.message}")
             emit(Result.Error(e.message.toString()))

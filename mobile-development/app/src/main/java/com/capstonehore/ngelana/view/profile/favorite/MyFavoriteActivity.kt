@@ -26,12 +26,9 @@ class MyFavoriteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyFavoriteBinding
 
-    private lateinit var placeViewModel: PlaceViewModel
     private lateinit var favoriteViewModel: FavoriteViewModel
 
     private lateinit var placeAdapter: PlaceAdapter
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,14 +117,8 @@ class MyFavoriteActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): FavoriteViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[FavoriteViewModel::class.java]
     }
 
-    companion object {
-        const val SESSION = "session"
-    }
 }

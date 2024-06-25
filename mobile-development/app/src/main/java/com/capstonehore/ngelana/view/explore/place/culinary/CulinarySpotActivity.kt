@@ -31,8 +31,6 @@ class CulinarySpotActivity : AppCompatActivity() {
 
     private lateinit var placeViewModel: PlaceViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCulinarySpotBinding.inflate(layoutInflater)
@@ -148,16 +146,12 @@ class CulinarySpotActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "TouristAttractionsActivity"
-        const val SESSION = "session"
     }
 
 }

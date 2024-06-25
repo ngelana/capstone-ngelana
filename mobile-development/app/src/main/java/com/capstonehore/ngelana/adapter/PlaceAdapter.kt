@@ -1,27 +1,25 @@
 package com.capstonehore.ngelana.adapter
 
-import android.location.Location
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ItemPlaceBinding
+import com.capstonehore.ngelana.utils.capitalizeEachWord
 import com.capstonehore.ngelana.utils.splitAndReplaceCommas
-import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
+import java.util.Locale
 
 class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val binding = ItemPlaceBinding.inflate(
@@ -34,13 +32,11 @@ class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_C
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        val item = getItem(position)
-        Log.d(TAG, "Binding item at position $position: $item")
-        holder.bind(item)
+        holder.bind(getItem(position))
     }
 
-    inner class PlaceViewHolder(private var binding: ItemPlaceBinding)
-        : RecyclerView.ViewHolder(binding.root) {
+    inner class PlaceViewHolder(private var binding: ItemPlaceBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
 //        private var currentLocation: Location? = null
 
@@ -51,15 +47,16 @@ class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_C
 
                 val typesList = item.types?.splitAndReplaceCommas()
 
+
 //                currentLocation = Location("")
 //                currentLocation?.latitude = item.latitude ?: 0.0
 //                currentLocation?.longitude = item.longitude ?: 0.0
 
                 binding.apply {
-                    placeName.text = item.name
-//                    placeCity.text = currentLocation
+                    placeName.text = item.name?.capitalizeEachWord()
+                    placeCity.text = itemView.context.getString(R.string.bali_indonesia)
                     placeRating.text = item.rating.toString()
-                    placeType.text = typesList?.joinToString(", ") { it }
+                    placeType.text = typesList?.joinToString(", ")?.capitalizeEachWord()
                     Glide.with(itemView.context)
                         .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
@@ -68,69 +65,10 @@ class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_C
                 }
             }
 
-//            setupLocation()
-//            bindCircleView()
-            setupListeners(items)
-        }
-
-//        private fun setupLocation() {
-//            currentLocation?.let { location ->
-//                placeViewModel.getLocationDetails(itemView.context, location)
-//
-//                placeViewModel.locationResult.observe(itemView.context as LifecycleOwner) { result ->
-//                    when (result) {
-//                        is Result.Success -> {
-//                            val response = result.data
-//                            binding.placeCity.text = response.locality ?: itemView.context.getString(R.string.unknown)
-//                        }
-//                        is Result.Error -> {
-//                            binding.placeCity.text = itemView.context.getString(R.string.unknown)
-//                            Log.e(TAG, "Failed to get location details: ${result.error}")
-//                        }
-//                        is Result.Loading -> {}
-//                    }
-//                }
-//            }
-//        }
-
-//        private fun bindCircleView() {
-//            val circleView = View(itemView.context).apply {
-//                id = View.generateViewId()
-//                background = ContextCompat.getDrawable(itemView.context, R.drawable.circle)
-//            }
-//
-//            binding.constraintLayout.id = View.generateViewId()
-//
-//            binding.constraintLayout.addView(circleView)
-//
-//            val constraintSet = ConstraintSet()
-//            constraintSet.clone(binding.constraintLayout)
-//
-//            constraintSet.connect(
-//                circleView.id, ConstraintSet.START,
-//                R.id.placeType, ConstraintSet.END, 8
-//            )
-//            constraintSet.connect(
-//                circleView.id, ConstraintSet.TOP,
-//                R.id.placeType, ConstraintSet.TOP
-//            )
-//            constraintSet.connect(
-//                circleView.id, ConstraintSet.BOTTOM,
-//                R.id.placeType, ConstraintSet.BOTTOM
-//            )
-//
-//            constraintSet.applyTo(binding.constraintLayout)
-//        }
-
-        private fun setupListeners(item: PlaceItem?) {
             itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+                onItemClickCallback.onItemClicked(items)
             }
         }
-    }
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
     }
 
     interface OnItemClickCallback {
@@ -138,7 +76,6 @@ class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_C
     }
 
     companion object {
-        private const val TAG = "PlaceAdapter"
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PlaceItem>() {
             override fun areItemsTheSame(oldItem: PlaceItem, newItem: PlaceItem): Boolean {
                 return oldItem.id == newItem.id

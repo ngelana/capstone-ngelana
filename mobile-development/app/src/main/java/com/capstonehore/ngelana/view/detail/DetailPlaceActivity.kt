@@ -1,17 +1,11 @@
 package com.capstonehore.ngelana.view.detail
 
-import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
@@ -19,9 +13,9 @@ import com.capstonehore.ngelana.adapter.PhotoAdapter
 import com.capstonehore.ngelana.adapter.SimilarPlaceAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.entity.Favorite
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityDetailPlaceBinding
+import com.capstonehore.ngelana.utils.capitalizeEachWord
 import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
@@ -36,8 +30,6 @@ class DetailPlaceActivity : AppCompatActivity() {
 
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var favoriteViewModel: FavoriteViewModel
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,9 +106,10 @@ class DetailPlaceActivity : AppCompatActivity() {
                 setupSimilarAdapter()
                 setupSimilarPlace()
 
-                placeName.text = item.name
-                placePrimaryType.text = primaryType?.joinToString(", ")
-                placeType.text = typesList?.joinToString(", ")
+                placeName.text = item.name?.capitalizeEachWord()
+                placeCity.text = getString(R.string.bali_indonesia)
+                placePrimaryType.text = primaryType?.joinToString(", ")?.capitalizeEachWord()
+                placeType.text = typesList?.joinToString(", ")?.capitalizeEachWord()
                 placeRating.text = item.rating.toString()
                 placeRatingCount.text = item.ratingCount.toString()
                 placeStatus.text = item.status
@@ -203,7 +196,6 @@ class DetailPlaceActivity : AppCompatActivity() {
         similarPlaceAdapter = SimilarPlaceAdapter()
 
         binding.rvSimilarPlace.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@DetailPlaceActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = similarPlaceAdapter
         }
@@ -226,8 +218,13 @@ class DetailPlaceActivity : AppCompatActivity() {
                         showLoading(false)
 
                         val response = it.data
-                        response.let { item ->
-                            val randomPlacesWithFiltering = getRandomPlaces(item)
+                        response.let {
+                            val filteredPlacesWithImages = response.filter { place ->
+                                !place.urlPlaceholder.isNullOrEmpty()
+                            }
+
+                            val randomPlacesWithFiltering = getRandomPlaces(filteredPlacesWithImages)
+
                             similarPlaceAdapter.submitList(randomPlacesWithFiltering)
                         }
                         Log.d(TAG, "Successfully Show Similar Place: $response")
@@ -245,14 +242,8 @@ class DetailPlaceActivity : AppCompatActivity() {
     }
 
     private fun setupFavorite(placeItem: PlaceItem?) {
-        val factory = ViewModelFactory.getInstance(
-            this,
-            UserPreferences.getInstance(dataStore)
-        )
-        favoriteViewModel = ViewModelProvider(
-            this,
-            factory
-        )[FavoriteViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(this)
+        favoriteViewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
 
         placeItem?.let { item ->
             val randomIndex = item.urlPlaceholder?.indices?.random()
@@ -327,16 +318,12 @@ class DetailPlaceActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "DetailPlaceActivity"
         const val EXTRA_PLACES= "extra_places"
-        const val SESSION = "session"
     }
 }

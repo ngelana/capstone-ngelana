@@ -187,11 +187,12 @@
 
     <string name="success_completed_title">Anda sudah siap!</string>
 
-    <string name="registration_completed_message">Satu langkah lagi untuk kelengkapannya. Klik tombol lanjutkan untuk melanjutkan.</string>
+    <string name="registration_completed_message">Anda telah berhasil membuat akun Anda. Klik tombol lanjutkan untuk masuk.</string>
     <string name="registration_failed">Registrasi Gagal</string>
 
     <string name="login_success_title">Berhasil!</string>
     <string name="login_success_message">Anda telah berhasil masuk. Klik tombol lanjutkan untuk melanjutkan.</string>
+    <string name="login_success_interest_message">Satu langkah lagi untuk menyelesaikan. Klik tombol lanjutkan untuk melanjutkan.</string>
     <string name="login_failed">Login Gagal</string>
 
     <string name="plan_creation_success_message">Rencana perjalanan Anda berhasil dibuat.</string>
@@ -210,6 +211,7 @@
     <string name="delete_account_confirmation_message">Apakah Anda yakin ingin menghapus akun Anda?</string>
     <string name="delete_account">Hapus Akun</string>
 
+    <!-- Image -->
     <string name="ic_preference">https://storage.googleapis.com/ngelana-bucket/ngelana-assets/icon_ngelana_black.svg</string>
     <string name="logo_ngelana">https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png</string>
 

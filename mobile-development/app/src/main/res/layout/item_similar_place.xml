@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_5_0"
-                android:textColor="@color/yellow"
+                android:textColor="?attr/colorSecondaryVariant"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/ratingView"

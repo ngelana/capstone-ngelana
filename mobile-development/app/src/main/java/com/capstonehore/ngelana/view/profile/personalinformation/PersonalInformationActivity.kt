@@ -27,8 +27,6 @@ class PersonalInformationActivity : AppCompatActivity() {
 
     private var userInformationItem: UserInformationItem? = null
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalInformationBinding.inflate(layoutInflater)
@@ -112,15 +110,8 @@ class PersonalInformationActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): ProfileViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[ProfileViewModel::class.java]
-    }
-
-    companion object {
-        const val SESSION = "session"
     }
 
 }

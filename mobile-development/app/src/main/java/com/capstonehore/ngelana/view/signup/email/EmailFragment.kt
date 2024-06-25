@@ -41,8 +41,6 @@ class EmailFragment : Fragment() {
 
     private lateinit var signUpViewModel: SignUpViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -196,10 +194,7 @@ class EmailFragment : Fragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(requireActivity().dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
     }
 
@@ -208,7 +203,4 @@ class EmailFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        const val SESSION = "session"
-    }
 }

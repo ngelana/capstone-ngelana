@@ -55,7 +55,6 @@ class ProfileFragment : Fragment() {
     private lateinit var profileViewModel: ProfileViewModel
 
     private val Context.themeDataStore: DataStore<Preferences> by preferencesDataStore(THEME_SETTINGS)
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -308,10 +307,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity): ProfileViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(requireActivity().dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[ProfileViewModel::class.java]
     }
 
@@ -323,7 +319,6 @@ class ProfileFragment : Fragment() {
     companion object {
         private const val TAG = "ProfileFragment"
         private const val THEME_SETTINGS = "theme_settings"
-        const val SESSION = "session"
     }
 
 }

@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -26,6 +24,7 @@ import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentDetailPlaceBinding
+import com.capstonehore.ngelana.utils.capitalizeEachWord
 import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
@@ -43,8 +42,6 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
 
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var favoriteViewModel: FavoriteViewModel
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,9 +115,10 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                 setupSimilarAdapter()
                 setupSimilarPlace()
 
-                placeName.text = item.name
-                placePrimaryType.text = primaryType?.joinToString(", ")
-                placeType.text = typesList?.joinToString(", ")
+                placeName.text = item.name?.capitalizeEachWord()
+                placeCity.text = getString(R.string.bali_indonesia)
+                placePrimaryType.text = primaryType?.joinToString(", ")?.capitalizeEachWord()
+                placeType.text = typesList?.joinToString(", ")?.capitalizeEachWord()
                 placeRating.text = item.rating.toString()
                 placeRatingCount.text = item.ratingCount.toString()
                 placeStatus.text = item.status
@@ -209,9 +207,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
         similarPlaceAdapter = SimilarPlaceAdapter()
 
         binding.rvSimilarPlace.apply {
-            setHasFixedSize(true)
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = similarPlaceAdapter
         }
 
@@ -236,8 +232,13 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
                         showLoading(false)
 
                         val response = it.data
-                        response.let { item ->
-                            val randomPlacesWithFiltering = getRandomPlaces(item)
+                        response.let {
+                            val filteredPlacesWithImages = response.filter { place ->
+                                !place.urlPlaceholder.isNullOrEmpty()
+                            }
+
+                            val randomPlacesWithFiltering = getRandomPlaces(filteredPlacesWithImages)
+
                             similarPlaceAdapter.submitList(randomPlacesWithFiltering)
                         }
                         Log.d(TAG, "Successfully Show Similar Place: $response")
@@ -257,14 +258,8 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupFavorite(placeItem: PlaceItem?) {
-        val factory = ViewModelFactory.getInstance(
-            requireActivity(),
-            UserPreferences.getInstance(requireActivity().dataStore)
-        )
-        favoriteViewModel = ViewModelProvider(
-            requireActivity(),
-            factory
-        )[FavoriteViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(requireActivity(),)
+        favoriteViewModel = ViewModelProvider(requireActivity(), factory)[FavoriteViewModel::class.java]
 
         placeItem?.let { item ->
             val randomIndex = item.urlPlaceholder?.indices?.random()
@@ -336,10 +331,7 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(requireActivity().dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
     }
 
@@ -359,7 +351,6 @@ class DetailPlaceFragment : BottomSheetDialogFragment() {
     companion object {
         private const val TAG = "DetailPlaceFragment"
         private const val ARG_PLACE = "arg_place"
-        const val SESSION = "session"
 
         fun newInstance(placeItem: PlaceItem): DetailPlaceFragment {
             return DetailPlaceFragment().apply {

@@ -7,8 +7,8 @@ import com.capstonehore.ngelana.data.repository.Repository
 import com.capstonehore.ngelana.data.repository.UserRepository
 
 class SignUpViewModel(
-//        private val userRepository: UserRepository
-    private val repository: Repository
+    private val userRepository: UserRepository
+//    private val repository: Repository
 ) : ViewModel() {
 
     private val _name = MutableLiveData<String>()
@@ -36,5 +36,5 @@ class SignUpViewModel(
             name: String,
             email: String,
             password: String,
-    ) = repository.register(name, email, password)
+    ) = userRepository.register(name, email, password)
 }

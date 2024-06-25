@@ -41,13 +41,20 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    fun getUserPreferenceId(): Flow<String?> = dataStore.data.map {
-        it[USER_PREFERENCE_ID_KEY]
+    private fun getUserPreferenceIds(): Flow<List<String>> = dataStore.data.map { preferences ->
+        preferences[USER_PREFERENCE_ID_KEY]?.split(",")?.filter { it.isNotBlank() } ?: emptyList()
+    }
+
+    suspend fun saveUserPreferenceIds(userPreferenceIds: List<String>) {
+        val ids = userPreferenceIds.joinToString(",")
+        dataStore.edit { preferences ->
+            preferences[USER_PREFERENCE_ID_KEY] = ids
+        }
     }
 
     suspend fun hasUserPreferences(): Boolean {
-        val userPreferenceId = getUserPreferenceId().first()
-        return !userPreferenceId.isNullOrEmpty()
+        val userPreferenceIds = getUserPreferenceIds().first()
+        return userPreferenceIds.isNotEmpty()
     }
 
     suspend fun logout() = dataStore.edit {

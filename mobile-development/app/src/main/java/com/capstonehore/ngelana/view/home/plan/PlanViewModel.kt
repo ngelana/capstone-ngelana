@@ -6,18 +6,18 @@ import com.capstonehore.ngelana.data.repository.PlanRepository
 import com.capstonehore.ngelana.data.repository.Repository
 
 class PlanViewModel(
-//    private val planRepository: PlanRepository
-    private val repository: Repository
+    private val planRepository: PlanRepository
+//    private val repository: Repository
 ): ViewModel() {
 
-    fun getRecommendedPlace(date: String) = repository.getRecommendedPlace(date)
+//    fun getRecommendedPlace(date: String) = planRepository.getRecommendedPlace(date)
 
-    fun setPlanResult(planUserItem: PlanUserItem) = repository.setPlanResult(planUserItem)
+    fun setPlanResult(planUserItem: PlanUserItem) = planRepository.setPlanResult(planUserItem)
 
-    fun setDetailPlanResult(planUserItem: PlanUserItem) = repository.setDetailPlanResult(planUserItem)
+    fun setDetailPlanResult(planUserItem: PlanUserItem) = planRepository.setDetailPlanResult(planUserItem)
 
-    fun getPlanByUserId() = repository.getPlanByUserId()
+    fun getPlanByUserId() = planRepository.getPlanByUserId()
 
-    fun getPlanDetailByUserId() = repository.getPlanDetailByUserId()
+    fun getPlanDetailByUserId() = planRepository.getPlanDetailByUserId()
 
 }

@@ -1,26 +1,19 @@
 package com.capstonehore.ngelana.adapter
 
-import android.location.Location
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ItemRecommendationPlaceBinding
-import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
+import com.capstonehore.ngelana.utils.capitalizeEachWord
+import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 
-class RecommendationPlaceAdapter(
-    private val placeViewModel: PlaceViewModel
-) : ListAdapter<PlaceItem, RecommendationPlaceAdapter.RecommendationPlaceViewHolder>(DIFF_CALLBACK) {
+class RecommendationPlaceAdapter
+    : ListAdapter<PlaceItem, RecommendationPlaceAdapter.RecommendationPlaceViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
     private lateinit var onClearButtonClickCallback: OnClearButtonClickCallback
@@ -54,24 +47,19 @@ class RecommendationPlaceAdapter(
 
     inner class RecommendationPlaceViewHolder(private var binding: ItemRecommendationPlaceBinding)
         : RecyclerView.ViewHolder(binding.root) {
-        private var currentLocation: Location? = null
 
-        fun bind(item: PlaceItem?) {
-            item?.let {
-
+        fun bind(items: PlaceItem?) {
+            items?.let { item ->
                 val randomIndex = item.urlPlaceholder?.indices?.random()
                 val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
 
-                val typesList = item.types?.split(", ") ?: emptyList()
-
-                currentLocation = Location("")
-                currentLocation?.latitude = item.latitude ?: 0.0
-                currentLocation?.longitude = item.longitude ?: 0.0
+                val typesList = item.types?.splitAndReplaceCommas()
 
                 binding.apply {
-                    placeName.text = item.name
+                    placeName.text = item.name?.capitalizeEachWord()
+                    placeCity.text = itemView.context.getString(R.string.bali_indonesia)
                     placeRating.text = item.rating.toString()
-                    placeType.text = typesList.joinToString(", ")
+                    placeType.text = typesList?.joinToString(", ")?.capitalizeEachWord()
                     Glide.with(itemView.context)
                         .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
@@ -80,55 +68,7 @@ class RecommendationPlaceAdapter(
                 }
             }
 
-            setupLocation()
-            bindCircleView()
-            setupListeners(item)
-        }
-
-        private fun setupLocation() {
-            currentLocation?.let { location ->
-                placeViewModel.getLocationDetails(itemView.context, location)
-
-                placeViewModel.locationResult.observe(itemView.context as LifecycleOwner) { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            val response = result.data
-                            binding.placeCity.text = response.locality ?: itemView.context.getString(R.string.unknown)
-                        }
-                        is Result.Error -> {
-                            binding.placeCity.text = itemView.context.getString(R.string.unknown)
-                            Log.e(TAG, "Failed to get location details: ${result.error}")
-                        }
-                        is Result.Loading -> {}
-                    }
-                }
-            }
-        }
-
-        private fun bindCircleView() {
-            val circleView = View(itemView.context)
-            circleView.id = View.generateViewId()
-            circleView.background = ContextCompat.getDrawable(itemView.context, R.drawable.circle)
-
-            binding.constraintLayout.addView(circleView)
-
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(binding.constraintLayout)
-
-            constraintSet.connect(
-                circleView.id, ConstraintSet.START,
-                R.id.placeType, ConstraintSet.END, 8
-            )
-            constraintSet.connect(
-                circleView.id, ConstraintSet.TOP,
-                R.id.placeType, ConstraintSet.TOP
-            )
-            constraintSet.connect(
-                circleView.id, ConstraintSet.BOTTOM,
-                R.id.placeType, ConstraintSet.BOTTOM
-            )
-
-            constraintSet.applyTo(binding.constraintLayout)
+            setupListeners(items)
         }
 
         private fun setupListeners(item: PlaceItem?) {
@@ -159,7 +99,6 @@ class RecommendationPlaceAdapter(
     }
 
     companion object {
-        private const val TAG = "RecommendationPlaceAdapter"
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PlaceItem>() {
             override fun areItemsTheSame(oldItem: PlaceItem, newItem: PlaceItem): Boolean {
                 return oldItem.id == newItem.id

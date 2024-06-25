@@ -17,6 +17,7 @@ import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.databinding.ActivityMyReviewBinding
+import com.capstonehore.ngelana.di.dataStore
 import com.capstonehore.ngelana.view.ViewModelFactory
 
 class MyReviewActivity : AppCompatActivity() {
@@ -26,8 +27,6 @@ class MyReviewActivity : AppCompatActivity() {
     private lateinit var reviewAdapter: ReviewAdapter
 
     private lateinit var reviewViewModel: ReviewViewModel
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,15 +98,11 @@ class MyReviewActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): ReviewViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[ReviewViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "MyReviewActivity"
-        const val SESSION = "session"
     }
 }

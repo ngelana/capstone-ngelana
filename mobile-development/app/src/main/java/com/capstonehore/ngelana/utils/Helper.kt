@@ -23,3 +23,11 @@ fun String.dateFormat(): String {
 fun String?.splitAndReplaceCommas(): List<String> {
     return this?.split(", ")?.map { it.replace("_", " ") } ?: emptyList()
 }
+
+fun String.capitalizeEachWord(): String {
+    return split(" ").joinToString(" ") { it1 ->
+        it1.replaceFirstChar { it2 ->
+            if (it2.isLowerCase()) it2.titlecase(Locale.getDefault()) else it2.toString()
+        }
+    }
+}

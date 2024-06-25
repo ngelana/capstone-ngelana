@@ -14,7 +14,7 @@ data class UserPreferenceResponse(
 
 data class UserDataPreferencesItem(
 
-	@field:SerializedName("preference")
+	@SerializedName("preference")
 	val preference: PreferenceItem? = null,
 
 	@field:SerializedName("userId")

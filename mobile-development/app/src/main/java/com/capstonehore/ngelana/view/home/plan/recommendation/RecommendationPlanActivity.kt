@@ -32,8 +32,6 @@ class RecommendationPlanActivity : AppCompatActivity() {
 
     private lateinit var placeViewModel: PlaceViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     @SuppressLint("NotifyDataSetChanged")
     val addPlaceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == CustomizePlanActivity.RESULT_CODE && result.data != null) {
@@ -91,7 +89,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
     private fun setupView() {
         placeList.addAll(getListPlace())
 
-        recommendationPlaceAdapter = RecommendationPlaceAdapter(placeViewModel)
+        recommendationPlaceAdapter = RecommendationPlaceAdapter()
 
         binding.rvPlaces.apply {
             setHasFixedSize(true)
@@ -153,16 +151,12 @@ class RecommendationPlanActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
     }
 
     companion object {
         const val EXTRA_DATE = "extra_date"
         const val EXTRA_RETURN_PLACE = "extra_return_place"
-        const val SESSION = "session"
     }
 }

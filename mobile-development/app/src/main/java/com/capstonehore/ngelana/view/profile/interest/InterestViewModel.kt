@@ -4,31 +4,31 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
-import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
 import com.capstonehore.ngelana.data.repository.PreferenceRepository
-import com.capstonehore.ngelana.data.repository.Repository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class InterestViewModel(
-//    private val preferenceRepository: PreferenceRepository,
-    private val repository: Repository,
+    private val preferenceRepository: PreferenceRepository,
+//    private val repository: Repository,
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
-    fun getAllPreferences() = repository.getAllPreferences()
+    fun getAllPreferences() = preferenceRepository.getAllPreferences()
 
-    fun createUserPreference(userDataPreferencesItem: List<UserDataPreferencesItem>) =
-        repository.createUserPreference(userDataPreferencesItem)
+    fun createUserPreference(preferenceIds: List<String>) =
+        preferenceRepository.createUserPreference(preferenceIds)
 
-    fun getPreferenceById() = repository.getPreferenceByUserId()
+    fun getPreferenceById() = preferenceRepository.getPreferenceByUserId()
 
-    fun updateUserPreference(preferenceItem: List<PreferenceItem>) =
-        repository.updateUserPreference(preferenceItem)
+//    fun updateUserPreference(preferenceItem: List<PreferenceItem>) =
+//        preferenceRepository.updateUserPreference(preferenceItem)
 
-    fun getUserId() {
+
+    fun saveUserPreferenceId(userPreferenceId: List<String>) {
         viewModelScope.launch {
-            userPreferences.getUserId().first()
+            userPreferences.saveUserPreferenceIds(userPreferenceId)
+            userPreferences.prefLogin()
         }
     }
 

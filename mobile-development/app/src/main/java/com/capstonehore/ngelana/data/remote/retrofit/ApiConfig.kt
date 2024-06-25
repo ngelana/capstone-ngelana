@@ -1,6 +1,5 @@
 package com.capstonehore.ngelana.data.remote.retrofit
 
-import android.util.Log
 import com.capstonehore.ngelana.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

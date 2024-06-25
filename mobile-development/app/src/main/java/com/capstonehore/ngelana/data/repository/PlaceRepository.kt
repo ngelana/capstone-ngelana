@@ -14,6 +14,7 @@ import com.capstonehore.ngelana.data.remote.response.places.PlaceResponseById
 import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
+import com.capstonehore.ngelana.data.repository.Repository.Companion
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -27,25 +28,27 @@ class PlaceRepository (
 
     private var token: String? = null
 
-    private suspend fun getToken(): String? = token ?: runBlocking {
-        userPreferences.getToken().first()
-    }.also { token = it }
+    private suspend fun getToken(): String {
+        if (token.isNullOrEmpty()) {
+            token = userPreferences.getToken().first()
+        }
+        return token ?: ""
+    }
+
+    private suspend fun initializeApiService() {
+        val token = getToken()
+        apiService = ApiConfig.getApiService(token)
+    }
 
     fun getAllPlaces(): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            apiService = ApiConfig.getApiService(token.toString())
+            initializeApiService()
 
             val response = apiService.getAllPlaces()
             val placeItem = response.data ?: emptyList()
 
             emit(Result.Success(placeItem))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
-
-            emit(Result.Error(errorResponse.toString()))
         } catch (e: Exception) {
             Log.d(TAG, "getAllPlaces: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -55,19 +58,13 @@ class PlaceRepository (
     fun getPlaceById(id: String): LiveData<Result<PlaceItem>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            val apiService = ApiConfig.getApiService(token.toString())
+            initializeApiService()
 
             val response = apiService.getPlaceById(id)
             val placeItem = response.data
 
             if (placeItem != null) emit(Result.Success(placeItem))
             else emit(Result.Error("Data is null"))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, PlaceResponseById::class.java)
-
-            emit(Result.Error(errorResponse.message ?: "Unknown HTTP error"))
         } catch (e: Exception) {
             Log.d(TAG, "getPlaceById: ${e.message}")
             emit(Result.Error("Unexpected error: ${e.message}"))
@@ -77,17 +74,12 @@ class PlaceRepository (
     fun searchPlaceByQuery(query: String): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            apiService = ApiConfig.getApiService(token.toString())
+            initializeApiService()
 
             val response = apiService.searchPlaceByQuery(query)
             val placeItem = response.data ?: emptyList()
-            emit(Result.Success(placeItem))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
 
-            emit(Result.Error(errorResponse.toString()))
+            emit(Result.Success(placeItem))
         } catch (e: Exception) {
             Log.d(TAG, "searchPlaceByQuery: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -97,17 +89,12 @@ class PlaceRepository (
     fun getPrimaryTypePlace(type: String): LiveData<Result<List<PlaceItem>>> = liveData {
         emit(Result.Loading)
         try {
-            val token = getToken()
-            apiService = ApiConfig.getApiService(token.toString())
+            initializeApiService()
 
             val response = apiService.getPrimaryTypePlace(type)
             val placeItem = response.data ?: emptyList()
-            emit(Result.Success(placeItem))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, PlacesResponse::class.java)
 
-            emit(Result.Error(errorResponse.toString()))
+            emit(Result.Success(placeItem))
         } catch (e: Exception) {
             Log.d(TAG, "getPrimaryTypePlace: ${e.message}")
             emit(Result.Error(e.message.toString()))

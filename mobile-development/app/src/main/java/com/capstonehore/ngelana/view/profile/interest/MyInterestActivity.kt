@@ -29,8 +29,6 @@ class MyInterestActivity : AppCompatActivity() {
 
     private lateinit var interestViewModel: InterestViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyInterestBinding.inflate(layoutInflater)
@@ -64,7 +62,6 @@ class MyInterestActivity : AppCompatActivity() {
         myInterestAdapter = MyInterestAdapter()
 
         binding.rvInterest.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MyInterestActivity)
             adapter = myInterestAdapter
         }
@@ -84,7 +81,7 @@ class MyInterestActivity : AppCompatActivity() {
                         showLoading(false)
 
                         val response = it.data
-                            myInterestAdapter.submitList(response)
+                        myInterestAdapter.submitList(response)
 
                         Log.d(TAG, "Successfully Show All Preferences: $response")
                     }
@@ -109,16 +106,12 @@ class MyInterestActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): InterestViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[InterestViewModel::class.java]
     }
 
     companion object {
-        private const val TAG = "InterestActivity"
-        const val SESSION = "session"
+        private const val TAG = "MyInterestActivity"
     }
 
 }

@@ -6,12 +6,12 @@ import com.capstonehore.ngelana.data.repository.Repository
 import com.capstonehore.ngelana.data.repository.ReviewRepository
 
 class ReviewViewModel(
-//    private val reviewRepository: ReviewRepository
-    private val repository: Repository
+    private val reviewRepository: ReviewRepository
+//    private val repository: Repository
 ): ViewModel() {
 
-    fun getAllReviewByUserId() = repository.getAllReviewByUserId()
+    fun getAllReviewByUserId() = reviewRepository.getAllReviewByUserId()
 
-    fun createReview(reviewItem: ReviewItem) = repository.createReview(reviewItem)
+    fun createReview(reviewItem: ReviewItem) = reviewRepository.createReview(reviewItem)
 
 }

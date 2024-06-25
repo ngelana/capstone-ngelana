@@ -32,8 +32,6 @@ class CanceledTripFragment : Fragment() {
 
     private lateinit var planViewModel: PlanViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -106,10 +104,7 @@ class CanceledTripFragment : Fragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity): PlanViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(requireActivity().dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlanViewModel::class.java]
     }
 
@@ -120,6 +115,5 @@ class CanceledTripFragment : Fragment() {
 
     companion object {
         private const val TAG = "CanceledTripFragment"
-        const val SESSION = "session"
     }
 }

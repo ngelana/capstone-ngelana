@@ -36,8 +36,6 @@ class EditMyInterestActivity : AppCompatActivity() {
 
     private lateinit var interestViewModel: InterestViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditMyInterestBinding.inflate(layoutInflater)
@@ -144,28 +142,28 @@ class EditMyInterestActivity : AppCompatActivity() {
             )
         }
 
-        interestViewModel.updateUserPreference(selectedPreferences).observe(this) {
-            when (it) {
-                is Result.Success -> {
-                    showLoading(false)
-
-                    val response = it.data
-
-                    showToast(getString(R.string.successfully_saved_preferences))
-                    moveToMyInterest()
-                    Log.d(TAG, "Successfully updated preferences: $response")
-                }
-
-                is Result.Error -> {
-                    showLoading(false)
-
-                    showToast(it.error)
-                    Log.d(TAG, "Failed to updated preferences: ${it.error}")
-                }
-
-                is Result.Loading -> showLoading(true)
-            }
-        }
+//        interestViewModel.updateUserPreference(selectedPreferences).observe(this) {
+//            when (it) {
+//                is Result.Success -> {
+//                    showLoading(false)
+//
+//                    val response = it.data
+//
+//                    showToast(getString(R.string.successfully_saved_preferences))
+//                    moveToMyInterest()
+//                    Log.d(TAG, "Successfully updated preferences: $response")
+//                }
+//
+//                is Result.Error -> {
+//                    showLoading(false)
+//
+//                    showToast(it.error)
+//                    Log.d(TAG, "Failed to updated preferences: ${it.error}")
+//                }
+//
+//                is Result.Loading -> showLoading(true)
+//            }
+//        }
     }
 
     private fun updateInterestCount() {
@@ -191,16 +189,12 @@ class EditMyInterestActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): InterestViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[InterestViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "EditMyInterestActivity"
-        const val SESSION = "session"
     }
 
 }

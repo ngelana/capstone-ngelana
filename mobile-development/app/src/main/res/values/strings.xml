@@ -198,11 +198,12 @@
 
     <string name="success_completed_title">You\'re all set!</string>
 
-    <string name="registration_completed_message">One more step to complete. Click the continue button to proceed.</string>
+    <string name="registration_completed_message">You have successfully created your account. Click the continue button to log in.</string>
     <string name="registration_failed">Registration Failed</string>
 
     <string name="login_success_title">Success!</string>
     <string name="login_success_message">You have successfully logged in. Click the continue button to proceed.</string>
+    <string name="login_success_interest_message">One more step to complete. Click the continue button to proceed.</string>
     <string name="login_failed">Login Failed</string>
 
     <string name="plan_creation_success_message">Your travel plan has been successfully created.</string>
@@ -213,7 +214,10 @@
     <string name="delete_account_confirmation_message">Are you sure you want to delete your account?</string>
     <string name="delete_account">Delete Account</string>
 
+    <!-- Image -->
     <string name="ic_preference">https://storage.googleapis.com/ngelana-bucket/ngelana-assets/icon_ngelana_black.svg</string>
     <string name="logo_ngelana">https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png</string>
+    <string name="failed_to_save_preferences">Please select at least 3 interests</string>
+    <string name="bali_indonesia">Bali, Indonesia</string>
 
 </resources>

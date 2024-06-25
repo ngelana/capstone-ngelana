@@ -8,14 +8,13 @@ data class PreferencesResponseByUserId(
 	@field:SerializedName("message")
 	val message: String? = null,
 
-	@field:SerializedName("user")
-	val user: UserPreference? = null
+	@SerializedName("data")
+	val data: PreferencesData?,
 )
 
-data class UserPreference(
-
-	@field:SerializedName("userPreferences")
-	val userPreferences: List<UserPreferencesItem>? = null,
+data class PreferencesData(
+	@SerializedName("userPreferences")
+	val userPreferences: List<UserPreferencesItem>?,
 
 	@field:SerializedName("name")
 	val name: String? = null,

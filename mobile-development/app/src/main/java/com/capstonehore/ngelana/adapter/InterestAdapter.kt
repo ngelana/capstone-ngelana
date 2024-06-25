@@ -3,6 +3,7 @@ package com.capstonehore.ngelana.adapter
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,8 @@ import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.databinding.ItemInterestBinding
 import com.capstonehore.ngelana.databinding.ItemProfileBinding
+import com.capstonehore.ngelana.utils.splitAndReplaceCommas
+import java.util.Locale
 
 class InterestAdapter(
     private val selectedItems: SparseBooleanArray
@@ -40,12 +43,16 @@ class InterestAdapter(
     inner class InterestViewHolder(private val binding: ItemInterestBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: PreferenceItem?, isSelected: Boolean) {
-            item?.let {
-                val imageUrl = itemView.context.getString(R.string.ic_preference)
+        fun bind(items: PreferenceItem?, isSelected: Boolean) {
+            items?.let { item ->
+                val imageUrl = ContextCompat.getDrawable(itemView.context, R.drawable.icon_ngelana_black)
 
                 binding.apply {
-                    tvInterest.text = it.name
+                    tvInterest.text = item.name?.splitAndReplaceCommas()?.joinToString(", ") { it.replaceFirstChar { it1 ->
+                        if (it1.isLowerCase()) it1.titlecase(
+                            Locale.getDefault()
+                        ) else it1.toString()
+                    } } ?: ""
                     Glide.with(itemView.context)
                         .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
@@ -59,7 +66,7 @@ class InterestAdapter(
             }
 
             itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+                onItemClickCallback.onItemClicked(items)
             }
         }
     }

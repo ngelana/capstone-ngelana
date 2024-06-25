@@ -34,8 +34,6 @@ class UpcomingTripFragment : Fragment() {
 
     private lateinit var planViewModel: PlanViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,15 +111,11 @@ class UpcomingTripFragment : Fragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity): PlanViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(requireActivity().dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlanViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "UpcomingTripFragment"
-        const val SESSION = "session"
     }
 }

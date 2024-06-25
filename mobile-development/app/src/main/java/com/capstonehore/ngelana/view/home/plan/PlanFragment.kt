@@ -13,12 +13,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.FragmentPlanBinding
+import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -33,14 +37,14 @@ class PlanFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-//    private lateinit var planViewModel: PlanViewModel
+    private lateinit var planViewModel: PlanViewModel
 
     private val navController by lazy { findNavController() }
 
     private var selectedDate: Date? = null
     private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+//    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +57,7 @@ class PlanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         setupAction()
         setupImage()
@@ -66,12 +70,13 @@ class PlanFragment : Fragment() {
         }
 
         binding.nextButton.setOnClickListener {
-            if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-                checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                getUserLastLocation()
-            } else {
-                requestLocationPermission()
-            }
+//            if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+//                checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+//                getUserLastLocation()
+//            } else {
+//                requestLocationPermission()
+//            }
+            moveToRecommendationPlan()
         }
 
         binding.edDate.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
@@ -139,55 +144,55 @@ class PlanFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            when {
-                permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true -> {
-                    getUserLastLocation()
-                }
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true -> {
-                    getUserLastLocation()
-                }
-                else -> {
-                    showToast(getString(R.string.permission_request_denied))
-                }
-            }
-        }
+//    private val requestPermissionLauncher =
+//        registerForActivityResult(
+//            ActivityResultContracts.RequestMultiplePermissions()
+//        ) { permissions ->
+//            when {
+//                permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true -> {
+//                    getUserLastLocation()
+//                }
+//                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true -> {
+//                    getUserLastLocation()
+//                }
+//                else -> {
+//                    showToast(getString(R.string.permission_request_denied))
+//                }
+//            }
+//        }
 
-    private fun checkPermission(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+//    private fun checkPermission(permission: String): Boolean {
+//        return ContextCompat.checkSelfPermission(
+//            requireContext(),
+//            permission
+//        ) == PackageManager.PERMISSION_GRANTED
+//    }
 
-    private fun requestLocationPermission() {
-        requestPermissionLauncher.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        )
-    }
+//    private fun requestLocationPermission() {
+//        requestPermissionLauncher.launch(
+//            arrayOf(
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            )
+//        )
+//    }
 
-    private fun getUserLastLocation() {
-        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-        ) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    moveToRecommendationPlan()
+//    private fun getUserLastLocation() {
+//        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+//            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+//        ) {
+//            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+//                if (location != null) {
+//                    moveToRecommendationPlan()
 //                    updateLocationUI(location)
-                } else {
-                    showToast(getString(R.string.enable_location_first))
-                }
-            }
-        } else {
-            requestLocationPermission()
-        }
-    }
+//                } else {
+//                    showToast(getString(R.string.enable_location_first))
+//                }
+//            }
+//        } else {
+//            requestLocationPermission()
+//        }
+//    }
 
     private fun moveToRecommendationPlan() {
         val dateStr = selectedDate?.let { dateFormat.format(it) } ?: ""
@@ -209,5 +214,10 @@ class PlanFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
     }
 }

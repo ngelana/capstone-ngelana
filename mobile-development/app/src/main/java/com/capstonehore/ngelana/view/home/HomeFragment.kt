@@ -37,14 +37,12 @@ class HomeFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private lateinit var placeAdapter: PlaceAdapter
     private lateinit var popularAdapter: PopularAdapter
+    private lateinit var placeAdapter: PlaceAdapter
 
     private lateinit var placeViewModel: PlaceViewModel
 
     private val navController by lazy { findNavController() }
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,7 +116,6 @@ class HomeFragment : Fragment() {
         }
 
         binding.rvRecommendationPlace.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireActivity())
             adapter = placeAdapter
         }
@@ -151,9 +148,12 @@ class HomeFragment : Fragment() {
 
                         val response = it.data
                         response.let {
+                            val filteredPlacesWithImages = response.filter { place ->
+                                !place.urlPlaceholder.isNullOrEmpty()
+                            }
 
-                            val randomPlacesWithFiltering = getRandomPlaces(response)
-                            val randomPlacesWithoutFiltering = response.shuffled().take(8)
+                            val randomPlacesWithFiltering = getRandomPlaces(filteredPlacesWithImages)
+                            val randomPlacesWithoutFiltering = filteredPlacesWithImages.shuffled().take(8)
 
                             Log.d(TAG, "Filtered Places: $randomPlacesWithFiltering")
                             Log.d(TAG, "Shuffled Places: $randomPlacesWithoutFiltering")
@@ -226,10 +226,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity): PlaceViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(requireActivity().dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
     }
 
@@ -240,6 +237,5 @@ class HomeFragment : Fragment() {
 
     companion object {
         private const val TAG = "HomeFragment"
-        const val SESSION = "session"
     }
 }

@@ -9,17 +9,17 @@ import com.capstonehore.ngelana.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-//    private val userRepository: UserRepository,
-    private val repository: Repository,
+    private val userRepository: UserRepository,
+//    private val repository: Repository,
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
-    fun getUserById() = repository.getUserById()
+    fun getUserById() = userRepository.getUserById()
 
     fun updateUserById(userInformationItem: UserInformationItem) =
-        repository.updateUserById(userInformationItem)
+        userRepository.updateUserById(userInformationItem)
 
-    fun deleteUserById() = repository.deleteUserById()
+    fun deleteUserById() = userRepository.deleteUserById()
 
     fun logout() {
         viewModelScope.launch {

@@ -31,17 +31,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tvAppName"
-                        android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/ivAppName"
+                        android:layout_width="84dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/app_name"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorSecondaryVariant"
+                        android:src="@drawable/img_ngelana_logo_name"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/colorSecondaryVariant"
+                        tools:ignore="ContentDescription" />
 
                     <ImageView
                         android:id="@+id/ivIconLeft"
@@ -60,9 +59,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-                        android:text="@string/location"
+                        android:text="@string/bali_indonesia"
                         android:textColor="?attr/colorSecondaryVariant"
                         android:textSize="16sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/ivIconLeft"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/ivIconLeft" />

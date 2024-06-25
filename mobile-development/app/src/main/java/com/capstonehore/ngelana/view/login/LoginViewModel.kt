@@ -8,15 +8,15 @@ import com.capstonehore.ngelana.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-//        private val userRepository: UserRepository,
-    private val repository: Repository,
+        private val userRepository: UserRepository,
+//    private val repository: Repository,
     private val userPreferences: UserPreferences
 ): ViewModel() {
 
     fun doLogin(
         email: String,
         password: String
-    ) = repository.login(email, password)
+    ) = userRepository.login(email, password)
 
     fun saveLogin(token: String) {
         viewModelScope.launch {

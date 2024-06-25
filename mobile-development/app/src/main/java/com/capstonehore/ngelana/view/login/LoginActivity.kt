@@ -52,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
 
     private val Context.themeDataStore by preferencesDataStore(THEME_SETTINGS)
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -235,15 +234,21 @@ class LoginActivity : AppCompatActivity() {
             with(alertLayout) {
                 alertIcon.setImageResource(R.drawable.ic_check_circle)
                 alertTitle.text = getString(R.string.login_success_title)
-                alertMessage.text = getString(R.string.login_success_message)
 
-                submitButton.setOnClickListener {
-                    lifecycleScope.launch {
-                        when (loginViewModel.hasUserPreference()) {
+                lifecycleScope.launch {
+                    val hasUserPreferences = loginViewModel.hasUserPreference()
+
+                    alertMessage.text = if (hasUserPreferences) {
+                        getString(R.string.login_success_message)
+                    } else {
+                        getString(R.string.login_success_interest_message)
+                    }
+
+                    submitButton.setOnClickListener {
+                        when (hasUserPreferences) {
                             true -> moveToMain()
                             false -> moveToInterest()
                         }
-                        dialog.dismiss()
                     }
                 }
             }
@@ -309,17 +314,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): LoginViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[LoginViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "LoginActivity"
         const val THEME_SETTINGS = "theme_settings"
-        const val SESSION = "session"
 
         fun setLocale(context: Context) {
             val languageCode = LanguagePreference.getLanguage(context)

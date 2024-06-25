@@ -2,7 +2,6 @@ package com.capstonehore.ngelana.view.login.interest
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,17 +9,12 @@ import android.util.SparseBooleanArray
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.InterestAdapter
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
-import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
 import com.capstonehore.ngelana.databinding.ActivityInterestBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.main.MainActivity
@@ -34,10 +28,9 @@ class InterestActivity : AppCompatActivity() {
 
     private val selectedItems = SparseBooleanArray()
     private var interestCount: Int = 0
+    private var delay: Long = 3000
 
     private lateinit var interestViewModel: InterestViewModel
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +47,7 @@ class InterestActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.skipButton.setOnClickListener {
-            startActivity(Intent(this@InterestActivity, MainActivity::class.java))
-            finish()
+            moveToMain()
         }
         binding.nextButton.setOnClickListener {
             setupInterest()
@@ -106,7 +98,6 @@ class InterestActivity : AppCompatActivity() {
         }
 
         binding.rvInterest.apply {
-            setHasFixedSize(true)
             layoutManager = GridLayoutManager(this@InterestActivity, 2)
             adapter = interestAdapter
         }
@@ -138,31 +129,35 @@ class InterestActivity : AppCompatActivity() {
     }
 
     private fun setupInterest() {
-        val userId = interestViewModel.getUserId().toString()
-        val selectedPreferences = interestAdapter.currentList.filterIndexed { index, _ ->
-            selectedItems[index]
-        }.map { preferenceItem ->
-            UserDataPreferencesItem(userId = userId, preference = preferenceItem)
-        }
+        val selectedPreferenceIds = interestAdapter.currentList
+            .filterIndexed { index, _ -> selectedItems[index] }
+            .mapNotNull { it?.id }
 
-        interestViewModel.createUserPreference(selectedPreferences).observe(this) {
-            when (it) {
-                is Result.Success -> {
-                    showLoading(false)
+        if (selectedPreferenceIds.isNotEmpty()) {
+            interestViewModel.saveUserPreferenceId(selectedPreferenceIds)
+            interestViewModel.createUserPreference(selectedPreferenceIds).observe(this) { result ->
+                when (result) {
+                    is Result.Success -> {
+                        showLoading(false)
 
-                    val response = it.data
+                        val response = result.data
+                        showToast(getString(R.string.successfully_saved_preferences))
+                        moveToMain()
+                        Log.d(TAG, "Successfully created preferences: $response")
+                    }
 
-                    showToast(getString(R.string.successfully_saved_preferences))
-                    Log.d(TAG, "Successfully created preferences: $response")
+                    is Result.Error -> {
+                        showLoading(false)
+
+                        showToast(result.error)
+                        Log.d(TAG, "Failed to create preferences: ${result.error}")
+                    }
+
+                    is Result.Loading -> showLoading(true)
                 }
-                is Result.Error -> {
-                    showLoading(false)
-
-                    showToast(it.error)
-                    Log.d(TAG, "Failed to create preferences: ${it.error}")
-                }
-                is Result.Loading -> showLoading(true)
             }
+        } else {
+            showToast(getString(R.string.failed_to_save_preferences))
         }
     }
 
@@ -175,6 +170,13 @@ class InterestActivity : AppCompatActivity() {
         }
     }
 
+    private fun moveToMain() {
+        window.decorView.postDelayed({
+        startActivity(Intent(this@InterestActivity, MainActivity::class.java))
+        finish()
+        }, delay)
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -184,15 +186,11 @@ class InterestActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): InterestViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[InterestViewModel::class.java]
     }
 
     companion object {
-        const val SESSION = "session"
         private const val TAG = "InterestActivity"
     }
 

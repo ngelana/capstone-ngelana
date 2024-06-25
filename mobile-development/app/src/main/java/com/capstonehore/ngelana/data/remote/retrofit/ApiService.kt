@@ -9,6 +9,7 @@ import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlaceRecommendedResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
+import com.capstonehore.ngelana.data.remote.response.preferences.CreateUserPreferenceRequest
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponseByUserId
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
@@ -31,10 +32,14 @@ import retrofit2.http.Query
 interface ApiService {
 
     @POST("user/register")
-    suspend fun register(@Body request: RegisterModel): RegisterResponse
+    suspend fun register(
+        @Body registerModel: RegisterModel
+    ): RegisterResponse
 
     @POST("user/login")
-    suspend fun login(@Body request: LoginModel): LoginResponse
+    suspend fun login(
+        @Body loginModel: LoginModel
+    ): LoginResponse
 
     @GET("user/{id}")
     suspend fun getUserById(
@@ -93,12 +98,12 @@ interface ApiService {
 
 
     // Preferences
-    @GET("preference")
+    @GET("preference/")
     suspend fun getAllPreferences(): PreferencesResponse
 
-    @POST("preference")
+    @POST("preference/")
     suspend fun createUserPreference(
-        @Body userDataPreferencesItem: List<UserDataPreferencesItem>
+        @Body request: CreateUserPreferenceRequest
     ): UserPreferenceResponse
 
     @GET("preference/{id}")

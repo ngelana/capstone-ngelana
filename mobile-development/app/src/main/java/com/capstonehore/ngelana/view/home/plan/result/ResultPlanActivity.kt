@@ -38,8 +38,6 @@ class ResultPlanActivity : AppCompatActivity() {
 
     private lateinit var planViewModel: PlanViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultPlanBinding.inflate(layoutInflater)
@@ -167,10 +165,7 @@ class ResultPlanActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): PlanViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(dataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlanViewModel::class.java]
     }
 
@@ -178,6 +173,5 @@ class ResultPlanActivity : AppCompatActivity() {
         const val EXTRA_RESULT_PLACE = "extra_result_place"
         const val EXTRA_NAME = "extra_name"
         const val EXTRA_DATE = "extra_date"
-        const val SESSION = "session"
     }
 }
