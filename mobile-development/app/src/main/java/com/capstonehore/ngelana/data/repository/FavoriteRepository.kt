@@ -3,11 +3,9 @@ package com.capstonehore.ngelana.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.database.NgelanaRoomDatabase
 import com.capstonehore.ngelana.data.local.entity.Favorite
-import com.capstonehore.ngelana.data.repository.Repository.Companion
 
 class FavoriteRepository (
     private val ngelanaRoomDatabase: NgelanaRoomDatabase,

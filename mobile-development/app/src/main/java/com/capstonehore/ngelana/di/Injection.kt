@@ -11,7 +11,6 @@ import com.capstonehore.ngelana.data.repository.FavoriteRepository
 import com.capstonehore.ngelana.data.repository.PlaceRepository
 import com.capstonehore.ngelana.data.repository.PlanRepository
 import com.capstonehore.ngelana.data.repository.PreferenceRepository
-import com.capstonehore.ngelana.data.repository.Repository
 import com.capstonehore.ngelana.data.repository.ReviewRepository
 import com.capstonehore.ngelana.data.repository.UserRepository
 import kotlinx.coroutines.flow.first

@@ -24,7 +24,6 @@ import com.capstonehore.ngelana.adapter.ProfileAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.entity.Profile
 import com.capstonehore.ngelana.data.preferences.ThemeManager
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.FragmentProfileBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.LoginActivity

@@ -2,7 +2,6 @@ package com.capstonehore.ngelana.view.home
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -12,9 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +20,6 @@ import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
 import com.capstonehore.ngelana.adapter.PopularAdapter
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentHomeBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
@@ -155,9 +150,6 @@ class HomeFragment : Fragment() {
                             val randomPlacesWithFiltering = getRandomPlaces(filteredPlacesWithImages)
                             val randomPlacesWithoutFiltering = filteredPlacesWithImages.shuffled().take(8)
 
-                            Log.d(TAG, "Filtered Places: $randomPlacesWithFiltering")
-                            Log.d(TAG, "Shuffled Places: $randomPlacesWithoutFiltering")
-
                             popularAdapter.submitList(randomPlacesWithFiltering)
                             placeAdapter.submitList(randomPlacesWithoutFiltering)
                         }
@@ -177,7 +169,7 @@ class HomeFragment : Fragment() {
 
     private fun filterHighRatingPlaces(items: List<PlaceItem>): List<PlaceItem> {
         return items.filter { item ->
-            (item.rating ?: 0.0) == 5.0
+            (item.rating ?: 0.0) > 4.7
         }
     }
 

@@ -6,14 +6,9 @@ import androidx.lifecycle.liveData
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.ReviewItem
-import com.capstonehore.ngelana.data.remote.response.review.ReviewResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
-import com.capstonehore.ngelana.data.repository.Repository.Companion
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import retrofit2.HttpException
 
 class ReviewRepository (
     private var apiService: ApiService,

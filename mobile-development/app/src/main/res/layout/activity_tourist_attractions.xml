@@ -63,37 +63,37 @@
         <com.google.android.material.search.SearchBar
             android:id="@+id/searchBar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="@string/destinations"
             app:backgroundTint="?attr/colorSecondary"
-            app:layout_constraintBottom_toTopOf="@+id/bgBottom"
-            app:layout_constraintEnd_toEndOf="@+id/bgBottom"
-            app:layout_constraintStart_toStartOf="@+id/bgBottom"
-            app:layout_constraintTop_toBottomOf="@+id/bgBottom" />
+            app:layout_constraintEnd_toEndOf="@id/bgBottom"
+            app:layout_constraintStart_toStartOf="@id/bgBottom"
+            app:layout_constraintTop_toTopOf="@id/bgBottom"
+            app:layout_constraintBottom_toBottomOf="@+id/bgBottom" />
 
         <com.google.android.material.search.SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:hint="@string/destinations"
             android:textColor="?attr/colorOnPrimary"
             app:backgroundTint="?attr/colorSecondary"
-            app:layout_anchor="@id/searchBar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+            app:layout_constraintBottom_toBottomOf="@id/searchBar"
+            app:layout_constraintEnd_toEndOf="@id/filterButton"
+            app:layout_constraintStart_toStartOf="@id/bgBottom"
+            app:layout_constraintTop_toTopOf="@id/bgBottom" />
 
         <ImageButton
             android:id="@+id/filterButton"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/rounded_corners_border"
+            android:background="@drawable/bg_circle_border"
             android:src="@drawable/ic_filter_alt"
             app:layout_constraintBottom_toBottomOf="@+id/bgBottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bgBottom"
+            app:tint="?attr/colorOnPrimary"
             tools:ignore="ContentDescription" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -105,6 +105,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bgBottom" />
+
+        <TextView
+            android:id="@+id/tvNoData"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/no_data_available"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

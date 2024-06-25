@@ -11,7 +11,6 @@ import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ItemPlaceBinding
 import com.capstonehore.ngelana.utils.capitalizeEachWord
 import com.capstonehore.ngelana.utils.splitAndReplaceCommas
-import java.util.Locale
 
 class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_CALLBACK) {
 

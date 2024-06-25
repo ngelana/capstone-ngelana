@@ -10,15 +10,9 @@ import androidx.lifecycle.liveData
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
-import com.capstonehore.ngelana.data.remote.response.places.PlaceResponseById
-import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
-import com.capstonehore.ngelana.data.repository.Repository.Companion
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import retrofit2.HttpException
 import java.util.Locale
 
 class PlaceRepository (

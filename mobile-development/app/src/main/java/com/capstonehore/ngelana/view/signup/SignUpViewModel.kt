@@ -3,7 +3,6 @@ package com.capstonehore.ngelana.view.signup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.capstonehore.ngelana.data.repository.Repository
 import com.capstonehore.ngelana.data.repository.UserRepository
 
 class SignUpViewModel(

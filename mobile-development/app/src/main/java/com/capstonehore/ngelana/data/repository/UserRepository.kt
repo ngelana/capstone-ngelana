@@ -13,11 +13,7 @@ import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
 import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
-import com.capstonehore.ngelana.data.repository.Repository.Companion
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import retrofit2.HttpException
 
 class UserRepository (
     private var apiService: ApiService,

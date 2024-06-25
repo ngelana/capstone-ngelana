@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.databinding.ItemInterestBinding
-import com.capstonehore.ngelana.databinding.ItemProfileBinding
 import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 import java.util.Locale
 

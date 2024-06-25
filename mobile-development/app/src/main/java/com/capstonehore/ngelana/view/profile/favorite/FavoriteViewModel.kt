@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstonehore.ngelana.data.local.entity.Favorite
 import com.capstonehore.ngelana.data.repository.FavoriteRepository
-import com.capstonehore.ngelana.data.repository.Repository
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(

@@ -5,20 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
-import com.capstonehore.ngelana.data.remote.response.DataPlacesItem
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
-import com.capstonehore.ngelana.data.remote.response.ReviewItem
-import com.capstonehore.ngelana.data.remote.response.plan.PlaceRecommendedResponse
-import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
-import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
-import com.capstonehore.ngelana.data.repository.Repository.Companion
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import retrofit2.HttpException
 
 class PlanRepository (
     private var apiService: ApiService,

@@ -3,7 +3,6 @@ package com.capstonehore.ngelana.view.mytrip.detail
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.data.remote.response.DataPlacesItem
 import com.capstonehore.ngelana.databinding.ActivityUpcomingTripDetailBinding
 
 class UpcomingTripDetailActivity : AppCompatActivity() {

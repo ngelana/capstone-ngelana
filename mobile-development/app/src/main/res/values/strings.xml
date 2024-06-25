@@ -59,6 +59,7 @@
     <string name="popular_places_in_bali">Popular places in Bali</string>
     <string name="tv_similar_place">You might also like these places</string>
     <string name="see_all">See all</string>
+    <string name="bali_indonesia">Bali, Indonesia</string>
 
     <string name="choose_the_date">Choose the date for your trip!</string>
     <string name="date_description">Set a date for your trip to simplify your travel arrangements.</string>
@@ -165,6 +166,7 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="successfully_saved_preferences">Successfully saved preferences.</string>
+    <string name="failed_to_save_preferences">Please select at least 3 interests</string>
 
     <!-- Tab Pager -->
     <string name="tab_text_1">Upcoming</string>
@@ -217,7 +219,5 @@
     <!-- Image -->
     <string name="ic_preference">https://storage.googleapis.com/ngelana-bucket/ngelana-assets/icon_ngelana_black.svg</string>
     <string name="logo_ngelana">https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png</string>
-    <string name="failed_to_save_preferences">Please select at least 3 interests</string>
-    <string name="bali_indonesia">Bali, Indonesia</string>
 
 </resources>

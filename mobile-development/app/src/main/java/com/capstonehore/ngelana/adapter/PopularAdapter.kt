@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ItemPopularBinding
+import com.capstonehore.ngelana.utils.capitalizeEachWord
 
 class PopularAdapter : ListAdapter<PlaceItem, PopularAdapter.PlaceViewHolder>(DIFF_CALLBACK) {
 
@@ -40,7 +41,7 @@ class PopularAdapter : ListAdapter<PlaceItem, PopularAdapter.PlaceViewHolder>(DI
                 val imageUrl = it.urlPlaceholder?.get(randomIndex ?: 0)
 
                 binding.apply {
-                    placeName.text = it.name
+                    placeName.text = it.name?.capitalizeEachWord()
                     placeRating.text = it.rating.toString()
                     Glide.with(itemView.context)
                         .load(imageUrl)

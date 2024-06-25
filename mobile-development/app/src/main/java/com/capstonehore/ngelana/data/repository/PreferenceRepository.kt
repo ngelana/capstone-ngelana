@@ -5,11 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
-import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.data.remote.response.preferences.CreateUserPreferenceRequest
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
-import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferencesItem
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.first

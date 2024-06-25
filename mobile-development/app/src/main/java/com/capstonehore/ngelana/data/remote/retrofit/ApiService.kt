@@ -12,7 +12,6 @@ import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.CreateUserPreferenceRequest
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponseByUserId
-import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
 import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferenceResponse
 import com.capstonehore.ngelana.data.remote.response.review.ReviewResponse
 import com.capstonehore.ngelana.data.remote.response.users.LoginModel

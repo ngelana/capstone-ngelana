@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.UserInformationItem
-import com.capstonehore.ngelana.data.repository.Repository
 import com.capstonehore.ngelana.data.repository.UserRepository
 import kotlinx.coroutines.launch
 

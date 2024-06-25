@@ -2,7 +2,6 @@ package com.capstonehore.ngelana.view.profile.review
 
 import androidx.lifecycle.ViewModel
 import com.capstonehore.ngelana.data.remote.response.ReviewItem
-import com.capstonehore.ngelana.data.repository.Repository
 import com.capstonehore.ngelana.data.repository.ReviewRepository
 
 class ReviewViewModel(

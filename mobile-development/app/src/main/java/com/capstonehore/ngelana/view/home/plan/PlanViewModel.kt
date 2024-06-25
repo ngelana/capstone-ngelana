@@ -3,7 +3,6 @@ package com.capstonehore.ngelana.view.home.plan
 import androidx.lifecycle.ViewModel
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
 import com.capstonehore.ngelana.data.repository.PlanRepository
-import com.capstonehore.ngelana.data.repository.Repository
 
 class PlanViewModel(
     private val planRepository: PlanRepository

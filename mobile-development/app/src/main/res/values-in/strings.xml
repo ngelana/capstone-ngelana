@@ -58,6 +58,7 @@
     <string name="recommended_place_for_you">Tempat yang direkomendasikan untuk Anda</string>
     <string name="popular_places_in_bali">Tempat populer di Bali</string>
     <string name="see_all">Lihat semua</string>
+    <string name="bali_indonesia">Bali, Indonesia</string>
 
     <string name="choose_the_date">Pilih tanggal untuk perjalanan Anda!</string>
     <string name="date_description">Tentukan tanggal perjalanan Anda untuk menyederhanakan persiapan perjalanan Anda.</string>
@@ -154,6 +155,7 @@
     <string name="skip">Lewati</string>
     <string name="next">Selanjutnya</string>
     <string name="successfully_saved_preferences">Successfully saved preferences.</string>
+    <string name="failed_to_save_preferences">Silakan pilih setidaknya 3 minat</string>
 
     <!-- Tab Pager -->
     <string name="tab_text_1">Mendatang</string>

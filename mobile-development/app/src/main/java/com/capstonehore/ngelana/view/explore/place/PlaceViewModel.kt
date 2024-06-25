@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.repository.PlaceRepository
-import com.capstonehore.ngelana.data.repository.Repository
 import kotlinx.coroutines.launch
 
 class PlaceViewModel(

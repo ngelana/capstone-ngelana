@@ -1,20 +1,15 @@
 package com.capstonehore.ngelana.view.home.plan.recommendation
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
 import com.capstonehore.ngelana.data.Place
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.ViewModelFactory
@@ -73,21 +68,21 @@ class RecommendationPlanActivity : AppCompatActivity() {
         binding.planDate.text = selectedDate?.withDateFormat() ?: ""
     }
 
-    private fun getListPlace(): ArrayList<Place> {
-        val dataName = resources.getStringArray(R.array.data_name)
-        val dataDescription = resources.getStringArray(R.array.data_description)
-        val dataImage = resources.getStringArray(R.array.data_image)
-        val listPlace= ArrayList<Place>()
-
-        for (i in dataName.indices) {
-            val place = Place(dataName[i], dataDescription[i], dataImage[i])
-            listPlace.add(place)
-        }
-        return listPlace
-    }
+//    private fun getListPlace(): ArrayList<Place> {
+//        val dataName = resources.getStringArray(R.array.data_name)
+//        val dataDescription = resources.getStringArray(R.array.data_description)
+//        val dataImage = resources.getStringArray(R.array.data_image)
+//        val listPlace= ArrayList<Place>()
+//
+//        for (i in dataName.indices) {
+//            val place = Place(dataName[i], dataDescription[i], dataImage[i])
+//            listPlace.add(place)
+//        }
+//        return listPlace
+//    }
 
     private fun setupView() {
-        placeList.addAll(getListPlace())
+//        placeList.addAll(getListPlace())
 
         recommendationPlaceAdapter = RecommendationPlaceAdapter()
 

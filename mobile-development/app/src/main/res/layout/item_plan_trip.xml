@@ -51,6 +51,8 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="@+id/bgTop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
