@@ -23,8 +23,6 @@ class PlaceViewModel(
 
     fun searchPlaceByQuery(query: String) = placeRepository.searchPlaceByQuery(query)
 
-    fun getPrimaryTypePlace(type: String) = placeRepository.getPrimaryTypePlace(type)
-
     private val _locationResult = MutableLiveData<Result<Address>>()
     val locationResult: LiveData<Result<Address>>
         get() = _locationResult

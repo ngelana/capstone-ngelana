@@ -12,8 +12,9 @@ import com.capstonehore.ngelana.databinding.ItemRecommendationPlaceBinding
 import com.capstonehore.ngelana.utils.capitalizeEachWord
 import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 
-class RecommendationPlaceAdapter
-    : ListAdapter<PlaceItem, RecommendationPlaceAdapter.RecommendationPlaceViewHolder>(DIFF_CALLBACK) {
+class RecommendationPlaceAdapter(
+    private val placeItem: MutableList<PlaceItem>
+): ListAdapter<PlaceItem, RecommendationPlaceAdapter.RecommendationPlaceViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
     private lateinit var onClearButtonClickCallback: OnClearButtonClickCallback

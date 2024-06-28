@@ -45,4 +45,18 @@ data class PlaceItem(
 
     @field:SerializedName("urlPlaceholder")
     val urlPlaceholder: List<String>? = null
-) : Parcelable
+) : Parcelable {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PlaceItem
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        val result = id.hashCode()
+        return result
+    }
+}

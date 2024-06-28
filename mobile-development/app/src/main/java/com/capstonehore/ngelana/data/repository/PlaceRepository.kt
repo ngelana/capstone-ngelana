@@ -80,21 +80,6 @@ class PlaceRepository (
         }
     }
 
-    fun getPrimaryTypePlace(type: String): LiveData<Result<List<PlaceItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            initializeApiService()
-
-            val response = apiService.getPrimaryTypePlace(type)
-            val placeItem = response.data ?: emptyList()
-
-            emit(Result.Success(placeItem))
-        } catch (e: Exception) {
-            Log.d(TAG, "getPrimaryTypePlace: ${e.message}")
-            emit(Result.Error(e.message.toString()))
-        }
-    }
-
     fun getLocationDetails(context: Context, location: Location): LiveData<Result<Address>> =
         liveData {
             emit(Result.Loading)

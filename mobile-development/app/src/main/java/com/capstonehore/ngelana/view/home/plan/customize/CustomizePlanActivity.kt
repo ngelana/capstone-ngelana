@@ -1,16 +1,21 @@
 package com.capstonehore.ngelana.view.home.plan.customize
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
-import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.adapter.PlanAdapter
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityCustomizePlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
 import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.PlanViewModel
 import com.capstonehore.ngelana.view.home.plan.recommendation.RecommendationPlanActivity
 import com.capstonehore.ngelana.view.home.plan.result.ResultPlanActivity
@@ -19,13 +24,16 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCustomizePlanBinding
 
-    private lateinit var customizePlanViewModel: CustomizePlanViewModel
+    private var newPlace: PlaceItem? = null
+    private var removedItem: PlaceItem? = null
+    private var placeItem = mutableListOf<PlaceItem>()
 
-    private var planList = ArrayList<Place>()
-    private var newPlace: Place? = null
     private var planName: String? = null
     private var selectedDate: String? = null
 
+    private lateinit var planAdapter: PlanAdapter
+
+    private lateinit var customizePlanViewModel: CustomizePlanViewModel
     private lateinit var planViewModel: PlanViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +41,10 @@ class CustomizePlanActivity : AppCompatActivity() {
         binding = ActivityCustomizePlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        customizePlanViewModel = CustomizePlanViewModel(this)
+        customizePlanViewModel = ViewModelProvider(this)[CustomizePlanViewModel::class.java]
+        planViewModel = obtainViewModel(this@CustomizePlanActivity)
 
-        planList = customizePlanViewModel.loadPlanList()
+        placeItem = customizePlanViewModel.loadPlanList().toMutableList()
 
         @Suppress("DEPRECATION")
         newPlace = intent.getParcelableExtra(EXTRA_PLACE)
@@ -44,25 +53,21 @@ class CustomizePlanActivity : AppCompatActivity() {
         setupToolbar()
         setupDate()
         setupData()
-//        setupView()
+        setupAdapter()
         updatePlanListAndSave()
     }
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener {
-            if (planList.isEmpty()) {
-                showToast(getString(R.string.empty_place))
-            } else {
-                planName = binding.edPlanName.text?.toString()
-                navigateToResultActivity()
-            }
+            if (placeItem.isEmpty()) showToast(getString(R.string.empty_place)) else
+                navigateToResult()
         }
 
-        binding.ivAddPlace.setOnClickListener{
-            val addPlaceIntent = Intent().apply {
-                putExtra(RecommendationPlanActivity.EXTRA_RETURN_PLACE, planList)
+        binding.ivAddPlace.setOnClickListener {
+            val returnIntent = Intent().apply {
+                putExtra(RecommendationPlanActivity.EXTRA_RETURN_PLACE, removedItem)
             }
-            setResult(RESULT_CODE, addPlaceIntent)
+            setResult(RESULT_CODE, returnIntent)
             finish()
         }
     }
@@ -83,65 +88,67 @@ class CustomizePlanActivity : AppCompatActivity() {
     }
 
     private fun setupData() {
-        if (planList.isNotEmpty()) {
+        if (placeItem.isNotEmpty()) {
             binding.tvNoData.visibility = View.GONE
         } else {
             binding.tvNoData.visibility = View.VISIBLE
         }
     }
 
-//    private fun setupView() {
-//        val planAdapter = PlanAdapter(planList)
-//
-//        binding.rvPlaces.apply {
-//            setHasFixedSize(true)
-//            layoutManager = LinearLayoutManager(this@CustomizePlanActivity)
-//            adapter = planAdapter
-//        }
+    private fun setupAdapter() {
+        planAdapter = PlanAdapter()
 
-//        planAdapter.setOnItemClickCallback(object :
-//            PlanAdapter.OnItemClickCallback {
-//            override fun onItemClicked(items: Place) {
-//                val dialogFragment = DetailPlaceFragment.newInstance(items)
-//                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
-//            }
-//        })
+        binding.rvPlaces.apply {
+            layoutManager = LinearLayoutManager(this@CustomizePlanActivity)
+            adapter = planAdapter
+        }
 
-//        planAdapter.setOnClearButtonClickCallback(object : PlanAdapter.OnClearButtonClickCallback {
-//            @SuppressLint("NotifyDataSetChanged")
-//            override fun onClearButtonClicked(item: Place) {
-//                planList.remove(item)
-//                planAdapter.notifyDataSetChanged()
-//                customizePlanViewModel.savePlanList(planList)
-//                setupData()
-//
-//                val returnIntent = Intent().apply {
-//                    putExtra(RecommendationPlanActivity.EXTRA_RETURN_PLACE, item)
-//                }
-//                Log.d("CustomizePlanActivity", "Returning place: $item")
-//                setResult(RESULT_CODE, returnIntent)
-//            }
-//        })
-//    }
+        planAdapter.setOnItemClickCallback(object : PlanAdapter.OnItemClickCallback {
+            override fun onItemClicked(item: PlaceItem?) {
+                item?.let {
+                    val dialogFragment = DetailPlaceFragment.newInstance(it)
+                    dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+                }
+            }
+        })
 
+        planAdapter.setOnClearButtonClickCallback(object : PlanAdapter.OnClearButtonClickCallback {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onClearButtonClicked(item: PlaceItem?) {
+                item?.let {
+                    removedItem = it
+
+                    placeItem.remove(it)
+                    planAdapter.notifyDataSetChanged()
+                    customizePlanViewModel.savePlanList(placeItem)
+                    setupData()
+
+                    val returnIntent = Intent().apply {
+                        putExtra(RecommendationPlanActivity.EXTRA_RETURN_PLACE, it)
+                    }
+                    Log.d("CustomizePlanActivity", "Returning place: $it")
+                    setResult(RESULT_CODE, returnIntent)
+                }
+            }
+        })
+
+        planAdapter.submitList(placeItem)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     private fun updatePlanListAndSave() {
         newPlace?.let {
-            if (!planList.contains(it)) {
-                planList.add(it)
-                customizePlanViewModel.savePlanList(planList)
+            if (!placeItem.contains(it)) {
+                placeItem.add(it)
+                customizePlanViewModel.savePlanList(placeItem)
                 setupData()
             }
         }
     }
 
-    private fun navigateToResultActivity() {
+    private fun navigateToResult() {
         val planName = binding.edPlanName.text?.toString()
-        val intent = Intent(this@CustomizePlanActivity, ResultPlanActivity::class.java).apply {
-            putParcelableArrayListExtra(ResultPlanActivity.EXTRA_RESULT_PLACE, planList)
-            putExtra(ResultPlanActivity.EXTRA_NAME, planName)
-            putExtra(ResultPlanActivity.EXTRA_DATE, selectedDate)
-        }
-        startActivity(intent)
+        startActivity(Intent(this@CustomizePlanActivity, ResultPlanActivity::class.java))
         finish()
     }
 

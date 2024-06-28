@@ -143,8 +143,8 @@ class HomeFragment : Fragment() {
 
                         val response = it.data
                         response.let {
-                            val filteredPlacesWithImages = response.filter { place ->
-                                !place.urlPlaceholder.isNullOrEmpty()
+                            val filteredPlacesWithImages = response.filter { item ->
+                                !item.urlPlaceholder.isNullOrEmpty()
                             }
 
                             val randomPlacesWithFiltering = getRandomPlaces(filteredPlacesWithImages)

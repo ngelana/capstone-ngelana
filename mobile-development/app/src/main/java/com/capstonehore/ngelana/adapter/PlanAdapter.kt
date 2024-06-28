@@ -39,8 +39,8 @@ class PlanAdapter :
     }
 
     inner class PlanViewHolder(private val binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: PlaceItem?) {
-            item?.let {
+        fun bind(items: PlaceItem?) {
+            items?.let { item ->
                 val randomIndex = item.urlPlaceholder?.indices?.random()
                 val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
 
@@ -55,21 +55,21 @@ class PlanAdapter :
             }
 
             itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+                onItemClickCallback.onItemClicked(items)
             }
 
-            itemView.setOnClickListener {
-                onClearButtonClickCallback.onClearButtonClicked(item)
+            binding.clearButton.setOnClickListener {
+                onClearButtonClickCallback.onClearButtonClicked(items)
             }
         }
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: PlaceItem?)
+        fun onItemClicked(item: PlaceItem?)
     }
 
     interface OnClearButtonClickCallback {
-        fun onClearButtonClicked(data: PlaceItem?)
+        fun onClearButtonClicked(item: PlaceItem?)
     }
 
     companion object {

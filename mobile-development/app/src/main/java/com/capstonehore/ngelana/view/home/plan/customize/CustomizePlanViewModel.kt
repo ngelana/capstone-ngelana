@@ -1,32 +1,40 @@
 package com.capstonehore.ngelana.view.home.plan.customize
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.capstonehore.ngelana.data.Place
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class CustomizePlanViewModel(context: Context) {
+class CustomizePlanViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("plan_prefs", Context.MODE_PRIVATE)
 
-    fun savePlanList(planList: ArrayList<Place>) {
-        val editor = sharedPreferences.edit()
-        val gson = Gson()
-        val json = gson.toJson(planList)
-        editor.putString(PLAN_LIST_KEY, json)
-        editor.apply()
+    private val _placeItem = MutableLiveData<MutableList<PlaceItem>>(mutableListOf())
+    val placeItem: LiveData<MutableList<PlaceItem>> get() = _placeItem
+
+    init {
+        loadPlanList()
     }
 
-    fun loadPlanList(): ArrayList<Place> {
-        val gson = Gson()
-        val json = sharedPreferences.getString(PLAN_LIST_KEY, null)
-        val type = object : TypeToken<ArrayList<Place>>() {}.type
-        return gson.fromJson(json, type) ?: ArrayList()
+    fun savePlanList(list: MutableList<PlaceItem>) {
+        _placeItem.value = list
+        val json = Gson().toJson(list)
+        sharedPreferences.edit().putString("plan_list", json).apply()
     }
 
-    companion object {
-        private const val PREFS_NAME = "CustomizePlanPrefs"
-        private const val PLAN_LIST_KEY = "planList"
+    fun loadPlanList(): MutableList<PlaceItem> {
+        val json = sharedPreferences.getString("plan_list", null)
+        val type = object : TypeToken<MutableList<PlaceItem>>() {}.type
+        return if (json != null) {
+            Gson().fromJson(json, type)
+        } else {
+            mutableListOf()
+        }
     }
+
 }
