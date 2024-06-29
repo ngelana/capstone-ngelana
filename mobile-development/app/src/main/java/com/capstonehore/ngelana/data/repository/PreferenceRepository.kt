@@ -6,7 +6,7 @@ import androidx.lifecycle.liveData
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.data.remote.response.PreferenceItem
-import com.capstonehore.ngelana.data.remote.response.preferences.CreateUserPreferenceRequest
+import com.capstonehore.ngelana.data.remote.response.preferences.PreferenceModel
 import com.capstonehore.ngelana.data.remote.response.preferences.UserDataPreferencesItem
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
@@ -59,7 +59,7 @@ class PreferenceRepository (
         try {
             val userId = getUserId()
 
-            val request = CreateUserPreferenceRequest(preferenceIds, userId)
+            val request = PreferenceModel(preferenceIds, userId)
             val response = apiService.createUserPreference(request)
             val userDataPreferences = response.data ?: emptyList()
 

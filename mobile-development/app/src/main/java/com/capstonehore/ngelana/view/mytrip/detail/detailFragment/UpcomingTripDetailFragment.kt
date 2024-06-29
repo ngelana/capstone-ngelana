@@ -57,7 +57,7 @@ class UpcomingTripDetailFragment : Fragment() {
         planResultAdapter.setOnItemClickCallback(object : PlanResultAdapter.OnItemClickCallback {
             override fun onItemClicked(data: PlaceItem?) {
                 data?.let {
-                    val dialogFragment = DetailPlaceFragment.newInstance(data)
+                    val dialogFragment = DetailPlaceFragment.newInstance(it)
                     dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
                 }
             }
@@ -65,26 +65,24 @@ class UpcomingTripDetailFragment : Fragment() {
     }
 
     private fun setupView() {
-        planViewModel.getPlanDetailByUserId().observe(viewLifecycleOwner) {
-            if (it != null) {
-                when (it) {
-                    is Result.Success -> {
-                        showLoading(false)
+        planViewModel.getPlanDetailByUserId().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Success -> {
+                    showLoading(false)
 
-                        val response = it.data
-                        response.let { item ->
-                            planResultAdapter.submitList(item)
-                        }
-                        Log.d(TAG, "Successfully Show Upcoming Trip Plan: $response")
+                    val response = result.data
+                    response.let { item ->
+                        planResultAdapter.submitList(item)
                     }
-                    is Result.Error -> {
-                        showLoading(false)
-
-                        showToast(it.error)
-                        Log.d(TAG, "Failed to Show Upcoming Trip Plan: ${it.error}")
-                    }
-                    is Result.Loading -> showLoading(true)
+                    Log.d(TAG, "Successfully Show Upcoming Trip Plan: $response")
                 }
+                is Result.Error -> {
+                    showLoading(false)
+
+                    showToast(result.error)
+                    Log.d(TAG, "Failed to Show Upcoming Trip Plan: ${result.error}")
+                }
+                is Result.Loading -> showLoading(true)
             }
         }
     }

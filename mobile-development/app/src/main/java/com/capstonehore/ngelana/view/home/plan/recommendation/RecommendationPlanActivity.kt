@@ -38,16 +38,16 @@ class RecommendationPlanActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_CODE && result.data != null) {
-//            val returnedPlace = result.data?.getParcelableExtra<PlaceItem>(EXTRA_RETURN_PLACE)
             @Suppress("DEPRECATION")
-            val returnedPlace = result.data?.getParcelableExtra<PlaceItem>(EXTRA_RETURN_PLACE)
+            val returnedPlace = result.data?.getParcelableArrayListExtra<PlaceItem>(EXTRA_RETURN_PLACE)
             Log.d(TAG, "Returned Places: $returnedPlace")
-            returnedPlace?.let {
-                if (!placeItem.contains(it)) {
-                    placeItem.add(it)
-                    binding.rvPlaces.adapter?.notifyItemInserted(placeItem.size - 1)
+            returnedPlace?.let { places ->
+                for (place in places) {
+                    if (!placeItem.contains(place)) {
+                        placeItem.add(place)
+                    }
                 }
-                binding.rvPlaces.adapter?.notifyDataSetChanged()
+                recommendationPlaceAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -108,8 +108,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
             override fun onClearButtonClicked(item: PlaceItem?) {
                 item?.let {
                     placeItem.remove(it)
-                    updateAdapter()
-                    addRandomPlaceIfNeeded()
+                    recommendationPlaceAdapter.submitList(ArrayList(placeItem))
                 }
             }
         })
@@ -124,8 +123,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
                     addPlaceLauncher.launch(intent)
 
                     placeItem.remove(it)
-                    updateAdapter()
-                    addRandomPlaceIfNeeded()
+                    recommendationPlaceAdapter.submitList(ArrayList(placeItem))
                 }
             }
         })
@@ -143,10 +141,13 @@ class RecommendationPlanActivity : AppCompatActivity() {
                             !place.urlPlaceholder.isNullOrEmpty()
                         }
 
-                        val getRandomPlaces = filteredPlacesWithImages.shuffled().take(10)
+                        if (placeItem.size <= 10) {
+                            val remainingItemCount = 10 - placeItem.size
+                            val randomPlaces = filteredPlacesWithImages.shuffled().take(remainingItemCount)
 
-                        placeItem.clear()
-                        placeItem.addAll(getRandomPlaces)
+                            placeItem.clear()
+                            placeItem.addAll(randomPlaces)
+                        }
 
                         recommendationPlaceAdapter.submitList(placeItem)
                         Log.d(TAG, "Successfully Show All Places: $response")
@@ -158,28 +159,6 @@ class RecommendationPlanActivity : AppCompatActivity() {
                         Log.d(TAG, "Failed to Show All Places: ${it.error}")
                     }
                     is Result.Loading -> showLoading(true)
-                }
-            }
-        }
-    }
-
-    private fun updateAdapter() {
-        recommendationPlaceAdapter.submitList(ArrayList(placeItem))
-    }
-
-    private fun addRandomPlaceIfNeeded() {
-        if (placeItem.size < 10) {
-            placeViewModel.getAllPlaces().value?.let { result ->
-                if (result is Result.Success) {
-                    val places = result.data
-                    val filteredPlacesWithImages = places.filter { place ->
-                        !place.urlPlaceholder.isNullOrEmpty()
-                    }
-
-                    val remainingItemCount = 10 - placeItem.size
-                    val randomPlaces = filteredPlacesWithImages.shuffled().take(remainingItemCount)
-                    placeItem.addAll(randomPlaces)
-                    updateAdapter()
                 }
             }
         }

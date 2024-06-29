@@ -8,9 +8,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import com.capstonehore.ngelana.adapter.UpcomingTripAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.capstonehore.ngelana.adapter.PlanResultAdapter
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.FragmentCompletedTripDetailBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
 import com.capstonehore.ngelana.view.home.plan.PlanViewModel
 
 class CanceledTripDetailFragment : Fragment() {
@@ -19,7 +22,7 @@ class CanceledTripDetailFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private lateinit var upcomingTripAdapter: UpcomingTripAdapter
+    private lateinit var planResultAdapter: PlanResultAdapter
 
     private lateinit var planViewModel: PlanViewModel
 
@@ -36,42 +39,47 @@ class CanceledTripDetailFragment : Fragment() {
 
         planViewModel = obtainViewModel(requireActivity())
 
-
+        setupAdapter()
+//        setupView()
     }
 
-//    private fun setupAdapter() {
-//        upcomingTripAdapter = UpcomingTripAdapter()
-//
-//        binding.rvPlan.apply {
-//            setHasFixedSize(true)
-//            layoutManager = LinearLayoutManager(requireActivity())
-//            adapter = upcomingTripAdapter
+    private fun setupAdapter() {
+        planResultAdapter = PlanResultAdapter()
+
+        binding.rvPlan.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireActivity())
+            adapter = planResultAdapter
+        }
+
+        planResultAdapter.setOnItemClickCallback(object : PlanResultAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: PlaceItem?) {
+                data?.let {
+                    val dialogFragment = DetailPlaceFragment.newInstance(it)
+                    dialogFragment.show(childFragmentManager, "DetailPlaceFragment")
+                }
+            }
+        })
+    }
+
+//    private fun setupView() {
+//        planViewModel.completedPlans.observe(viewLifecycleOwner) { result ->
+//            planResultAdapter.submitList(result)
 //        }
-//
-//        upcomingTripAdapter.setOnItemClickCallback(object : UpcomingTripAdapter.OnItemClickCallback {
-//            override fun onItemClicked(data: PlanUserItem?) {
-//                data?.let {
-//                    val intent = Intent(requireActivity(), UpcomingTripDetailActivity::class.java).apply {
-//                        putExtra(UpcomingTripDetailActivity.EXTRA_PLAN_ITEM, data)
-//                    }
-//                    startActivity(intent)
-//                }
-//            }
-//        })
 //    }
 
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun obtainViewModel(activity: FragmentActivity): PlanViewModel {
         val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlanViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

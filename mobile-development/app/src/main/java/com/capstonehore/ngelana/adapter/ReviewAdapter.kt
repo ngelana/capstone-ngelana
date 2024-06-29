@@ -12,7 +12,7 @@ import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.data.remote.response.ReviewItem
 import com.capstonehore.ngelana.data.remote.retrofit.ApiService
 import com.capstonehore.ngelana.databinding.ItemReviewBinding
-import com.capstonehore.ngelana.utils.dateFormat
+import com.capstonehore.ngelana.utils.withDateFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,7 +59,7 @@ class ReviewAdapter(private val apiService: ApiService) :
                     placeName.text = place.name ?: "Unknown Place"
 
                     reviewRating.text = reviewItem.star.toString()
-                    reviewDate.text = reviewItem.date?.dateFormat() ?: "Unknown Date"
+                    reviewDate.text = reviewItem.date?.withDateFormat() ?: "Unknown Date"
                     reviewDescription.text = reviewItem.review
 
                     Glide.with(itemView.context)

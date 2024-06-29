@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.UserPreferences
+import com.capstonehore.ngelana.data.remote.response.DataPlacesItem
 import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
 import com.capstonehore.ngelana.data.remote.retrofit.ApiConfig
@@ -64,38 +65,39 @@ class PlanRepository (
 //        }
 //    }
 
-    fun setPlanResult(planUserItem: PlanUserItem): LiveData<Result<PlanUserItem>> =
+    fun setPlanResult(name: String, date: String, places: List<DataPlacesItem>): LiveData<Result<PlanUserItem>> =
         liveData {
             emit(Result.Loading)
             try {
                 initializeApiService()
 
-                val response = apiService.setPlanResult(planUserItem)
-                val userPlan = response.data
+                val userId = getUserId()
+                val planUserItem = PlanUserItem(
+                    name = name,
+                    date = date,
+                    places = places,
+                    userId = userId
+                )
 
-                if (userPlan != null) emit(Result.Success(userPlan))
-                else emit(Result.Error("Data is null"))
+                val response = apiService.setPlanResult(planUserItem)
+
+                when {
+                    response.data != null -> {
+                        val userPlan = response.data
+                        emit(Result.Success(userPlan))
+                    }
+                    else -> {
+                        response.message != null
+                        val errorMessage = response.message.toString()
+                        emit(Result.Error(errorMessage))
+                    }
+                }
             } catch (e: Exception) {
                 Log.d(TAG, "setPlanResult: ${e.message}")
+
                 emit(Result.Error(e.message.toString()))
             }
         }
-
-    fun setDetailPlanResult(planUserItem: PlanUserItem): LiveData<Result<List<PlaceItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            initializeApiService()
-
-            val response = apiService.setPlanResult(planUserItem)
-            val dataPlanUser = response.data?.places
-            val places = dataPlanUser?.map { item -> item.place ?: PlaceItem() } ?: emptyList()
-
-            emit(Result.Success(places))
-        } catch (e: Exception) {
-            Log.d(TAG, "getPlanByUserId: ${e.message}")
-            emit(Result.Error(e.message.toString()))
-        }
-    }
 
     fun getPlanByUserId(): LiveData<Result<List<PlanUserItem>>> = liveData {
         emit(Result.Loading)
@@ -109,6 +111,7 @@ class PlanRepository (
             emit(Result.Success(planUserItem))
         } catch (e: Exception) {
             Log.d(TAG, "getPlanByUserId: ${e.message}")
+
             emit(Result.Error(e.message.toString()))
         }
     }
@@ -129,6 +132,7 @@ class PlanRepository (
             emit(Result.Success(places))
         } catch (e: Exception) {
             Log.d(TAG, "getPlanByUserId: ${e.message}")
+
             emit(Result.Error(e.message.toString()))
         }
     }

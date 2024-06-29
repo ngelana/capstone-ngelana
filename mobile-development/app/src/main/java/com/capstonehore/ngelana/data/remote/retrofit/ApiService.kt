@@ -9,7 +9,7 @@ import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlaceRecommendedResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
-import com.capstonehore.ngelana.data.remote.response.preferences.CreateUserPreferenceRequest
+import com.capstonehore.ngelana.data.remote.response.preferences.PreferenceModel
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferencesResponseByUserId
 import com.capstonehore.ngelana.data.remote.response.preferences.UserPreferenceResponse
@@ -102,7 +102,7 @@ interface ApiService {
 
     @POST("preference/")
     suspend fun createUserPreference(
-        @Body request: CreateUserPreferenceRequest
+        @Body request: PreferenceModel
     ): UserPreferenceResponse
 
     @GET("preference/{id}")

@@ -61,7 +61,7 @@ class TripAdapter :
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PlanUserItem>() {
             override fun areItemsTheSame(oldItem: PlanUserItem, newItem: PlanUserItem): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.name == newItem.name
             }
 
             override fun areContentsTheSame(oldItem: PlanUserItem, newItem: PlanUserItem): Boolean {

@@ -86,6 +86,11 @@
     <string name="start_plan_completed_button">Rencanakan Perjalanan Selanjutnya</string>
     <string name="start_plan_canceled_button">Rencanakan Perjalanan Baru</string>
 
+    <string name="trip_cancel_success">Perjalanan berhasil dibatalkan!</string>
+    <string name="trip_cancel_failed">Gagal membatalkan Perjalanan.</string>
+
+    <string name="cancel_trip_confirmation_message">Apakah Anda yakin ingin membatalkan perjalanan ini?</string>
+
     <!-- Profile -->
     <string name="welcome">Selamat datang,</string>
     <string name="my_account">Akun Saya</string>

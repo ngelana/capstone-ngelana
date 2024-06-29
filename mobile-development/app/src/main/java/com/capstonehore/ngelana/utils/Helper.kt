@@ -13,10 +13,10 @@ fun String.withDateFormat(): String {
 }
 
 fun String.dateFormat(): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+    val inputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
     val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 
-    val date = inputFormat.parse(this) as Date
+    val date = inputFormat.parse(this) ?: return ""
     return outputFormat.format(date)
 }
 

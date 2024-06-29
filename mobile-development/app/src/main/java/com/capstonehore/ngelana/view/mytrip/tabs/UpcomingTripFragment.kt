@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.UpcomingTripAdapter
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
@@ -65,31 +66,45 @@ class UpcomingTripFragment : Fragment() {
                 }
             }
         })
+
+        upcomingTripAdapter.setOnCompletedButtonClickCallback(object : UpcomingTripAdapter.OnCompletedButtonClickCallback {
+            override fun onCompletedButtonClicked(data: PlanUserItem?) {
+                data?.let {
+                    planViewModel.addCompletedPlan(it)
+                    moveToCompleted()
+                }
+            }
+        })
     }
 
     private fun setupView() {
-        planViewModel.getPlanByUserId().observe(viewLifecycleOwner) {
-            if (it != null) {
-                when (it) {
-                    is Result.Success -> {
-                        showLoading(false)
+        planViewModel.getPlanByUserId().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Success -> {
+                    showLoading(false)
 
-                        val response = it.data
-                        response.let { item ->
-                            upcomingTripAdapter.submitList(item)
-                        }
-                        Log.d(TAG, "Successfully Show Upcoming Trip Plan: $response")
+                    val response = result.data
+                    response.let { item ->
+                        upcomingTripAdapter.submitList(item)
                     }
-                    is Result.Error -> {
-                        showLoading(false)
-
-                        showToast(it.error)
-                        Log.d(TAG, "Failed to Show Upcoming Trip Plan: ${it.error}")
-                    }
-                    is Result.Loading -> showLoading(true)
+                    Log.d(TAG, "Successfully Show Upcoming Trip Plan: $response")
                 }
+                is Result.Error -> {
+                    showLoading(false)
+
+                    showToast(result.error)
+                    Log.d(TAG, "Failed to Show Upcoming Trip Plan: ${result.error}")
+                }
+                is Result.Loading -> showLoading(true)
             }
         }
+    }
+
+    private fun moveToCompleted() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, CompletedTripFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun showToast(message: String) {
@@ -100,14 +115,14 @@ class UpcomingTripFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun obtainViewModel(activity: FragmentActivity): PlanViewModel {
         val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[PlanViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

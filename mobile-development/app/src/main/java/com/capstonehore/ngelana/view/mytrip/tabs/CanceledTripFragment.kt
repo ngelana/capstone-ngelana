@@ -1,21 +1,20 @@
 package com.capstonehore.ngelana.view.mytrip.tabs
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.adapter.TripAdapter
-import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.remote.response.PlanUserItem
 import com.capstonehore.ngelana.databinding.FragmentCanceledTripBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.home.plan.PlanViewModel
+import com.capstonehore.ngelana.view.mytrip.detail.CanceledTripDetailActivity
 
 class CanceledTripFragment : Fragment() {
 
@@ -55,47 +54,20 @@ class CanceledTripFragment : Fragment() {
 
         tripAdapter.setOnItemClickCallback(object : TripAdapter.OnItemClickCallback {
             override fun onItemClicked(data: PlanUserItem?) {
-//                data?.let {
-//                    val intent = Intent(requireActivity(), DetailPlaceActivity::class.java).apply {
-//                        putExtra(DetailPlaceActivity.EXTRA_PLACES, data)
-//                    }
-//                    startActivity(intent)
-//                }
+                data?.let {
+                    val intent = Intent(requireActivity(), CanceledTripDetailActivity::class.java).apply {
+                        putExtra(CanceledTripDetailActivity.EXTRA_PLAN_ITEM, arrayListOf(it))
+                    }
+                    startActivity(intent)
+                }
             }
         })
     }
 
     private fun setupView() {
-        planViewModel.getPlanByUserId().observe(viewLifecycleOwner) {
-            if (it != null) {
-                when (it) {
-                    is Result.Success -> {
-                        showLoading(false)
-
-                        val response = it.data
-                        response.let { item ->
-                            tripAdapter.submitList(item)
-                        }
-                        Log.d(TAG, "Successfully Show Upcoming Trip Plan: $response")
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-
-                        showToast(it.error)
-                        Log.d(TAG, "Failed to Show Upcoming Trip Plan: ${it.error}")
-                    }
-                    is Result.Loading -> showLoading(true)
-                }
-            }
+        planViewModel.canceledPlans.observe(viewLifecycleOwner) { result ->
+            tripAdapter.submitList(result)
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showLoading(isLoading:Boolean){
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun obtainViewModel(activity: FragmentActivity): PlanViewModel {

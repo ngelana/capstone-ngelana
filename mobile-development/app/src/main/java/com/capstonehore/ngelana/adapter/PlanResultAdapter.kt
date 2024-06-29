@@ -33,13 +33,13 @@ class PlanResultAdapter :
     }
 
     inner class PlanViewHolder(private val binding: ItemPlanResultBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: PlaceItem?) {
-            item?.let {
-                val randomIndex = item.urlPlaceholder?.indices?.random()
-                val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
+        fun bind(items: PlaceItem?) {
+            items?.let {
+                val randomIndex = it.urlPlaceholder?.indices?.random()
+                val imageUrl = it.urlPlaceholder?.get(randomIndex ?: 0)
 
                 binding.apply {
-                    placeName.text = item.name
+                    placeName.text = it.name
                     Glide.with(itemView.context)
                         .load(imageUrl)
                         .placeholder(R.drawable.ic_image)
@@ -49,7 +49,7 @@ class PlanResultAdapter :
             }
 
             itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+                onItemClickCallback.onItemClicked(items)
             }
         }
     }

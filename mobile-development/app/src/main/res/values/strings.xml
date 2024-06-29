@@ -87,6 +87,11 @@
     <string name="start_plan_completed_button">Plan Your Next Trip</string>
     <string name="start_plan_canceled_button">Plan a New Trip</string>
 
+    <string name="trip_cancel_success">Trip successfully canceled!</string>
+    <string name="trip_cancel_failed">Failed to cancel trip.</string>
+
+    <string name="cancel_trip_confirmation_message">Are you sure you want to cancel this trip?</string>
+
     <!-- Profile -->
     <string name="welcome">Welcome,</string>
     <string name="my_account">My Account</string>
