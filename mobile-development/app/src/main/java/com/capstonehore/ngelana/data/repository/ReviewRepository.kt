@@ -44,12 +44,24 @@ class ReviewRepository (
 
             val userId = getUserId()
             val response = apiService.getAllReviewByUserId(userId)
-            val reviewItem = response.data
 
-            if (reviewItem != null) emit(Result.Success(reviewItem))
-            else emit(Result.Error("Data is null"))
+            when {
+                response.data != null -> {
+                    val reviewItem = response.data
+                    Log.d(TAG, "getAllReviewByUserId: ${response.message.toString()}")
+
+                    emit(Result.Success(reviewItem))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
-            Log.d(TAG, "getReviewById: ${e.message}")
+            Log.d(TAG, "getAllReviewByUserId: ${e.message}")
             emit(Result.Error(e.message.toString()))
         }
     }
@@ -60,10 +72,22 @@ class ReviewRepository (
             initializeApiService()
 
             val response = apiService.createReview(reviewItem)
-            val dataReview = response.data
 
-            if (dataReview != null) emit(Result.Success(dataReview))
-            else emit(Result.Error("Data is null"))
+            when {
+                response.data != null -> {
+                    val dataReview = response.data
+                    Log.d(TAG, "createReview: ${response.message.toString()}")
+
+                    emit(Result.Success(dataReview))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "createReview: ${e.message}")
             emit(Result.Error(e.message.toString()))

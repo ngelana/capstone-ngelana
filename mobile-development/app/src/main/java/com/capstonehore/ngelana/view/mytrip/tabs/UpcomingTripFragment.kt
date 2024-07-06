@@ -85,7 +85,8 @@ class UpcomingTripFragment : Fragment() {
 
                     val response = result.data
                     response.let { item ->
-                        upcomingTripAdapter.submitList(item)
+                        if (item.isNotEmpty()) upcomingTripAdapter.submitList(item)
+                        else binding.tvNoData.visibility = View.VISIBLE
                     }
                     Log.d(TAG, "Successfully Show Upcoming Trip Plan: $response")
                 }

@@ -55,10 +55,22 @@ class PlaceRepository (
             initializeApiService()
 
             val response = apiService.getPlaceById(id)
-            val placeItem = response.data
 
-            if (placeItem != null) emit(Result.Success(placeItem))
-            else emit(Result.Error("Data is null"))
+            when {
+                response.data != null -> {
+                    val placeItem = response.data
+                    Log.d(TAG, "getPlaceById: ${response.message.toString()}")
+
+                    emit(Result.Success(placeItem))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "getPlaceById: ${e.message}")
             emit(Result.Error("Unexpected error: ${e.message}"))

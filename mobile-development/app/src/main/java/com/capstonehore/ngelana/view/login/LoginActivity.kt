@@ -181,37 +181,36 @@ class LoginActivity : AppCompatActivity() {
                 binding.edPassword.error = getString(R.string.empty_password)
             }
             else -> {
-                loginViewModel.doLogin(email, password).observe(this@LoginActivity){
-                    if(it != null){
-                        when(it) {
-                            is Result.Success -> {
-                                showLoading(false)
+                loginViewModel.doLogin(email, password).observe(this) { result ->
+                    when(result) {
+                        is Result.Success -> {
+                            showLoading(false)
 
-                                val response = it.data
+                            val response = result.data
 
-                                val token = response.token ?: ""
-                                val userId = response.data?.id ?: ""
+                            val token = response.token ?: ""
+                            val userId = response.data?.id ?: ""
 
-                                loginViewModel.saveLogin(token)
-                                loginViewModel.saveUserId(userId)
+                            loginViewModel.saveLogin(token)
+                            loginViewModel.saveUserId(userId)
 
-                                showCustomAlertDialog(true, "")
-                                Log.d(TAG, "Success registering: $response")
-                            }
-                            is Result.Error -> {
-                                showLoading(false)
+                            showCustomAlertDialog(true, "")
+                            Log.d(TAG, "Success registering: $response")
+                        }
+                        is Result.Error -> {
+                            showLoading(false)
 
-                                val response = it.error
-                                showCustomAlertDialog(false, response)
-                                Log.e(TAG, "Error login: $response")
-                            }
-                            is Result.Loading -> {
-                                showLoading(true)
+                            val response = result.error
+                            showCustomAlertDialog(false, response)
+                            Log.e(TAG, "Error login: $response")
+                        }
+                        is Result.Loading -> {
+                            showLoading(true)
 
-                                Log.d(TAG, "Loading Login User ....")
-                            }
+                            Log.d(TAG, "Loading Login User ....")
                         }
                     }
+
                 }
             }
         }

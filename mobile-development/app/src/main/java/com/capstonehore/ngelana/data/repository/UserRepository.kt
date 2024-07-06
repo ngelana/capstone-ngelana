@@ -52,7 +52,14 @@ class UserRepository (
             val request = RegisterModel(name, email, password)
             val response = apiService.register(request)
 
-            emit(Result.Success(response))
+            if (response.message != null) {
+                Log.d(TAG, "register: ${response.message}")
+
+                emit(Result.Success(response))
+            } else {
+                val errorMessage = "Unknown error"
+                emit(Result.Error(errorMessage))
+            }
         } catch (e: Exception) {
             Log.d(TAG, "register: ${e.message}")
 
@@ -69,7 +76,20 @@ class UserRepository (
             val request = LoginModel(email, password)
             val response = apiService.login(request)
 
-            emit(Result.Success(response))
+            when {
+                response.data != null -> {
+                    Log.d(TAG, "login: ${response.message.toString()}")
+
+                    emit(Result.Success(response))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "login  : ${e.message}")
 
@@ -85,7 +105,20 @@ class UserRepository (
             val userId = getUserId()
             val response = apiService.getUserById(userId)
 
-            emit(Result.Success(response))
+            when {
+                response.data != null -> {
+                    Log.d(TAG, "getUserById: ${response.message.toString()}")
+
+                    emit(Result.Success(response))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "getUserById: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -101,7 +134,20 @@ class UserRepository (
                 val userId = getUserId()
                 val response = apiService.updateUserById(userId, userInformationItem)
 
-                emit(Result.Success(response))
+                when {
+                    response.data != null -> {
+                        Log.d(TAG, "updateUserById: ${response.message.toString()}")
+
+                        emit(Result.Success(response))
+                    }
+                    response.message != null -> {
+                        val errorMessage = response.message.toString()
+                        emit(Result.Error(errorMessage))
+                    }
+                    else -> {
+                        emit(Result.Error("Unknown error"))
+                    }
+                }
             } catch (e: Exception) {
                 Log.d(TAG, "updateUserById: ${e.message}")
                 emit(Result.Error(e.message.toString()))
@@ -116,7 +162,20 @@ class UserRepository (
             val userId = getUserId()
             val response = apiService.deleteUserById(userId)
 
-            emit(Result.Success(response))
+            when {
+                response.data != null -> {
+                    Log.d(TAG, "deleteUserById: ${response.message.toString()}")
+
+                    emit(Result.Success(response))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "deleteUserById: ${e.message}")
             emit(Result.Error(e.message.toString()))

@@ -157,7 +157,6 @@ class CustomizePlanActivity : AppCompatActivity() {
 
     private fun setupPlan() {
         val edPlanName = binding.edPlanName.text.toString()
-
         val planName = if (edPlanName.isNotEmpty()) binding.edPlanName.text.toString()
         else generateNewName()
 

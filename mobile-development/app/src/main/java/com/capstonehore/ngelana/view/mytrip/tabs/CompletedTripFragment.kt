@@ -65,7 +65,8 @@ class CompletedTripFragment : Fragment() {
 
     private fun setupView() {
         planViewModel.completedPlans.observe(viewLifecycleOwner) { result ->
-            tripAdapter.submitList(result)
+            if (result.isNotEmpty()) tripAdapter.submitList(result)
+            else binding.tvNoData.visibility = View.VISIBLE
         }
     }
 

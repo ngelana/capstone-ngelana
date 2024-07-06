@@ -68,7 +68,10 @@ class RecommendationPlanActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.submitButton.setOnClickListener {
-            startActivity(Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java))
+            val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
+                putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
+            }
+            startActivity(intent)
         }
     }
 

@@ -61,9 +61,22 @@ class PreferenceRepository (
 
             val request = PreferenceModel(preferenceIds, userId)
             val response = apiService.createUserPreference(request)
-            val userDataPreferences = response.data ?: emptyList()
 
-            emit(Result.Success(userDataPreferences))
+            when {
+                response.data != null -> {
+                    val userDataPreferences = response.data
+                    Log.d(TAG, "createUserPreference: ${response.message.toString()}")
+
+                    emit(Result.Success(userDataPreferences))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "createUserPreference: ${e.message}")
             emit(Result.Error(e.message.toString()))
@@ -77,10 +90,23 @@ class PreferenceRepository (
 
             val userId = getUserId()
             val response = apiService.getPreferenceByUserId(userId)
-            val userPreferences = response.data?.userPreferences
-            val preferenceItem = userPreferences?.map { item -> item.preference ?: PreferenceItem() } ?: emptyList()
 
-            emit(Result.Success(preferenceItem))
+            when {
+                response.data != null -> {
+                    val userPreferences = response.data.userPreferences
+                    val preferenceItem = userPreferences?.map { item -> item.preference ?: PreferenceItem() } ?: emptyList()
+                    Log.d(TAG, "getPreferenceByUserId: ${response.message.toString()}")
+
+                    emit(Result.Success(preferenceItem))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "getPreferenceByUserId: ${e.message}")
             emit(Result.Error(e.message ?: "Unknown error"))

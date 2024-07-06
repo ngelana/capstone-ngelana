@@ -7,6 +7,7 @@ import com.capstonehore.ngelana.data.remote.response.UserInformationItem
 import com.capstonehore.ngelana.data.remote.response.places.PlaceResponseById
 import com.capstonehore.ngelana.data.remote.response.places.PlacesResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlaceRecommendedResponse
+import com.capstonehore.ngelana.data.remote.response.plan.PlanRecommendModel
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResponse
 import com.capstonehore.ngelana.data.remote.response.plan.PlanResultResponse
 import com.capstonehore.ngelana.data.remote.response.preferences.PreferenceModel
@@ -21,7 +22,6 @@ import com.capstonehore.ngelana.data.remote.response.users.RegisterResponse
 import com.capstonehore.ngelana.data.remote.response.users.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
-import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -80,9 +80,7 @@ interface ApiService {
     // Plan
     @POST("plan/recommend")
     suspend fun getRecommendedPlace(
-        @Field("userId") userId: String,
-        @Field("date") date: String,
-        @Field("preferenceId") preferenceId: String
+        @Body planRecommendModel: PlanRecommendModel
     ): PlaceRecommendedResponse
 
     @POST("plan/finalize")
@@ -92,7 +90,7 @@ interface ApiService {
 
     @GET("plan")
     suspend fun getPlanByUserId(
-        @Field("userId") userId: String
+        @Body userId: String
     ): PlanResponse
 
 
@@ -120,7 +118,7 @@ interface ApiService {
     // Review
     @GET("review")
     suspend fun getAllReviewByUserId(
-        @Field("userId") userId: String
+        @Body userId: String
     ): ReviewResponse
 
     @POST("review")

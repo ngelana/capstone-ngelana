@@ -84,12 +84,16 @@ class PlanRepository (
                 when {
                     response.data != null -> {
                         val userPlan = response.data
+                        Log.d(TAG, "setPlanResult: ${response.message.toString()}")
+
                         emit(Result.Success(userPlan))
                     }
-                    else -> {
-                        response.message != null
+                    response.message != null -> {
                         val errorMessage = response.message.toString()
                         emit(Result.Error(errorMessage))
+                    }
+                    else -> {
+                        emit(Result.Error("Unknown error"))
                     }
                 }
             } catch (e: Exception) {
@@ -106,9 +110,22 @@ class PlanRepository (
 
             val userId = getUserId()
             val response = apiService.getPlanByUserId(userId)
-            val planUserItem = response.data ?: emptyList()
 
-            emit(Result.Success(planUserItem))
+            when {
+                response.data != null -> {
+                    val planUserItem = response.data
+                    Log.d(TAG, "getPlanByUserId: ${response.message.toString()}")
+
+                    emit(Result.Success(planUserItem))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, "getPlanByUserId: ${e.message}")
 
@@ -123,15 +140,28 @@ class PlanRepository (
 
             val userId = getUserId()
             val response = apiService.getPlanByUserId(userId)
-            val planUserItem = response.data ?: emptyList()
 
-            val places = planUserItem.flatMap { item ->
-                item.places?.map { it.place ?: PlaceItem() } ?: emptyList()
+            when {
+                response.data != null -> {
+                    val planUserItem = response.data
+
+                    val places = planUserItem.flatMap { item ->
+                        item.places?.map { it.place ?: PlaceItem() } ?: emptyList()
+                    }
+                    Log.d(TAG, "getPlanDetailByUserId: ${response.message.toString()}")
+
+                    emit(Result.Success(places))
+                }
+                response.message != null -> {
+                    val errorMessage = response.message.toString()
+                    emit(Result.Error(errorMessage))
+                }
+                else -> {
+                    emit(Result.Error("Unknown error"))
+                }
             }
-
-            emit(Result.Success(places))
         } catch (e: Exception) {
-            Log.d(TAG, "getPlanByUserId: ${e.message}")
+            Log.d(TAG, "getPlanDetailByUserId: ${e.message}")
 
             emit(Result.Error(e.message.toString()))
         }
