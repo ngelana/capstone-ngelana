@@ -11,7 +11,7 @@ from functools import cache
 
 def load_reviews_data():
     try:
-        path = '/ml_dataset/review_dataset.csv'
+        path = '/ml_dataset/dataset_reviews.csv'
         data = pd.read_csv(path)
 
         encoder = LabelEncoder()
