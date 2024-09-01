@@ -1,13 +1,13 @@
 const express = require("express");
 const prisma = require("../db");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 const {
   accessValidation,
-  createHashedPass,
   createToken,
   compareHashedPass,
 } = require("../services/AuthServices");
-const parseDate = require("../services/UtilServices");
+const { parseDate } = require("../services/UtilServices");
 const { isValidUserId } = require("../services/DbServices");
 
 // Middleware auth
@@ -15,7 +15,10 @@ const { isValidUserId } = require("../services/DbServices");
 // Register user
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
-  const hashedPassword = createHashedPass(password);
+  console.log(typeof password);
+  console.log(password);
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  console.log(hashedPassword);
   try {
     const result = await prisma.user.create({
       data: {
@@ -138,7 +141,7 @@ router.get("/", accessValidation, async (req, res) => {
 router.get("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
   try {
-    if (!(await isValidUserId(userId))) {
+    if (!(await isValidUserId(id))) {
       return res.status(404).json({
         message: `User not found!`,
       });
@@ -171,9 +174,9 @@ router.get("/:id", accessValidation, async (req, res) => {
 router.patch("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
   const { name, email, password, phone, birthdate, gender } = req.body;
-  const hashedPassword = createHashedPass(password);
+  const hashedPassword = bcrypt.hashSync(password, 10);
   try {
-    if (!(await isValidUserId(userId))) {
+    if (!(await isValidUserId(id))) {
       return res.status(404).json({
         message: `User not found!`,
       });

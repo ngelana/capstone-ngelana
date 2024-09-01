@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 
-const secret = process.env.JWT_SECRET;
+const secret = "dcba";
 
 //Rate Limiter
 function limiter() {
@@ -27,7 +27,6 @@ const accessValidation = (req, res, next) => {
   }
 
   const token = authorization.split(" ")[1];
-  const secret = process.env.JWT_SECRET;
   try {
     const jwtDecode = jwt.verify(token, secret);
     req.userData = jwtDecode;
@@ -44,7 +43,7 @@ function createToken(payload) {
 }
 
 function createHashedPass(password) {
-  return bcrypt.hashSync(password, 10);
+  return bcrypt.hashSync("123456", 10);
 }
 
 function compareHashedPass(password, encrypted) {

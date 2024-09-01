@@ -32,30 +32,30 @@ router.get("/:id", accessValidation, async (req, res) => {
   const { id } = req.params;
 
   try {
-    // const getResponseSimilarPlacesId = await axios.get(
-    //   `http://110.136.181.224:4000/similar-places/${id}`
-    // );
+    const getResponseSimilarPlacesId = await axios.get(
+      `https://mlapi-5rowllw6pq-et.a.run.app/similar-places/${id}`
+    );
 
-    // const placeIds = getResponseSimilarPlacesId.data;
+    const placeIds = getResponseSimilarPlacesId.data;
 
-    // const similarPlaces = await prisma.place.findMany({
-    //   where: {
-    //     id: {
-    //       in: placeIds,
-    //     },
-    //   },
-    //   select: {
-    //     id: true,
-    //     name: true,
-    //     rating: true,
-    //   },
-    // });
+    const similarPlaces = await prisma.place.findMany({
+      where: {
+        id: {
+          in: placeIds,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        rating: true,
+      },
+    });
 
-    const result = await getPlaceWithUrlPlaceholderbyId(id);
-    // const resultWithSimilarPlaces = { ...result, similarPlaces };
+    // const result = await getPlaceWithUrlPlaceholderbyId(id);
+    const resultWithSimilarPlaces = { ...result, similarPlaces };
     return res.status(200).json({
-      // data: resultWithSimilarPlaces,
-      data: result,
+      data: resultWithSimilarPlaces,
+      // data: result,
       message: `Place with id ${id} and similar places listed!`,
     });
   } catch (error) {
