@@ -1,0 +1,5 @@
+runtime: nodejs22
+
+includes:
+  - beta_settings.yaml
+  - env_variables.yaml
