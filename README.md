@@ -8,22 +8,23 @@ This is a repository for Product Captsone Project for Bangkit Academy 2024.
 ---
 > [!IMPORTANT]
 > Project Management [here](https://fadhlimhd2020s-team.monday.com/docs/1861792425)
+> Progress and issue tracker []
 
 ### Members :
 
 #### Machine Learning Side :
-  - Syafri Winartanto M012D4KY3329
-  - Martinus Angger Budi Wicaksono M391D4KY2876[^1]
-  - Antonius Miquel Aureliano M391D4KY2901[^2]
+  - [M012D4KY3329](https://www.linkedin.com/in/syafri-winartanto-401b68267/) | Syafri Winartanto
+  - [M391D4KY2876](https://www.linkedin.com/in/martinus-angger/) | Martinus Angger Budi Wicaksono
+  - [M391D4KY2901](https://www.linkedin.com/in/antoniusmiquel39/) | Antonius Miquel Aureliano
 
 
 #### Cloud Computing Side :
-  - Putu Intan Julia Pratiwi C174D4KX1113
-  - Gede Martha C174D4KY0167
+  - [C174D4KX1113](https://www.linkedin.com/in/intanjp/) | Putu Intan Julia Pratiwi
+  - [C174D4KY0167](https://www.linkedin.com/in/gede-martha-8275ab2a1/) | Gede Martha
 
 #### Mobile Development Side : 
-  - Fadhli Muhammad A193D4KY4349
-  - Anisa Nurjanah A716D4KX4220
+  - [A193D4KY4349](https://www.linkedin.com/in/fadhlimuhammad/) | Fadhli Muhammad
+  - [A716D4KX4220](https://www.linkedin.com/in/anisanurjanah/) | Anisa Nurjanah
 
 
 ---
@@ -34,7 +35,7 @@ TBA
 ### NOTES :
 
 > [!TIP]
-> Don't forget to update the project before doing anything
+> Don't forget to fetch and update the local repo before doing anything
 
 ### Current Ideas
 - [ ] Sign Language (BISINDO) Interpreter
