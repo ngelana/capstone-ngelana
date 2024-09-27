@@ -49,7 +49,7 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun setupImage() {
-        val image = "https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png"
+        val image = getString(R.string.logo_ngelana)
         Glide.with(this@SplashScreenActivity)
             .load(image)
             .into(binding.imageLogo)

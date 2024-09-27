@@ -2,25 +2,38 @@ package com.capstonehore.ngelana.view.profile.interest
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.MyInterestAdapter
-import com.capstonehore.ngelana.data.Interest
+import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.remote.response.PreferenceItem
 import com.capstonehore.ngelana.databinding.ActivityMyInterestBinding
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.profile.interest.edit.EditMyInterestActivity
 
 class MyInterestActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyInterestBinding
 
+    private lateinit var myInterestAdapter: MyInterestAdapter
+
+    private lateinit var interestViewModel: InterestViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyInterestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        interestViewModel = obtainViewModel(this)
+
         setupAction()
         setupToolbar()
+        setupAdapter()
         setupView()
     }
 
@@ -40,34 +53,60 @@ class MyInterestActivity : AppCompatActivity() {
         }
     }
 
-    private fun getListInterest(): ArrayList<Interest> {
-        val dataName = resources.getStringArray(R.array.data_interest_name)
-        val dataIcon = resources.obtainTypedArray(R.array.data_interest_icon)
-        val listInterest = ArrayList<Interest>()
-        for (i in dataName.indices) {
-            val interest = Interest(dataName[i], dataIcon.getResourceId(i, -1))
-            listInterest.add(interest)
-        }
-        dataIcon.recycle()
-        return listInterest
-    }
-
-    private fun setupView() {
-        val interestList = getListInterest()
-        val myInterestAdapter = MyInterestAdapter(interestList)
+    private fun setupAdapter() {
+        myInterestAdapter = MyInterestAdapter()
 
         binding.rvInterest.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MyInterestActivity)
             adapter = myInterestAdapter
         }
 
         myInterestAdapter.setOnItemClickCallback(object : MyInterestAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Interest) {
-                startActivity(Intent(this@MyInterestActivity, EditMyInterestActivity::class.java)
-                    .putExtra(EditMyInterestActivity.EXTRA_RESULT_INTEREST, items))
+            override fun onItemClicked(data: PreferenceItem?) {
+                startActivity(Intent(this@MyInterestActivity, EditMyInterestActivity::class.java))
             }
         })
+    }
+
+    private fun setupView() {
+        interestViewModel.getPreferenceById().observe(this) {
+            if (it != null) {
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
+
+                        val response = it.data
+                        myInterestAdapter.submitList(response)
+
+                        Log.d(TAG, "Successfully Show All Preferences: $response")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+
+                        showToast(it.error)
+                        Log.d(TAG, "Failed to Show All Preferences: ${it.error}")
+                    }
+                    is Result.Loading -> showLoading(true)
+                }
+            }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): InterestViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[InterestViewModel::class.java]
+    }
+
+    companion object {
+        private const val TAG = "MyInterestActivity"
     }
 
 }

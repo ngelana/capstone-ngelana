@@ -17,10 +17,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.databinding.FragmentNameBinding
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.email.EmailFragment
@@ -30,6 +32,7 @@ class NameFragment : Fragment() {
     private var _binding: FragmentNameBinding? = null
 
     private val binding get() = _binding!!
+
     private lateinit var signUpViewModel: SignUpViewModel
 
     override fun onCreateView(
@@ -37,13 +40,13 @@ class NameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNameBinding.inflate(inflater, container, false)
-        signUpViewModel = ViewModelProvider(requireActivity())[SignUpViewModel::class.java]
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        signUpViewModel = obtainViewModel(requireActivity())
 
         setupAction()
         setupImage()
@@ -58,7 +61,12 @@ class NameFragment : Fragment() {
         }
         binding.nextButton.setOnClickListener {
             val name = binding.edName.text.toString()
-            moveToEmail(name)
+            if (name.isEmpty()) {
+                showToast(getString(R.string.empty_name))
+            } else {
+                signUpViewModel.setName(name)
+                moveToEmail()
+            }
         }
     }
 
@@ -161,20 +169,25 @@ class NameFragment : Fragment() {
         }
     }
 
-    private fun moveToEmail(name: String) {
-        if (name.isNotEmpty()) {
-            signUpViewModel.setName(name)
-
-            parentFragmentManager.beginTransaction()
+    private fun moveToEmail() {
+        parentFragmentManager.beginTransaction()
                 .replace(R.id.main, EmailFragment())
                 .addToBackStack(null)
                 .commit()
-        } else {
-            showToast(getString(R.string.empty_name))
-        }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
+
+    private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

@@ -22,19 +22,21 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.preferences.ThemeManager
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.ActivityLoginBinding
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.utils.LanguagePreference
 import com.capstonehore.ngelana.view.ViewModelFactory
+import com.capstonehore.ngelana.view.login.interest.InterestActivity
 import com.capstonehore.ngelana.view.main.MainActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
 import com.capstonehore.ngelana.view.signup.SignUpActivity
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
@@ -46,8 +48,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
 
-    private val Context.dataStore by preferencesDataStore(THEME_SETTINGS)
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
+    private val Context.themeDataStore by preferencesDataStore(THEME_SETTINGS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -180,36 +181,39 @@ class LoginActivity : AppCompatActivity() {
                 binding.edPassword.error = getString(R.string.empty_password)
             }
             else -> {
-                loginViewModel.doLogin(email, password).observe(this@LoginActivity){
-                    if(it != null){
-                        when(it) {
-                            is Result.Success -> {
-                                showLoading(false)
+                loginViewModel.doLogin(email, password).observe(this) { result ->
+                    when(result) {
+                        is Result.Success -> {
+                            showLoading(false)
 
-                                val response = it.data
-                                loginViewModel.saveLogin(response.token.toString())
-                                showCustomAlertDialog(true, "")
-                                Log.d(TAG, "Success registering: $response")
-                            }
-                            is Result.Error -> {
-                                showLoading(false)
+                            val response = result.data
 
-                                val response = it.error
-                                showCustomAlertDialog(false, response)
-                                Log.e(TAG, "Error login: $response")
-                            }
-                            is Result.Loading -> {
-                                showLoading(true)
+                            val token = response.token ?: ""
+                            val userId = response.data?.id ?: ""
 
-                                Log.d(TAG, "Loading Login User ....")
-                            }
+                            loginViewModel.saveLogin(token)
+                            loginViewModel.saveUserId(userId)
+
+                            showCustomAlertDialog(true, "")
+                            Log.d(TAG, "Success registering: $response")
+                        }
+                        is Result.Error -> {
+                            showLoading(false)
+
+                            val response = result.error
+                            showCustomAlertDialog(false, response)
+                            Log.e(TAG, "Error login: $response")
+                        }
+                        is Result.Loading -> {
+                            showLoading(true)
+
+                            Log.d(TAG, "Loading Login User ....")
                         }
                     }
+
                 }
             }
-
         }
-
     }
 
     private fun showCustomAlertDialog(isSuccess: Boolean, message: String) {
@@ -226,11 +230,22 @@ class LoginActivity : AppCompatActivity() {
             with(alertLayout) {
                 alertIcon.setImageResource(R.drawable.ic_check_circle)
                 alertTitle.text = getString(R.string.login_success_title)
-                alertMessage.text = getString(R.string.login_success_message)
 
-                submitButton.setOnClickListener {
-                    moveToMain()
-                    dialog.dismiss()
+                lifecycleScope.launch {
+                    val hasUserPreferences = loginViewModel.hasUserPreference()
+
+                    alertMessage.text = if (hasUserPreferences) {
+                        getString(R.string.login_success_message)
+                    } else {
+                        getString(R.string.login_success_interest_message)
+                    }
+
+                    submitButton.setOnClickListener {
+                        when (hasUserPreferences) {
+                            true -> moveToMain()
+                            false -> moveToInterest()
+                        }
+                    }
                 }
             }
         } else {
@@ -264,7 +279,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun themeSettings() {
-        themeManager = ThemeManager.getInstance(dataStore)
+        themeManager = ThemeManager.getInstance(themeDataStore)
 
         themeViewModel = ViewModelProvider(
             this@LoginActivity,
@@ -285,22 +300,23 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun moveToInterest() {
+        startActivity(Intent(this@LoginActivity, InterestActivity::class.java))
+        finish()
+    }
+
     private fun showLoading(isLoading: Boolean) {
        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): LoginViewModel {
-        val factory = ViewModelFactory.getInstance(
-            activity.application,
-            UserPreferences.getInstance(sessionDataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[LoginViewModel::class.java]
     }
 
     companion object {
         private const val TAG = "LoginActivity"
         const val THEME_SETTINGS = "theme_settings"
-        const val USER_SESSION = "user_session"
 
         fun setLocale(context: Context) {
             val languageCode = LanguagePreference.getLanguage(context)

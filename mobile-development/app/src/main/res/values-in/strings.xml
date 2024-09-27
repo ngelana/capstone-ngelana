@@ -58,6 +58,7 @@
     <string name="recommended_place_for_you">Tempat yang direkomendasikan untuk Anda</string>
     <string name="popular_places_in_bali">Tempat populer di Bali</string>
     <string name="see_all">Lihat semua</string>
+    <string name="bali_indonesia">Bali, Indonesia</string>
 
     <string name="choose_the_date">Pilih tanggal untuk perjalanan Anda!</string>
     <string name="date_description">Tentukan tanggal perjalanan Anda untuk menyederhanakan persiapan perjalanan Anda.</string>
@@ -85,6 +86,11 @@
     <string name="start_plan_completed_button">Rencanakan Perjalanan Selanjutnya</string>
     <string name="start_plan_canceled_button">Rencanakan Perjalanan Baru</string>
 
+    <string name="trip_cancel_success">Perjalanan berhasil dibatalkan!</string>
+    <string name="trip_cancel_failed">Gagal membatalkan Perjalanan.</string>
+
+    <string name="cancel_trip_confirmation_message">Apakah Anda yakin ingin membatalkan perjalanan ini?</string>
+
     <!-- Profile -->
     <string name="welcome">Selamat datang,</string>
     <string name="my_account">Akun Saya</string>
@@ -94,8 +100,8 @@
     <string name="edit">Edit</string>
     <string name="date_of_birth">Tanggal Lahir</string>
     <string name="gender">Jenis Kelamin</string>
-    <string name="woman">Wanita</string>
-    <string name="man">Pria</string>
+    <string name="female">Wanita</string>
+    <string name="male">Pria</string>
     <string name="phone_number">Nomor Telepon</string>
     <string name="joined_at">Bergabung Pada</string>
 
@@ -153,6 +159,8 @@
     <string name="interest_description">Silakan pilih minat Anda di bawah ini. Kami akan menggunakan informasi ini untuk mempersonalisasi rekomendasi yang paling cocok dengan preferensi dan kebutuhan Anda.</string>
     <string name="skip">Lewati</string>
     <string name="next">Selanjutnya</string>
+    <string name="successfully_saved_preferences">Successfully saved preferences.</string>
+    <string name="failed_to_save_preferences">Silakan pilih setidaknya 3 minat</string>
 
     <!-- Tab Pager -->
     <string name="tab_text_1">Mendatang</string>
@@ -176,6 +184,7 @@
     <string name="enable_location_first">Harap aktifkan lokasi terlebih dahulu untuk melanjutkan</string>
     <string name="location_not_found">Lokasi tidak ditemukan. Coba Lagi</string>
     <string name="no_data_available">Tidak ada data tersedia.</string>
+    <string name="unknown">Tidak diketahui</string>
 
     <!-- Alert Dialog -->
     <string name="continue_to_the_next_page">Lanjutkan</string>
@@ -185,16 +194,32 @@
 
     <string name="success_completed_title">Anda sudah siap!</string>
 
-    <string name="registration_completed_message">Satu langkah lagi untuk kelengkapannya. Klik tombol lanjutkan untuk melanjutkan.</string>
+    <string name="registration_completed_message">Anda telah berhasil membuat akun Anda. Klik tombol lanjutkan untuk masuk.</string>
     <string name="registration_failed">Registrasi Gagal</string>
 
     <string name="login_success_title">Berhasil!</string>
     <string name="login_success_message">Anda telah berhasil masuk. Klik tombol lanjutkan untuk melanjutkan.</string>
+    <string name="login_success_interest_message">Satu langkah lagi untuk menyelesaikan. Klik tombol lanjutkan untuk melanjutkan.</string>
     <string name="login_failed">Login Gagal</string>
 
     <string name="plan_creation_success_message">Rencana perjalanan Anda berhasil dibuat.</string>
     <string name="plan_creation_failed">Gagal membuat rencana</string>
 
     <string name="sign_out_confirmation_message">Apakah Anda yakin ingin keluar?</string>
+    <string name="tv_similar_place">Anda mungkin juga menyukai tempat-tempat ini</string>
+    <string name="set_my_name">Atur nama saya</string>
+    <string name="set_my_date_of_birth">Atur tanggal lahir saya</string>
+    <string name="set_my_gender">Atur jenis kelamin saya</string>
+    <string name="set_my_phone_number">Atur nomor telepon saya</string>
+    <string name="set_my_email">Atur email saya</string>
+    <string name="delete_my_account">Hapus akun saya</string>
+    <string name="user_updated_successfully">Pengguna berhasil diperbarui!</string>
+    <string name="failed_to_update_user">Gagal memperbarui pengguna: %1$s</string>
+    <string name="delete_account_confirmation_message">Apakah Anda yakin ingin menghapus akun Anda?</string>
+    <string name="delete_account">Hapus Akun</string>
+
+    <!-- Image -->
+    <string name="ic_preference">https://storage.googleapis.com/ngelana-bucket/ngelana-assets/icon_ngelana_black.svg</string>
+    <string name="logo_ngelana">https://storage.googleapis.com/ngelana-bucket/ngelana-logo/Logo_ngelana1.png</string>
 
 </resources>

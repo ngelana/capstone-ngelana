@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "BASE_URL", "\"[BASE_URL]\"")
+        buildConfigField("String", "BASE_URL", "\"https://ngelana-capstone.et.r.appspot.com/\"")
     }
 
     buildTypes {

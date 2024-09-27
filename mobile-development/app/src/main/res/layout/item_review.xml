@@ -61,7 +61,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
-                android:background="@drawable/bg_floating_action_button"
+                android:background="@drawable/rounded_corners_review"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/reviewDate" />
 
@@ -71,12 +71,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/_0"
                 android:textAlignment="center"
-                android:textColor="?attr/colorOnPrimary"
-                android:textSize="12sp"
+                android:textColor="@color/yellow"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/reviewNumber"
                 app:layout_constraintEnd_toEndOf="@+id/reviewNumber"
                 app:layout_constraintStart_toStartOf="@+id/reviewNumber"
-                app:layout_constraintTop_toTopOf="@+id/reviewNumber" />
+                app:layout_constraintTop_toTopOf="@+id/reviewNumber"/>
 
             <TextView
                 android:id="@+id/reviewDate"

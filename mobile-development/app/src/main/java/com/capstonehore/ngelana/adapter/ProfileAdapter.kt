@@ -28,15 +28,14 @@ class ProfileAdapter(private val listProfile: ArrayList<Profile>) :
     override fun getItemCount(): Int = listProfile.size
 
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
-        val (_, name, icon) = listProfile[position]
-        with(holder.binding) {
-            tvName.text = name
-            ivIconLeft.setImageResource(icon)
+        val profileItem = listProfile[position]
+        holder.binding.apply {
+            tvName.text = profileItem.name
+            ivIconLeft.setImageResource(profileItem.icon)
         }
 
         holder.itemView.setOnClickListener {
-            @Suppress("DEPRECATION")
-            onItemClickCallback.onItemClicked(listProfile[holder.adapterPosition])
+            onItemClickCallback.onItemClicked(profileItem)
         }
     }
 

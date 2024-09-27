@@ -4,39 +4,50 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.RecommendationPlaceAdapter
-import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityRecommendationPlanBinding
 import com.capstonehore.ngelana.utils.withDateFormat
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
+import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity
+import com.capstonehore.ngelana.view.home.plan.customize.CustomizePlanActivity.Companion.RESULT_CODE
 
 class RecommendationPlanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRecommendationPlanBinding
 
-    private val placeList = ArrayList<Place>()
-
     private var selectedDate: String? = null
+    private val placeItem = mutableListOf<PlaceItem>()
 
     private lateinit var recommendationPlaceAdapter: RecommendationPlaceAdapter
 
+    private lateinit var placeViewModel: PlaceViewModel
+
     @SuppressLint("NotifyDataSetChanged")
-    val addPlaceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == CustomizePlanActivity.RESULT_CODE && result.data != null) {
+    private val addPlaceLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_CODE && result.data != null) {
             @Suppress("DEPRECATION")
-            val returnedPlace = result.data?.getParcelableExtra<Place>(EXTRA_RETURN_PLACE)
-            Log.d("RecommendationPlanActivity", "Returned Place: $returnedPlace")
-            returnedPlace?.let {
-                if (!placeList.contains(it)) {
-                    placeList.add(it)
-                    binding.rvPlaces.adapter?.notifyItemInserted(placeList.size - 1)
-                    recommendationPlaceAdapter.notifyDataSetChanged()
+            val returnedPlace = result.data?.getParcelableArrayListExtra<PlaceItem>(EXTRA_RETURN_PLACE)
+            Log.d(TAG, "Returned Places: $returnedPlace")
+            returnedPlace?.let { places ->
+                for (place in places) {
+                    if (!placeItem.contains(place)) {
+                        placeItem.add(place)
+                    }
                 }
+                recommendationPlaceAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -46,9 +57,22 @@ class RecommendationPlanActivity : AppCompatActivity() {
         binding = ActivityRecommendationPlanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        placeViewModel = obtainViewModel(this@RecommendationPlanActivity)
+
+        setupAction()
         setupToolbar()
         setupDate()
+        setupAdapter()
         setupView()
+    }
+
+    private fun setupAction() {
+        binding.submitButton.setOnClickListener {
+            val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
+                putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
+            }
+            startActivity(intent)
+        }
     }
 
     private fun setupToolbar() {
@@ -66,76 +90,95 @@ class RecommendationPlanActivity : AppCompatActivity() {
         binding.planDate.text = selectedDate?.withDateFormat() ?: ""
     }
 
-    private fun getListPlace(): ArrayList<Place> {
-        val dataName = resources.getStringArray(R.array.data_name)
-        val dataDescription = resources.getStringArray(R.array.data_description)
-        val dataImage = resources.getStringArray(R.array.data_image)
-        val listPlace= ArrayList<Place>()
-
-        for (i in dataName.indices) {
-            val place = Place(dataName[i], dataDescription[i], dataImage[i])
-            listPlace.add(place)
-        }
-        return listPlace
-    }
-
-    private fun setupView() {
-        placeList.addAll(getListPlace())
-
-        recommendationPlaceAdapter = RecommendationPlaceAdapter(placeList)
+    private fun setupAdapter() {
+        recommendationPlaceAdapter = RecommendationPlaceAdapter(placeItem)
 
         binding.rvPlaces.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@RecommendationPlanActivity)
             adapter = recommendationPlaceAdapter
         }
 
         recommendationPlaceAdapter.setOnItemClickCallback(object : RecommendationPlaceAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Place) {
-                val dialogFragment = DetailPlaceFragment.newInstance(items)
-                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+            override fun onItemClicked(item: PlaceItem?) {
+                item?.let {
+                    val dialogFragment = DetailPlaceFragment.newInstance(it)
+                    dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+                }
             }
         })
 
         recommendationPlaceAdapter.setOnClearButtonClickCallback(object : RecommendationPlaceAdapter.OnClearButtonClickCallback {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onClearButtonClicked(item: Place) {
-                placeList.remove(item)
-                recommendationPlaceAdapter.notifyDataSetChanged()
+            override fun onClearButtonClicked(item: PlaceItem?) {
+                item?.let {
+                    placeItem.remove(it)
+                    recommendationPlaceAdapter.submitList(ArrayList(placeItem))
+                }
             }
         })
 
         recommendationPlaceAdapter.setOnAddButtonClickCallback(object : RecommendationPlaceAdapter.OnAddButtonClickCallback {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onAddButtonClicked(item: Place) {
-                val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
-                    putExtra(CustomizePlanActivity.EXTRA_PLACE, item)
-                    putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
-                }
-                addPlaceLauncher.launch(intent)
+            override fun onAddButtonClicked(item: PlaceItem?) {
+                item?.let {
+                    val intent = Intent(this@RecommendationPlanActivity, CustomizePlanActivity::class.java).apply {
+                        putExtra(CustomizePlanActivity.EXTRA_PLACE, it)
+                        putExtra(CustomizePlanActivity.EXTRA_DATE, selectedDate)
+                    }
+                    addPlaceLauncher.launch(intent)
 
-                if (placeList.remove(item)) {
-                    recommendationPlaceAdapter.notifyDataSetChanged()
+                    placeItem.remove(it)
+                    recommendationPlaceAdapter.submitList(ArrayList(placeItem))
                 }
             }
         })
     }
 
-//    private fun showToast(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//    }
+    private fun setupView() {
+        placeViewModel.getAllPlaces().observe(this) {
+            if (it != null) {
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
 
-//    private fun showLoading(isLoading: Boolean) {
-//        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
-//    }
-//
-//    private fun obtainViewModel(activity: AppCompatActivity): MainViewModel {
-//        val factory = ViewModelFactory.getInstance(
-//            activity.application,
-//            UserPreference.getInstance(dataStore)
-//        )
-//        return ViewModelProvider(activity, factory)[MainViewModel::class.java]
-//    }
+                        val response = it.data
+                        val filteredPlacesWithImages = response.filter { place ->
+                            !place.urlPlaceholder.isNullOrEmpty()
+                        }
+
+                        if (placeItem.size <= 10) {
+                            val remainingItemCount = 10 - placeItem.size
+                            val randomPlaces = filteredPlacesWithImages.shuffled().take(remainingItemCount)
+
+                            placeItem.clear()
+                            placeItem.addAll(randomPlaces)
+                        }
+
+                        recommendationPlaceAdapter.submitList(placeItem)
+                        Log.d(TAG, "Successfully Show All Places: $response")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+
+                        showToast(it.error)
+                        Log.d(TAG, "Failed to Show All Places: ${it.error}")
+                    }
+                    is Result.Loading -> showLoading(true)
+                }
+            }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
@@ -144,6 +187,7 @@ class RecommendationPlanActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val TAG = "RecommendationPlanActivity"
         const val EXTRA_DATE = "extra_date"
         const val EXTRA_RETURN_PLACE = "extra_return_place"
     }

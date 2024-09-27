@@ -2,13 +2,17 @@ package com.capstonehore.ngelana.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.R
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ItemPlaceBinding
+import com.capstonehore.ngelana.utils.capitalizeEachWord
+import com.capstonehore.ngelana.utils.splitAndReplaceCommas
 
-class PlaceAdapter(private val listPlace: ArrayList<Place>) :
-    RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {
+class PlaceAdapter : ListAdapter<PlaceItem, PlaceAdapter.PlaceViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -26,27 +30,59 @@ class PlaceAdapter(private val listPlace: ArrayList<Place>) :
         return PlaceViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = listPlace.size
-
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        val (name, description, image) = listPlace[position]
-        with(holder.binding) {
-            placeName.text = name
-            placeCity.text = description
-            Glide.with(holder.itemView.context)
-                .load(image)
-                .into(placeImage)
-        }
+        holder.bind(getItem(position))
+    }
 
-        holder.itemView.setOnClickListener {
-            @Suppress("DEPRECATION")
-            onItemClickCallback.onItemClicked(listPlace[holder.adapterPosition])
+    inner class PlaceViewHolder(private var binding: ItemPlaceBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+//        private var currentLocation: Location? = null
+
+        fun bind(items: PlaceItem?) {
+            items?.let { item ->
+                val randomIndex = item.urlPlaceholder?.indices?.random()
+                val imageUrl = item.urlPlaceholder?.get(randomIndex ?: 0)
+
+                val typesList = item.types?.splitAndReplaceCommas()
+
+
+//                currentLocation = Location("")
+//                currentLocation?.latitude = item.latitude ?: 0.0
+//                currentLocation?.longitude = item.longitude ?: 0.0
+
+                binding.apply {
+                    placeName.text = item.name?.capitalizeEachWord()
+                    placeCity.text = itemView.context.getString(R.string.bali_indonesia)
+                    placeRating.text = item.rating.toString()
+                    placeType.text = typesList?.joinToString(", ")?.capitalizeEachWord()
+                    Glide.with(itemView.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.ic_image)
+                        .error(R.drawable.ic_image)
+                        .into(placeImage)
+                }
+            }
+
+            itemView.setOnClickListener {
+                onItemClickCallback.onItemClicked(items)
+            }
         }
     }
 
-    class PlaceViewHolder(var binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root)
-
     interface OnItemClickCallback {
-        fun onItemClicked(items: Place)
+        fun onItemClicked(data: PlaceItem?)
+    }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PlaceItem>() {
+            override fun areItemsTheSame(oldItem: PlaceItem, newItem: PlaceItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: PlaceItem, newItem: PlaceItem): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

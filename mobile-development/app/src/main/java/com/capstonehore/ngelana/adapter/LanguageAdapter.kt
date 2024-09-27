@@ -31,8 +31,7 @@ class LanguageAdapter(private val listLanguages: ArrayList<Language>) :
         holder.binding.tvPreference.text = language.name
 
         holder.itemView.setOnClickListener {
-            @Suppress("DEPRECATION")
-            onItemClickCallback.onItemClicked(listLanguages[holder.adapterPosition])
+            onItemClickCallback.onItemClicked(language)
         }
     }
 

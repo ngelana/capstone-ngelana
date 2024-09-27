@@ -3,10 +3,12 @@ package com.capstonehore.ngelana.view.profile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
@@ -19,14 +21,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.ProfileAdapter
+import com.capstonehore.ngelana.data.Result
 import com.capstonehore.ngelana.data.local.entity.Profile
 import com.capstonehore.ngelana.data.preferences.ThemeManager
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.FragmentProfileBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.main.ThemeViewModel
 import com.capstonehore.ngelana.view.main.ThemeViewModelFactory
+import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 import com.capstonehore.ngelana.view.profile.about.AboutUsActivity
 import com.capstonehore.ngelana.view.profile.favorite.MyFavoriteActivity
 import com.capstonehore.ngelana.view.profile.helpcenter.HelpCenterActivity
@@ -50,30 +53,33 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(THEME_SETTINGS)
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
+    private val Context.themeDataStore: DataStore<Preferences> by preferencesDataStore(THEME_SETTINGS)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        profileViewModel = obtainViewModel(requireActivity())
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        profileViewModel = obtainViewModel(requireActivity())
+
         setupAction()
         setupData()
+        setUserName()
         themeSettings()
     }
 
     private fun setupAction() {
         binding.signOutButton.setOnClickListener {
             setupSignOut()
+        }
+        binding.deleteButton.setOnClickListener {
+            setupDelete()
         }
     }
 
@@ -169,6 +175,50 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    private fun setUserName() {
+        profileViewModel.getUserById().observe(viewLifecycleOwner) {
+            if( it != null ){
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
+
+                        val response = it.data
+                        val name = response.data?.name ?: ""
+
+                        binding.userName.text = name
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        showToast(it.error)
+                    }
+                    is Result.Loading -> showLoading(true)
+                }
+            }
+        }
+    }
+
+    private fun deleteUser() {
+        profileViewModel.deleteUserById().observe(viewLifecycleOwner) {
+            if (it != null) {
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
+
+                        val response = it.data
+                        Log.d(TAG, "Success deleting account: $response")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+
+                        val response = it.error
+                        Log.e(TAG, "Error deleting account: $response")
+                    }
+                    is Result.Loading -> showLoading(true)
+                }
+            }
+        }
+    }
+
     private fun setupSignOut() {
         AlertDialog.Builder(requireContext()).apply {
             val message = getString(R.string.sign_out_confirmation_message)
@@ -190,6 +240,26 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun setupDelete() {
+        AlertDialog.Builder(requireContext()).apply {
+            val message = getString(R.string.delete_account_confirmation_message)
+
+            setTitle(getString(R.string.delete_account))
+            setMessage(message)
+
+            setPositiveButton(getString(R.string.delete_account)) { _, _ ->
+                deleteUser()
+                moveToOnboarding()
+            }
+
+            setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            create().show()
+        }
+    }
+
     private fun moveToLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -197,8 +267,15 @@ class ProfileFragment : Fragment() {
         requireActivity().finish()
     }
 
+    private fun moveToOnboarding() {
+        val intent = Intent(requireContext(), OnboardingActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     private fun themeSettings() {
-        themeManager = ThemeManager.getInstance(requireContext().dataStore)
+        themeManager = ThemeManager.getInstance(requireContext().themeDataStore)
 
         themeViewModel = ViewModelProvider(
             requireActivity(),
@@ -220,11 +297,16 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading:Boolean){
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
     private fun obtainViewModel(activity: FragmentActivity): ProfileViewModel {
-        val factory = ViewModelFactory.getInstance(
-            requireContext(),
-            UserPreferences.getInstance(requireContext().sessionDataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[ProfileViewModel::class.java]
     }
 
@@ -234,8 +316,8 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
+        private const val TAG = "ProfileFragment"
         private const val THEME_SETTINGS = "theme_settings"
-        const val USER_SESSION = "user_session"
     }
 
 }

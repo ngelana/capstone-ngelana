@@ -1,25 +1,42 @@
 package com.capstonehore.ngelana.view.explore.place.tourist
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.PlaceAdapter
-import com.capstonehore.ngelana.data.Place
+import com.capstonehore.ngelana.data.Result
+import com.capstonehore.ngelana.data.remote.response.PlaceItem
 import com.capstonehore.ngelana.databinding.ActivityTouristAttractionsBinding
+import com.capstonehore.ngelana.view.ViewModelFactory
 import com.capstonehore.ngelana.view.detail.DetailPlaceFragment
+import com.capstonehore.ngelana.view.explore.place.PlaceViewModel
 
 class TouristAttractionsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTouristAttractionsBinding
+
+    private lateinit var placeAdapter: PlaceAdapter
+
+    private lateinit var placeViewModel: PlaceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTouristAttractionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        placeViewModel = obtainViewModel(this@TouristAttractionsActivity)
+
         setupToolbar()
+        setupAdapter()
         setupView()
+        setupSearchView()
     }
 
     private fun setupToolbar() {
@@ -32,35 +49,123 @@ class TouristAttractionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun getListPlace(): ArrayList<Place> {
-        val dataName = resources.getStringArray(R.array.data_name)
-        val dataDescription = resources.getStringArray(R.array.data_description)
-        val dataImage = resources.getStringArray(R.array.data_image)
-        val listPlace= ArrayList<Place>()
-
-        for (i in dataName.indices) {
-            val place = Place(dataName[i], dataDescription[i], dataImage[i])
-            listPlace.add(place)
-        }
-        return listPlace
-    }
-
-    private fun setupView() {
-        val placeList = getListPlace()
-        val placeAdapter = PlaceAdapter(placeList)
+    private fun setupAdapter() {
+        placeAdapter = PlaceAdapter()
 
         binding.rvPlaces.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@TouristAttractionsActivity)
             adapter = placeAdapter
         }
 
         placeAdapter.setOnItemClickCallback(object : PlaceAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Place) {
-                val dialogFragment = DetailPlaceFragment.newInstance(items)
-                dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+            override fun onItemClicked(data: PlaceItem?) {
+                data?.let {
+                    val dialogFragment = DetailPlaceFragment.newInstance(it)
+                    dialogFragment.show(supportFragmentManager, "DetailPlaceFragment")
+                }
             }
         })
+    }
+
+    private fun setupView() {
+        placeViewModel.getAllPlaces().observe(this) {
+            if (it != null) {
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
+
+                        val response = it.data
+                        if (response.isNotEmpty()) {
+                            val filteredList = filterPlaces(response)
+                            placeAdapter.submitList(filteredList)
+                        } else {
+                            binding.tvNoData.visibility = View.VISIBLE
+                        }
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        showToast(it.error)
+                    }
+                    is Result.Loading -> showLoading(true)
+                }
+            }
+        }
+    }
+
+    private fun searchPlace(query: String) {
+        placeViewModel.searchPlaceByQuery(query).observe(this) {
+            if (it != null) {
+                when (it) {
+                    is Result.Success -> {
+                        showLoading(false)
+
+                        val response = it.data
+                        if (response.isNotEmpty()) {
+                            val filteredList = filterPlaces(response)
+                            placeAdapter.submitList(filteredList)
+                        } else {
+                            binding.tvNoData.visibility = View.VISIBLE
+                        }
+                        Log.d(TAG, "Successfully Show Places: $response")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+
+                        showToast(it.error)
+                        Log.d(TAG, "Failed to Show Places: ${it.error}")
+                    }
+                    is Result.Loading -> showLoading(true)
+                }
+            }
+        }
+    }
+
+    private fun setupSearchView() {
+        binding.apply {
+            searchView.setupWithSearchBar(searchBar)
+            searchView.editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val query = s.toString().trim()
+                    if (query.isNotEmpty()) {
+                        searchPlace(query)
+                    } else {
+                        setupView()
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+
+            })
+        }
+    }
+
+    private fun filterPlaces(response: List<PlaceItem>): List<PlaceItem> {
+        val keywords = resources.getStringArray(R.array.data_type_tourist_attraction).toList()
+        return response.filter { item ->
+            !item.urlPlaceholder.isNullOrEmpty() &&
+                    keywords.any { keyword ->
+                        item.types?.contains(keyword, ignoreCase = true) ?: false
+                    }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): PlaceViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[PlaceViewModel::class.java]
+    }
+
+    companion object {
+        private const val TAG = "TouristAttractionsActivity"
     }
 
 }

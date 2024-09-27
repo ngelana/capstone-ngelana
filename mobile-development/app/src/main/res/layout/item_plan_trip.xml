@@ -26,23 +26,23 @@
                 android:layout_height="128dp"
                 android:background="@drawable/rounded_corners_white_top"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tripImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/planImage"
+                android:id="@+id/tripImage"
                 android:layout_width="match_parent"
                 android:layout_height="84dp"
                 android:background="@drawable/rounded_corners_transparent"
                 android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="@id/bgTop"
-                app:layout_constraintStart_toStartOf="@id/bgTop"
-                app:layout_constraintTop_toTopOf="@id/bgTop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_image"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/planName"
+                android:id="@+id/tripName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -51,13 +51,15 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="@+id/bgTop"
-                app:layout_constraintEnd_toEndOf="@id/bgTop"
-                app:layout_constraintStart_toStartOf="@id/bgTop"
-                app:layout_constraintTop_toBottomOf="@+id/planImage" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tripImage" />
 
             <TextView
-                android:id="@+id/planDate"
+                android:id="@+id/tripDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -66,7 +68,7 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/planImage" />
+                app:layout_constraintTop_toTopOf="@id/tripImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

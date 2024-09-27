@@ -3,7 +3,6 @@ package com.capstonehore.ngelana.view.signup.password
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -19,14 +18,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.Result
-import com.capstonehore.ngelana.data.preferences.UserPreferences
 import com.capstonehore.ngelana.databinding.CustomAlertDialogBinding
 import com.capstonehore.ngelana.databinding.FragmentPasswordBinding
 import com.capstonehore.ngelana.view.ViewModelFactory
@@ -34,7 +31,6 @@ import com.capstonehore.ngelana.view.login.LoginActivity
 import com.capstonehore.ngelana.view.onboarding.OnboardingActivity
 import com.capstonehore.ngelana.view.signup.SignUpViewModel
 import com.capstonehore.ngelana.view.signup.email.EmailFragment
-import com.capstonehore.ngelana.view.signup.interest.InterestFragment
 
 class PasswordFragment : Fragment() {
 
@@ -44,20 +40,19 @@ class PasswordFragment : Fragment() {
 
     private lateinit var signUpViewModel: SignUpViewModel
 
-    private val Context.sessionDataStore by preferencesDataStore(USER_SESSION)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPasswordBinding.inflate(inflater, container, false)
-        signUpViewModel = obtainViewModel(requireActivity())
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        signUpViewModel = obtainViewModel(requireActivity())
 
         setupAction()
         setupImage()
@@ -169,37 +164,35 @@ class PasswordFragment : Fragment() {
     }
 
     private fun setupRegister() {
-        val name = signUpViewModel.name.value.toString()
-        val email = signUpViewModel.email.value.toString()
+        val name = signUpViewModel.name.value ?: ""
+        val email = signUpViewModel.email.value ?: ""
         val password = binding.edPassword.text.toString()
 
-        if (password.isNotEmpty()) {
-            signUpViewModel.setPassword(password)
-        } else {
-            showToast(getString(R.string.empty_password))
-        }
+        when {
+            password.isEmpty() -> showToast(getString(R.string.empty_password))
+            else -> {
+                signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        when (it) {
+                            is Result.Success -> {
+                                showLoading(false)
 
-        signUpViewModel.doRegister(name, email, password).observe(viewLifecycleOwner) {
-            if( it != null ){
-                when (it) {
-                    is Result.Success -> {
-                        showLoading(false)
+                                val response = it.data
+                                showCustomAlertDialog(true, "")
+                                Log.d(TAG, "Success registering: $response")
+                            }
+                            is Result.Error -> {
+                                showLoading(false)
 
-                        val response = it.data
-                        showCustomAlertDialog(true, "")
-                        Log.d(TAG, "Success registering: $response")
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-
-                        val response = it.error
-                        showCustomAlertDialog(false, response)
-                        Log.e(TAG, "Error registering: $response")
-                    }
-                    is Result.Loading                           -> {
-                        showLoading(true)
-
-                        Log.d(TAG, "Loading Register User ....")
+                                val response = it.error
+                                showCustomAlertDialog(false, response)
+                                Log.e(TAG, "Error registering: $response")
+                            }
+                            is Result.Loading -> {
+                                showLoading(true)
+                                Log.d(TAG, "Loading Register User ....")
+                            }
+                        }
                     }
                 }
             }
@@ -229,7 +222,7 @@ class PasswordFragment : Fragment() {
                 alertMessage.text = getString(R.string.registration_completed_message)
 
                 submitButton.setOnClickListener {
-                    moveToInterest()
+                    moveToLogin()
                     dialog.dismiss()
                 }
             }
@@ -270,10 +263,9 @@ class PasswordFragment : Fragment() {
             .commit()
     }
 
-    private fun moveToInterest() {
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.main, InterestFragment())
-            .commit()
+    private fun moveToLogin() {
+        startActivity(Intent(requireActivity(), LoginActivity::class.java))
+        requireActivity().finish()
     }
 
     private fun moveToOnboarding() {
@@ -290,15 +282,16 @@ class PasswordFragment : Fragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity): SignUpViewModel {
-        val factory = ViewModelFactory.getInstance(
-            requireContext(),
-            UserPreferences.getInstance(activity.sessionDataStore)
-        )
+        val factory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory)[SignUpViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
         private const val TAG = "PasswordFragment"
-        const val USER_SESSION = "user_session"
     }
 }

@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.data.local.entity.Category
 import com.capstonehore.ngelana.databinding.ItemCategoryBinding
 
-class CategoryAdapter(private val listPlace: ArrayList<Category>) :
+class CategoryAdapter(private val listCategory: ArrayList<Category>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -31,36 +32,36 @@ class CategoryAdapter(private val listPlace: ArrayList<Category>) :
         return CategoryViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = listPlace.size
+    override fun getItemCount(): Int = listCategory.size
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val (_, name, description, image) = listPlace[position]
+        val categoryItem = listCategory[position]
         with(holder.binding) {
-            categoryName.text = name
-            categoryDescription.text = description
+            categoryName.text = categoryItem.name
+            categoryDescription.text = categoryItem.description
             Glide.with(holder.itemView.context)
-                .load(image)
+                .load(categoryItem.image)
+                .placeholder(R.drawable.ic_image)
+                .error(R.drawable.ic_image)
                 .into(categoryImage)
 
             holder.itemView.setOnClickListener {
-                @Suppress("DEPRECATION")
-                onItemClickCallback.onItemClicked(listPlace[holder.adapterPosition])
+                onItemClickCallback.onItemClicked(categoryItem)
             }
 
-            holder.binding.exploreButton.setOnClickListener {
-                @Suppress("DEPRECATION")
-                onButtonClickCallback.onButtonClicked(listPlace[holder.adapterPosition])
+            exploreButton.setOnClickListener {
+                onButtonClickCallback.onButtonClicked(categoryItem)
             }
         }
     }
 
-    class CategoryViewHolder(var binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root)
+    class CategoryViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
-        fun onItemClicked(items: Category)
+        fun onItemClicked(item: Category?)
     }
 
     interface OnButtonClickCallback {
-        fun onButtonClicked(item: Category)
+        fun onButtonClicked(item: Category?)
     }
 }

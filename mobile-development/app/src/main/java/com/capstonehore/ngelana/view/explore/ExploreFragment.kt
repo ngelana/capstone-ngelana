@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstonehore.ngelana.R
 import com.capstonehore.ngelana.adapter.CategoryAdapter
@@ -15,14 +14,12 @@ import com.capstonehore.ngelana.databinding.FragmentExploreBinding
 import com.capstonehore.ngelana.view.explore.place.culinary.CulinarySpotActivity
 import com.capstonehore.ngelana.view.explore.place.lodging.LodgingActivity
 import com.capstonehore.ngelana.view.explore.place.tourist.TouristAttractionsActivity
-import com.capstonehore.ngelana.view.home.HomeViewModel
 
 class ExploreFragment : Fragment() {
 
     private var _binding: FragmentExploreBinding? = null
 
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,28 +61,32 @@ class ExploreFragment : Fragment() {
         }
 
         categoryAdapter.setOnItemClickCallback(object : CategoryAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: Category) {
-                val context = requireContext()
-                val intent = when (items.code) {
-                    "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
-                    "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
-                    "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
-                    else -> null
+            override fun onItemClicked(item: Category?) {
+                item?.let {
+                    val context = requireContext()
+                    val intent = when (item.code) {
+                        "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
+                        "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
+                        "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
+                        else -> null
+                    }
+                    intent?.let { startActivity(it) }
                 }
-                intent?.let { startActivity(it) }
             }
         })
 
         categoryAdapter.setOnButtonClickCallback(object : CategoryAdapter.OnButtonClickCallback {
-            override fun onButtonClicked(item: Category) {
-                val context = requireContext()
-                val intent = when (item.code) {
-                    "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
-                    "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
-                    "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
-                    else -> null
+            override fun onButtonClicked(item: Category?) {
+                item?.let {
+                    val context = requireContext()
+                    val intent = when (item.code) {
+                        "NGELANA-TA" -> Intent(context, TouristAttractionsActivity::class.java)
+                        "NGELANA-CS" -> Intent(context, CulinarySpotActivity::class.java)
+                        "NGELANA-LO" -> Intent(context, LodgingActivity::class.java)
+                        else -> null
+                    }
+                    intent?.let { startActivity(it) }
                 }
-                intent?.let { startActivity(it) }
             }
         })
     }

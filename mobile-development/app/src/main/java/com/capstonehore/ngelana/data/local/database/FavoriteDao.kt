@@ -10,8 +10,12 @@ import com.capstonehore.ngelana.data.local.entity.Favorite
 
 @Dao
 interface FavoriteDao {
+
     @Query("SELECT * FROM favorite_place")
-    fun getAllFavorites(): LiveData<List<Favorite>>
+    fun getAllFavorites(): LiveData<List<Favorite?>>
+
+    @Query("SELECT * FROM favorite_place WHERE place_id = :placeId")
+    fun getFavoriteByPlaceId(placeId: String): LiveData<Favorite?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoritePlace(favorite: Favorite)
